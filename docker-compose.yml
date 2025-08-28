@@ -35,7 +35,7 @@ services:
       POSTGRES_PASSWORD: 123456a@A
       POSTGRES_DB: mbg_anm_be
     ports:
-      - "5432:5432"
+      - "15432:5432"
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
     healthcheck:
