@@ -1,0 +1,95 @@
+version: "3.9"
+
+networks:
+  mbg-anm-dev:
+
+services:
+  consul:
+    image: hashicorp/consul:1.17
+    command: agent -server -bootstrap-expect=1 -ui -client=0.0.0.0
+    ports:
+      - "8500:8500"       # UI
+      - "8600:8600/udp"   # DNS (optional)
+    volumes:
+      - ./data/consul:/consul/data
+    networks: [mbg-anm-dev]
+
+  redis:
+    image: redis:7.2-alpine
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "123"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./data/redis:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a redispass ping | grep PONG"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks: [mbg-anm-dev]
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: mbg_anm_be
+      POSTGRES_PASSWORD: 123456a@A
+      POSTGRES_DB: mbg_anm_be
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks: [mbg-anm-dev]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=123           # user: elastic
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    volumes:
+      - ./data/elasticsearch:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s -u elastic:elasticpass http://localhost:9200 >/dev/null"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+    networks: [mbg-anm-dev]
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.1
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=123
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks: [mbg-anm-dev]
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.14.1
+    environment:
+      - LS_JAVA_OPTS=-Xms256m -Xmx256m
+      - XPACK_MONITORING_ENABLED=false
+    volumes:
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5044:5044"
+      - "9600:9600"
+    networks: [mbg-anm-dev]

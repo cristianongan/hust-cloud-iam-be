@@ -1,7 +1,7 @@
 logging:
   level:
     ROOT: INFO
-    com.vmc: INFO
+    org.mbg: INFO
     org.springframework.cache: TRACE
     #org.springframework.security: DEBUG
     org.redisson: INFO # Logging level for Redisson client; set to DEBUG if Redisson debugging is needed
