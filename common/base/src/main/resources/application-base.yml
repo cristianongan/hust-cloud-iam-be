@@ -1,0 +1,46 @@
+validation:
+  password-regex: '^(?=.*[0-9])(?=.*[A-Za-z])(?=.*[\x21-\x2F@^=]).{8,}$' #password ít nhất 8 ký tự , 1 kí tự, 1 kí tự đặc biệt ascii từ: 33-47 + @^=], 1 kí tự số .. advance ^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$
+  username-regex: '^[a-zA-Z0-9]([._](?![._])|[a-zA-Z0-9]){1,72}[a-zA-Z0-9]$' #ky tu so + chu , ký tự (. _), do dai tu 3 den 75
+  email-regex: '^(?=.{1,64}@)[A-Za-z0-9\+_-]+(\.[A-Za-z0-9\+_-]+)*@[^-][A-Za-z0-9\+-]+(\.[A-Za-z0-9\+-]+)*(\.[A-Za-z]{2,35})$' #email không quá 100 ký tự
+  phone-number-regex: '^((\\s){0,}(020))((2|5|7|9)[0-9]{7}(\\s){0,})$|^((\\s){0,}(030))((2|4|5|7|9)[0-9]{6}(\\s){0,})$'
+  identification-regex:
+  - '^[A-Z0-9]{0,15}$'
+  coordinate-regex: '^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$'
+  otp-regex: '^\\d{8}$'
+  name-non-accent-regex: '^[ A-Z]*$'
+  name-lao-regex: '^[\s, \u0e80-\u0eff]*$'
+  user-fullname-non-accent-regex: '^[ a-zA-Z]*$'
+  email-mb-regex: '^(\\s){0,}[a-zA-Z][a-zA-Z0-9_\\.]{2,50}(@mbbank.com.vn|@evotek.vn)'
+  password-random:
+    uppercase-length: 1
+    lowercase-length: 1
+    special-length: 1
+    number-length: 9
+  phone-number-min-length: 10
+  phone-number-max-length: 15
+  fullname-min-length: 2
+  fullname-max-length: 100
+  identification-min-length: 0
+  identification-max-length: 15
+  username-min-length: 3
+  username-max-length: 75
+  password-min-length: 6
+  password-max-length: 20
+  email-min-length: 4
+  email-max-length: 100
+  name-max-length: 255
+  code-min-length: 2
+  code-max-length: 50
+  address-max-length: 255
+  description-max-length: 255
+  url-max-length: 255
+  small-text-max-length: 255
+  medium-text-max-length: 500
+  long-text-max-length: 1000
+  super-text-max-length: 2000
+  int-number-max-length: 10
+  max-file-upload: 5
+  max-file-id-card-upload: 1
+  standard-file-id-card-upload: 1
+  max-order-number: 99
+  max-bank-icon-upload: 1

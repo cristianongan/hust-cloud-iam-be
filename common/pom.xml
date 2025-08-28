@@ -1,0 +1,230 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mbg</groupId>
+        <artifactId>mbg-anm-be</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>common</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>common</name>
+
+    <description>MBG Common Modules Project</description>
+
+    <modules>
+        <module>utils</module>
+        <module>cache</module>
+        <module>base</module>
+        <module>label-bundle</module>
+        <module>security</module>
+        <module>api-common</module>
+        <module>annotation</module>
+        <module>captcha</module>
+        <module>keycloak-client</module>
+        <module>integration</module>
+    </modules>
+
+    <properties>
+        <!--DO NOT EDIT THIS 2 LINES -->
+        <build.time>${maven.build.timestamp}</build.time>
+        <maven.build.timestamp.format>yyyy_MM_dd_HH_mm</maven.build.timestamp.format>
+        <spring-boot.run.jvmArguments>-Duser.timezone=UTC</spring-boot.run.jvmArguments>
+        <skipTests>false</skipTests>
+        <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
+        <!--ADD YOUR CUSTOM PROPERTIES HERE -->
+        <parent-app.version>0.0.1-SNAPSHOT</parent-app.version>
+        <maven.version>3.9.9</maven.version>
+        <java.version>21</java.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
+
+        <hibernate.version>6.6.13.Final</hibernate.version>
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <jakarta.xml.bind-api.version>4.0.2</jakarta.xml.bind-api.version>
+        <jjwt-api.version>0.12.6</jjwt-api.version>
+        <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <spring-boot.version>3.4.4</spring-boot.version>
+        <liquibase.version>4.27.0</liquibase.version>
+        <validation-api.version>3.1.1</validation-api.version>
+        <itextpdf.version>5.5.13.4</itextpdf.version>
+        <!--<problem-spring-web.version>0.23.0</problem-spring-web.version>-->
+        <commons-compress.version>1.27.1</commons-compress.version>
+        <jakarta.servlet.version>6.1.0</jakarta.servlet.version>
+        <commons-net.version>3.11.1</commons-net.version>
+        <commons-text.version>1.13.0</commons-text.version>
+        <commons-collections4.version>4.5.0-M3</commons-collections4.version>
+        <guava.version>33.4.6-jre</guava.version>
+        <jts-core.version>1.20.1</jts-core.version>
+        <imgscalr-lib.version>4.3</imgscalr-lib.version>
+        <jsoup.version>1.19.1</jsoup.version>
+        <zalando.version>0.27.1</zalando.version>
+        <commons-io.version>2.18.0</commons-io.version>
+        <jxls.version>3.0.0</jxls.version>
+        <jxls-jexcel.version>1.0.9</jxls-jexcel.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <junit-jupiter.version>5.12.1</junit-jupiter.version>
+        <assertj.version>3.27.3</assertj.version>
+        <bcprov-jdk18on.version>1.80</bcprov-jdk18on.version>
+        <captcha.version>0.1.3</captcha.version>
+        <hazelcast.version>5.5.0</hazelcast.version>
+        <hazelcast-hibernate53.version>5.2.0</hazelcast-hibernate53.version>
+        <hibernate-search.version>5.11.12.Final</hibernate-search.version>
+        <hibernate-search-mapper-orm.version>7.2.3.Final</hibernate-search-mapper-orm.version>
+        <annotations.version>26.0.2</annotations.version>
+        <redisson-spring-boot-starter.version>3.45.1</redisson-spring-boot-starter.version>
+        <spring-boot-starter-log4j2.version>3.4.4</spring-boot-starter-log4j2.version>
+        <graphql-java-extended-scalars.version>22.0</graphql-java-extended-scalars.version>
+        <graphql-spring-boot-starter.version>15.1.0</graphql-spring-boot-starter.version>
+        <reactor-core.version>3.8.0-M1</reactor-core.version>
+        <firebase.version>24.1.1</firebase.version>
+        <jakarta-xml-ws.version.version>4.0.2</jakarta-xml-ws.version.version>
+        <jasypt-spring-boot-starter.version>3.0.5</jasypt-spring-boot-starter.version>
+        <jxls.version>3.0.0</jxls.version>
+        <jxls-jexcel.version>1.0.9</jxls-jexcel.version>
+        <httpclient5.version>5.4.3</httpclient5.version>
+        <common-file-upload.version>2.0.0-M2</common-file-upload.version><!--commons-fileupload2-jakarta-servlet6 -->
+        <minio.version>8.5.17</minio.version>
+        <okhttp.version>4.12.0</okhttp.version>
+        <infinispan.version>15.2.0.Final</infinispan.version>
+        <tomcat.version>11.0.5</tomcat.version>
+        <shedlock.version>6.3.1</shedlock.version>
+        <aws.s3.version>2.31.11</aws.s3.version>
+        <spring-retry.version>2.0.11</spring-retry.version>
+        <servlet-api.version>6.1.0</servlet-api.version>
+        <thumbnailator.version>0.4.20</thumbnailator.version>
+        <problem-spring-web.version>0.29.1</problem-spring-web.version>
+        <sonar-maven-plugin.version>5.1.0.4751</sonar-maven-plugin.version>
+        <jacoco.version>0.8.12</jacoco.version>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <!-- <sonar.jacoco.reportPath>${project.basedir}/target/jacoco.exec</sonar.jacoco.reportPath> -->
+        <sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.language>java</sonar.language>
+        <surefire-api.version>3.5.2</surefire-api.version>
+        <keycloak.version>26.0.5</keycloak.version>
+        <springdoc-openapi.version>2.8.6</springdoc-openapi.version>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo.maven.apache.org/maven2</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit-jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${sonar-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${jacoco.version}</version>
+                    <executions>
+                        <execution>
+                            <id>report</id>
+                            <goals>
+                                <goal>report-aggregate</goal>
+                            </goals>
+                            <phase>verify</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${surefire-api.version}</version>
+                    <executions>
+                        <execution>
+                            <id>default-integration-test</id>
+                            <goals>
+                                <goal>integration-test</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${surefire-api.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-help-plugin</artifactId>
+                    <version>3.3.0</version>
+                    <executions>
+                        <execution>
+                            <id>show-java-version</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>system</goal>
+                            </goals>
+                            <configuration>
+                                <output>${project.build.directory}/java-version.txt</output>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

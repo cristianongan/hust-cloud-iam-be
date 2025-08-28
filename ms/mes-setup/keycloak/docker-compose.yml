@@ -1,0 +1,77 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16.2
+    container_name: postgres-keycloak
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432" # Mapping host port 54321 to container port 5432 to avoid conflicts
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    networks:
+      - keycloak_network
+    healthcheck: # Added healthcheck for PostgreSQL
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s # Give some time for postgres to initialize before starting health checks
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.6
+    container_name: keycloak
+    # 'start' is the command for production-like environments.
+    # For development, 'start-dev' can be used, which enables HTTP by default and disables strict HTTPS.
+    # Since KC_HTTP_ENABLED is true and KC_HOSTNAME_STRICT_HTTPS is false, 'start' with these envs is fine for dev.
+    command: start
+    environment:
+      # --- Keycloak Hostname Configuration ---
+      KC_HOSTNAME: localhost # Public hostname for Keycloak
+      KC_HOSTNAME_PORT: 8080 # Public port for Keycloak (if different from default HTTP/HTTPS)
+      KC_HOSTNAME_STRICT_BACKCHANNEL: 'false' # For dev: allows internal requests not to use the public URL strictly. Set to 'true' in production if behind a proxy.
+      KC_HTTP_ENABLED: 'true' # For dev: enables HTTP. Disable in production (use HTTPS).
+      KC_HOSTNAME_STRICT_HTTPS: 'false' # For dev: allows running without HTTPS. Set to 'true' in production.
+
+      # --- Keycloak Health & Admin ---
+      KC_HEALTH_ENABLED: 'true' # Enables health check endpoints
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN} # Initial admin username
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD} # Initial admin password
+
+      # --- Keycloak Database Configuration (PostgreSQL) ---
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB} # Connects to the 'postgres' service on port 5432
+      KC_DB_USERNAME: ${POSTGRES_USER}
+      KC_DB_PASSWORD: ${POSTGRES_PASSWORD}
+      # KC_DB_SCHEMA: public # Optional: specify if you use a different schema
+
+      # --- Optional: Proxy settings if Keycloak is behind a reverse proxy ---
+      # KC_PROXY: edge # Example: if behind a reverse proxy like Nginx or Traefik
+      # KC_HTTP_RELATIVE_PATH: /auth # Example: if Keycloak is served under a subpath like /auth
+
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      postgres: # Ensures PostgreSQL is started before Keycloak attempts to connect
+        condition: service_healthy # Waits for PostgreSQL to be healthy
+    networks:
+      - keycloak_network
+    healthcheck: # Added healthcheck for Keycloak
+      # Keycloak 23.x Quarkus distribution uses /health/ready
+      test: ["CMD-SHELL", "curl -f http://localhost:8080/health/ready || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s # Give Keycloak ample time to start up before checking health
+
+volumes:
+  postgres_data: # Persists PostgreSQL data
+    driver: local
+
+networks:
+  keycloak_network: # Custom bridge network for services to communicate
+    driver: bridge

@@ -1,0 +1,14 @@
+captcha:
+  config:
+    image-width: 100
+    image-height: 40
+    text-producer-char-string: '0123456789'
+    text-producer-char-length: 4
+    text-producer-font-size: 30
+    text-producer-char-space: 5
+    text-producer-font-names: Arial,Arial Narrow,Serif,Helvetica,Tahoma,Times New Roman,Verdana
+    text-producer-font-color: 45,33,136
+    background-clear-from: 'white'
+    background-clear-to: 'white'
+    header-name: X-CAPTCHA-HEADER
+    use-border: 'no'
