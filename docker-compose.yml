@@ -49,7 +49,8 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.14.1
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=true
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
       - ELASTIC_PASSWORD=123           # user: elastic
       - KIBANA_PASSWORD=123456
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
