@@ -51,6 +51,7 @@ services:
       - discovery.type=single-node
       - xpack.security.enabled=true
       - ELASTIC_PASSWORD=123           # user: elastic
+      - KIBANA_PASSWORD=123
       - ES_JAVA_OPTS=-Xms1g -Xmx1g
     ulimits:
       memlock:
@@ -72,7 +73,7 @@ services:
     image: docker.elastic.co/kibana/kibana:8.14.1
     environment:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
-      - ELASTICSEARCH_USERNAME=elastic
+      - ELASTICSEARCH_USERNAME=kibana_system
       - ELASTICSEARCH_PASSWORD=123
     depends_on:
       - elasticsearch
