@@ -4,6 +4,7 @@ import liquibase.integration.spring.SpringLiquibase;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,10 +16,11 @@ import javax.sql.DataSource;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "spring.liquibase")
+//@ConfigurationProperties(prefix = "spring.liquibase")
 @EnableCaching
 @RequiredArgsConstructor
-@ConditionalOnProperty(prefix = "spring.liquibase", name = "enable", havingValue = "true")
+@ConditionalOnProperty(prefix = "spring.liquibase", name = "enabled", havingValue = "true")
+@ConditionalOnBean(DataSource.class)
 public class LiquibaseConfiguration {
 	private String changeLog;
 

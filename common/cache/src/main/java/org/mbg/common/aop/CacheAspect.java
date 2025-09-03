@@ -26,11 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * 07/04/2025 - LinhLH: Create new
- *
- * @author LinhLH
- */
 @Slf4j
 @Aspect
 @Component

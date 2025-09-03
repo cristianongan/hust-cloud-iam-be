@@ -75,9 +75,10 @@ public abstract class SecurityConfiguration {
                         .requestMatchers(getPublicUrlPatterns()).permitAll() // Allow custom public URLs
                         .anyRequest().authenticated() // Secure all other requests
                 )
-                .oauth2ResourceServer(getOAuth2ResourceServerConfigurer()) // Configure OAuth2 resource server (JWT validation)
+//                .oauth2ResourceServer(getOAuth2ResourceServerConfigurer()) // Configure OAuth2 resource server (JWT validation)
                 .cors(cors -> cors.configurationSource(getCorsConfigurationSource())) // Enable CORS
-                .addFilterBefore(getAuthorizationFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class); // Add our custom filter
+                .addFilterBefore(getAuthorizationFilter(), org.springframework.security.web.access.intercept.AuthorizationFilter.class)
+                ; // Add our custom filter
 
         return http.build();
     }
@@ -111,5 +112,5 @@ public abstract class SecurityConfiguration {
      *
      * @return A {@link Customizer} for {@link OAuth2ResourceServerConfigurer}.
      */
-    protected abstract Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> getOAuth2ResourceServerConfigurer();
+//    protected abstract Customizer<OAuth2ResourceServerConfigurer<HttpSecurity>> getOAuth2ResourceServerConfigurer();
 }

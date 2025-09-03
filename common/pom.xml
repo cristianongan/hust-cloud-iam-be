@@ -24,7 +24,6 @@
         <module>api-common</module>
         <module>annotation</module>
         <module>captcha</module>
-        <module>keycloak-client</module>
         <module>integration</module>
     </modules>
 

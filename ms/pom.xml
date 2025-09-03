@@ -15,8 +15,9 @@
     <description>MBG ANM Microservice Project</description>
 
     <modules>
-        <module>anm-api-gateway</module>
         <module>anm-integration</module>
+        <module>anm-auth</module>
+        <module>anm-gateway</module>
     </modules>
 
     <properties>
@@ -39,7 +40,7 @@
         <maven-compiler-plugin.version>3.14.0</maven-compiler-plugin.version>
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <spring-boot.version>3.4.4</spring-boot.version>
-        <liquibase.version>4.31.1</liquibase.version>
+        <liquibase.version>4.27.0</liquibase.version>
         <validation-api.version>3.1.1</validation-api.version>
         <itextpdf.version>5.5.13.4</itextpdf.version>
         <!--<problem-spring-web.version>0.23.0</problem-spring-web.version>-->

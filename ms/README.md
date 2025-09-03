@@ -1,4 +1,4 @@
-# Hướng Dẫn Cài Đặt & Triển Khai Hệ Thống vmc-mes-ms
+# Hướng Dẫn Cài Đặt & Triển Khai Hệ Thống mbg-anm
 ## 1. Cài đặt các thành phần hệ thống
 ### 1.1. Database: PostgreSQL
 Chạy lệnh sau để khởi tạo container PostgreSQL với user/database mặc định:
