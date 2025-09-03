@@ -395,4 +395,10 @@ public final class LabelKey {
 
 	public static final String LABEL_TRANSACTION_ID = "label.transaction-id";
 
+	public static final String ERROR_JWT_TOKEN_IS_UNSUPPORTED =  "error.jwt-token-is-unsupported";
+
+	public static final String ERROR_TOKEN_HAS_EXPIRED = "error.token-has-expired";
+
+	public static final String ERROR_TOKEN_MALFORMED = "error.token-malformed";
+
 }

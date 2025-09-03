@@ -32,6 +32,18 @@
             <version>${app.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mbg</groupId>
+            <artifactId>mbg-cache</artifactId>
+            <version>${app.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mbg</groupId>
+            <artifactId>mbg-api-common</artifactId>
+            <version>${app.version}</version>
+        </dependency>
+
         <!-- libaries -->
         <dependency>
             <groupId>org.projectlombok</groupId>

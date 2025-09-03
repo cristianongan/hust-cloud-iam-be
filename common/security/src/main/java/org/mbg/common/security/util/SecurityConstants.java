@@ -117,4 +117,28 @@ public final class SecurityConstants {
 			};
 		}
 	}
+
+	public static final class TOKEN_TYPE {
+		public static final String ACCESS_TOKEN = "access_token";
+
+		public static final String REFRESH_TOKEN = "refresh_token";
+	}
+
+	public static final class CLAIM {
+		public static final String TOKEN_TYPE = "token_type";
+
+		public static final String USER = "user";
+	}
+
+	public static final class CACHE {
+		public static final String REFRESH_TOKEN =  "refresh_token";
+
+		public static final String ACCESS_TOKEN = "access_token";
+
+		public static final String REMEMBER_ME_TOKEN = "remember_me";
+
+		public static final String TOKEN = "token";
+
+		public static final String FAST_LOGIN_REFRESH_TOKEN =  "fast_login_refresh_token";
+	}
 }
