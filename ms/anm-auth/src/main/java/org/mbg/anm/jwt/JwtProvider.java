@@ -1,4 +1,4 @@
-package org.mbg.common.security.jwt;
+package org.mbg.anm.jwt;
 
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -10,10 +10,9 @@ import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.security.configuration.AuthenticationProperties;
 import org.mbg.common.security.exception.UnauthorizedException;
-import org.mbg.common.security.service.TokenService;
+import org.mbg.anm.service.TokenService;
 import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.util.DateUtil;
-import org.mbg.common.util.GetterUtil;
 import org.mbg.common.util.StringPool;
 import org.mbg.common.util.Validator;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,7 +21,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
-import java.security.Key;
 import java.security.PublicKey;
 import java.util.Base64;
 import java.util.Date;

@@ -401,4 +401,16 @@ public final class LabelKey {
 
 	public static final String ERROR_TOKEN_MALFORMED = "error.token-malformed";
 
+	public static final String LABEL_DELETED = "label.deleted";
+
+	public static final String LABEL_INACTIVE = "label.inactive";
+
+	public static final String LABEL_NEW = "label.new";
+
+	public static final String LABEL_ACTIVE =  "label.active";
+
+	public static final String LABEL_PENDING =  "label.pending";
+
+	public static final String LABEL_WAITING = "label.waiting";
+
 }
