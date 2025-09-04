@@ -189,3 +189,5 @@ springdoc:
 ```
 - Bổ sung thêm cấu hình nếu có service mới
 - Truy cập link swagger tổng của gateway [http://localhost:8080/swagger-ui/](http://localhost:8080/swagger-ui/) ở môi trường development để test API.
+
+superadmin/12345678aA@

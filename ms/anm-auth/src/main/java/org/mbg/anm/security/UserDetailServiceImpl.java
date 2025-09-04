@@ -37,12 +37,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
         User user = userRepository.findByUsername(username);
 
         if (user == null) {
-            _log.error("User not exist with name :" + username);
+            _log.error("User not exist with name :{}", username);
 
             return null;
         }
 
-        return null;
+        return this.createSpringSecurityUser(username, user);
     }
 
     private UserPrincipal createSpringSecurityUser(String username, User user) {

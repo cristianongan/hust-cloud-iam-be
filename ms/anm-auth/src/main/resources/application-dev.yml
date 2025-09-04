@@ -78,16 +78,16 @@ spring:
         hibernate.jdbc.time_zone: "UTC"
         hibernate.order_inserts: true
         hibernate.format_sql: true
-    messages:
-      encoding: 'UTF-8'
-      use-code-as-default-message: true
-      basename: i18n/labels
-      cache-duration: 60   # 60 second, see the ISO 8601 standard
-      servlet:
-        multipart:
-          max-file-size: -1 #meaning total file size is unlimited
-          max-request-size: -1 #meaning total request size for a multipart/form-data is unlimited.
-          resolve-lazily: true
+  messages:
+    encoding: 'UTF-8'
+    use-code-as-default-message: true
+    basename: i18n/labels
+    cache-duration: 60   # 60 second, see the ISO 8601 standard
+    servlet:
+      multipart:
+        max-file-size: -1 #meaning total file size is unlimited
+        max-request-size: -1 #meaning total request size for a multipart/form-data is unlimited.
+        resolve-lazily: true
 security:
   cache:
     url-patterns: '/i18n/*,/content/*,/app/*'
@@ -113,6 +113,7 @@ security:
     public-url-patterns:
       - "/actuator/**"
       - "/public/**"
+      - "/auth/**"
     signature:
       gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
     user:

@@ -11,6 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.mbg.anm.jwt.JwtProvider;
 import org.mbg.common.security.util.SecurityConstants;
+import org.mbg.common.util.Validator;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -30,7 +33,16 @@ public class UserSecurityFilter implements AuthorizationFilter {
         String auth = request.getHeader("Authorization");
         String token = this.resolveToken(auth);
 
+         if (Validator.isNotNull(token)) {
+             this.jwtProvider.validateToken(token);
 
+             Authentication authentication =
+                     this.jwtProvider.getAuthentication(token);
+
+             SecurityContextHolder.getContext().setAuthentication(authentication);
+         }
+
+        filterChain.doFilter(request, response);
     }
 
     private String resolveToken(String token) {
