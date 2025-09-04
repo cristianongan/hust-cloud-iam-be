@@ -3,6 +3,7 @@ package org.mbg.anm.jwt;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.security.UserPrincipal;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.cache.CacheProperties;
 import org.mbg.common.cache.util.CacheConstants;
@@ -16,6 +17,9 @@ import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.StringPool;
 import org.mbg.common.util.Validator;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -40,6 +44,8 @@ public class JwtProvider implements InitializingBean {
     private final CacheProperties cacheProperties;
 
     private final TokenService tokenService;
+
+    private final UserDetailsService userDetailsService;
 
     private JwtParser jwtParser;
 
@@ -159,4 +165,17 @@ public class JwtProvider implements InitializingBean {
         return new JwtToken(jwt, duration);
     }
 
+    public Authentication getAuthentication(String token) {
+        Claims claims = jwtParser.parseSignedClaims(token).getPayload();
+
+        String username = claims.getSubject();
+
+        UserPrincipal principal = (UserPrincipal) userDetailsService.loadUserByUsername(username);
+
+        if (Validator.isNull(principal)) {
+            return null;
+        }
+
+        return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
+    }
 }

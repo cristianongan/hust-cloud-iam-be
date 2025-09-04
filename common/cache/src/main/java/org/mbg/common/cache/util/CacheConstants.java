@@ -37,6 +37,6 @@ public final class CacheConstants {
     public static final class KEYS {
         public static final String TOKEN = "token";
 
-        public static final String REFRESH_TOKEN = "refresh_token";
+        public static final String REFRESH_TOKEN = "refresh-token";
     }
 }

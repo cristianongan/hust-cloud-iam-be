@@ -45,7 +45,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public abstract class SecurityConfiguration {
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(12);
     }
 
     /**

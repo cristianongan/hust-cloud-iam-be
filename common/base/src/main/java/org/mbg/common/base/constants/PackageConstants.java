@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PackageConstants {
 
-    public static final String DEFAULT_JPA_REPOSITORY = "org.mbg.repository";
+    public static final String DEFAULT_JPA_REPOSITORY = "org.mbg.anm.repository";
 
     public static final String DEFAULT_PACKAGE_SCAN = "org.mbg";
 

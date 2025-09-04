@@ -69,6 +69,7 @@ security:
     public-url-patterns:
       - "/actuator/**"
       - "/api/auth-service/public/**"
+      - "/api/auth-service/auth/**"
     signature:
       gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
 
@@ -159,7 +160,7 @@ cache:
     dashboard: 180 # 3 phút
 management:
   server:
-    port: 9001
+    port: 9091
   health:
     circuitbreakers:
       enabled: true # Include circuit breaker status in the health endpoint
@@ -170,6 +171,8 @@ management:
   endpoint:
     health:
       show-details: always # Always show full details in the /actuator/health endpoint
+    gateway:
+      enabled: true
   metrics:
     distribution:
       percentiles-histogram:

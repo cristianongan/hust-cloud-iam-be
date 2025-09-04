@@ -90,4 +90,29 @@
             CREATE INDEX user_role_user_id ON user_role (user_id);
         </sql>
     </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-06" author="Nganph">
+        <sql>
+            create table client_(
+                                      id bigserial primary key,
+                                      client_id varchar(100),
+                                      client_name varchar(100),
+                                      client_secret varchar(100),
+                                      description varchar(500),
+                                      status smallint,
+                                      created_by varchar(100),
+                                      created_date timestamp,
+                                      last_modified_by varchar(100),
+                                      last_modified_date timestamp
+            );
+            CREATE INDEX client_client_id ON client_ (client_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-07" author="Nganph">
+        <sql>
+            alter table user_ add column address varchar(500);
+            alter table user_ drop column addess;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
