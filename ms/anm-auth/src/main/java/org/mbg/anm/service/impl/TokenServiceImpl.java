@@ -1,6 +1,6 @@
-package org.mbg.common.security.service.impl;
+package org.mbg.anm.service.impl;
 
-import org.mbg.common.security.service.TokenService;
+import org.mbg.anm.service.TokenService;
 import org.springframework.stereotype.Service;
 
 @Service

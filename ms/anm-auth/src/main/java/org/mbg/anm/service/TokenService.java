@@ -1,7 +1,7 @@
-package org.mbg.common.security.service;
+package org.mbg.anm.service;
 
-import org.mbg.common.security.jwt.JwtAccessToken;
-import org.mbg.common.security.jwt.JwtToken;
+import org.mbg.anm.jwt.JwtAccessToken;
+import org.mbg.anm.jwt.JwtToken;
 import org.mbg.common.security.util.SecurityConstants;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

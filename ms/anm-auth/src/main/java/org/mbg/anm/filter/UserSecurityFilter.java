@@ -6,13 +6,21 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mbg.common.security.filter.AuthorizationFilter;
+import org.mbg.anm.jwt.JwtProvider;
 import org.mbg.common.security.util.SecurityConstants;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 
+@Slf4j
+@RequiredArgsConstructor
 public class UserSecurityFilter implements AuthorizationFilter {
+
+    private final JwtProvider jwtProvider;
+
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

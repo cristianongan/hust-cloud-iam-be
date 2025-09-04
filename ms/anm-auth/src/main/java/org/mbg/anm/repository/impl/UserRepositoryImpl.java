@@ -1,4 +1,6 @@
 package org.mbg.anm.repository.impl;
 
-public class UserRepositoryImpl {
+import org.mbg.anm.repository.extend.UserRepositoryExtend;
+
+public class UserRepositoryImpl implements UserRepositoryExtend {
 }
