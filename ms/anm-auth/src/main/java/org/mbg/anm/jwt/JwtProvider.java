@@ -70,6 +70,11 @@ public class JwtProvider implements InitializingBean {
         this.timeToLives = this.cacheProperties.getTimeToLives();
     }
 
+    public String getSubject(String token) {
+        Claims claims = this.jwtParser.parseSignedClaims(token).getPayload();
+        return claims.getSubject();
+    }
+
     public boolean validateToken(String token) {
         String username = StringPool.BLANK;
 
@@ -138,8 +143,7 @@ public class JwtProvider implements InitializingBean {
     private JwtToken createRefreshToken(String username, int duration) {
         Map<String, Object> params = new HashMap<>();
 
-        params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.ACCESS_TOKEN);
-        params.put(SecurityConstants.CLAIM.USER, SecurityConstants.TOKEN_TYPE.ACCESS_TOKEN);
+        params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.REFRESH_TOKEN);
 
         return createToken(username, duration, params);
     }
@@ -147,7 +151,7 @@ public class JwtProvider implements InitializingBean {
     private JwtToken createAccessToken(String username, int duration) {
         Map<String, Object> params = new HashMap<>();
 
-        params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.REFRESH_TOKEN);
+        params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.ACCESS_TOKEN);
 
         return createToken(username, duration, params);
     }

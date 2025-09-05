@@ -413,4 +413,8 @@ public final class LabelKey {
 
 	public static final String LABEL_WAITING = "label.waiting";
 
+	public static final String ERROR_INVALID_CREDENTIAL = "error.invalid-credential";
+
+	public static final String ERROR_CLIENT_NOT_FOUND = "error.client-not-found";
+
 }
