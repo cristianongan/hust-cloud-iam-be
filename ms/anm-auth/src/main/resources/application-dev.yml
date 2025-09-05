@@ -114,6 +114,7 @@ security:
       - "/actuator/**"
       - "/public/**"
       - "/auth/**"
+      - "/client/**"
     signature:
       gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
     user:

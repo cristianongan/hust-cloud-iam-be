@@ -12,6 +12,7 @@ import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.TokenService;
 import org.mbg.anm.service.UserService;
 import org.mbg.common.api.exception.BadRequestException;
+import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.security.RsaProvider;
 import org.mbg.common.util.Validator;
@@ -55,7 +56,7 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = userRepository.findByUsername(userDTO.getUsername());
-        if (Validator.isNull(user)) {
+        if (Validator.isNull(user) || !Validator.equals(user.getStatus(), EntityStatus.ACTIVE)) {
             throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
                     User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
         }

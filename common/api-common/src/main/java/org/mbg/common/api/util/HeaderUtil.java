@@ -4,6 +4,7 @@ import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.util.StringPool;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
+import org.mbg.common.util.Validator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -123,6 +124,17 @@ public final class HeaderUtil {
 		byte[] encodedAuth = Base64.encodeBase64(sb.getBytes(StandardCharsets.UTF_8));
 
 		return SecurityConstants.Header.BASIC_START + new String(encodedAuth);
+	}
+
+	public static String[] decodeBasicAuthorization(String basicAuthorization) {
+		if (Validator.isNull(basicAuthorization)) {
+			return null;
+		}
+
+		byte[] decodedAuth = Base64.decodeBase64(basicAuthorization);
+		String auth = new String(decodedAuth, StandardCharsets.UTF_8);
+
+        return auth.split(StringPool.COLON);
 	}
 
 	public static String getBearerAuthorization(String token) {

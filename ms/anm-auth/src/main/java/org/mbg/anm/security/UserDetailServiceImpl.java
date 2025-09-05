@@ -2,9 +2,11 @@ package org.mbg.anm.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.model.Client;
 import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.User;
+import org.mbg.anm.repository.ClientRepository;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
@@ -28,6 +30,8 @@ import java.util.stream.Collectors;
 public class UserDetailServiceImpl implements UserDetailsService {
     private final UserRepository userRepository;
 
+    private final ClientRepository clientRepository;
+
     private final RoleRepository roleRepository;
 
     private final PermissionRepository permissionRepository;
@@ -43,6 +47,52 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
 
         return this.createSpringSecurityUser(username, user);
+    }
+
+    public UserDetails loadUserByClientId(String clientId) throws UsernameNotFoundException {
+        Client client = clientRepository.findByClientId(clientId);
+
+        if (client == null) {
+            _log.error("client not exist with id :{}", clientId);
+
+            return null;
+        }
+
+        return this.createSpringSecurityUser(clientId, client);
+    }
+
+    private UserDetails createSpringSecurityUser(String clientId, Client client) {
+        if (!Validator.equals(EntityStatus.ACTIVE.getStatus(), client.getStatus())) {
+            throw new UserNotActivatedException("Client " + clientId + " was not activated");
+        }
+
+        List<Role> roles = this.roleRepository.findByClientId(clientId);
+
+        List<String> roleNames = new ArrayList<>();
+
+        List<Permission> privileges = new ArrayList<>();
+
+        roles.forEach(role -> {
+            if (Validator.equals(role.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+                roleNames.add(role.getName());
+
+                //get privilege by role id
+                List<Permission> pves = this.permissionRepository.findByRoleCode(role.getCode());
+
+                // set list of privileges into role
+                role.setPermissions(pves);
+
+                privileges.addAll(pves);
+            }
+        });
+
+        List<GrantedAuthority> grantedAuthorities = privileges.stream()
+                .map(privilege -> new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
+
+        // add role name to authority list
+        roleNames.forEach(roleName -> grantedAuthorities.add(new SimpleGrantedAuthority(roleName)));
+
+        return new UserPrincipal(client, roleNames, grantedAuthorities);
     }
 
     private UserPrincipal createSpringSecurityUser(String username, User user) {

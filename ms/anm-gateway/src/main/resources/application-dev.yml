@@ -70,6 +70,7 @@ security:
       - "/actuator/**"
       - "/api/auth-service/public/**"
       - "/api/auth-service/auth/**"
+      - "/api/auth-service/client/**"
     signature:
       gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
 

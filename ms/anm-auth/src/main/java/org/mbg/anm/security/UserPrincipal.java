@@ -1,6 +1,8 @@
 package org.mbg.anm.security;
 
+import org.mbg.anm.model.Client;
 import org.mbg.anm.model.User;
+import org.mbg.common.util.Validator;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;
@@ -14,6 +16,8 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
 
     private User user;
 
+    private Client client;
+
     private Collection<String> roles;
 
     public UserPrincipal(User user, Collection<String> roles, Collection<? extends GrantedAuthority> authorities) {
@@ -24,17 +28,25 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
         this.roles = roles;
     }
 
+    public UserPrincipal(Client client, Collection<String> roles, Collection<? extends GrantedAuthority> authorities) {
+        super(client.getClientId(), client.getClientSecret(), authorities);
+
+        this.client = client;
+
+        this.roles = roles;
+    }
+
     public Long getUserId() {
-        return user.getId();
+        return Validator.isNotNull(user) ? user.getId() : client.getId();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return Validator.isNotNull(user) ? user.getUsername() : client.getClientId();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return Validator.isNotNull(user) ? user.getPassword() : client.getClientSecret();
     }
 }

@@ -29,4 +29,21 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
 
         return query.getResultList();
     }
+
+    @Override
+    public List<Role> findByClientId(String clientId) {
+        StringBuilder sql = new StringBuilder(1);
+        sql.append("""
+                select *
+                    from role_ p
+                    right join client_role rp on rp.role_code = p.code
+                    where rp.client_id = :clientId
+                """);
+
+        Query query = em.createNativeQuery(sql.toString(), Permission.class);
+
+        query.setParameter("clientId", clientId);
+
+        return query.getResultList();
+    }
 }
