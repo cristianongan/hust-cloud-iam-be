@@ -93,4 +93,5 @@ services:
     ports:
       - "5044:5044"
       - "9600:9600"
+      - "5000:5000"
     networks: [mbg-anm-dev]
