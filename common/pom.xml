@@ -25,6 +25,7 @@
         <module>annotation</module>
         <module>captcha</module>
         <module>integration</module>
+        <module>queue</module>
     </modules>
 
     <properties>
