@@ -15,9 +15,10 @@
     <description>MBG ANM Microservice Project</description>
 
     <modules>
-        <module>anm-integration</module>
         <module>anm-auth</module>
         <module>anm-gateway</module>
+        <module>anm-req-producer</module>
+        <module>anm-core</module>
     </modules>
 
     <properties>

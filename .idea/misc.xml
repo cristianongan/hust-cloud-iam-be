@@ -11,6 +11,7 @@
       <set>
         <option value="$PROJECT_DIR$/common/keycloak-client/pom.xml" />
         <option value="$PROJECT_DIR$/ms/anm-api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/ms/anm-integration/pom.xml" />
       </set>
     </option>
   </component>
