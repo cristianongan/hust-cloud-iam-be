@@ -11,7 +11,8 @@
     <!-- Or ensure LOG_ROOT is reliably set -->
     <property name="LOG_ROOT"            value="${CATALINA_BASE:-.}"/>
     <property name="LOG_PATH"            value="${LOG_ROOT}/logs"/>
-    <property name="APP_NAME"            value="${spring.application.name:-anm-auth9-service}"/> <!-- Use Spring App Name -->
+<!--    <springProperty name="APP_NAME"            value="${spring.application.name:-anm-auth-service}"/> &lt;!&ndash; Use Spring App Name &ndash;&gt;-->
+    <springProperty scope="context" name="APP_NAME" source="spring.application.name"/>
     <property name="LOG_ARCHIVE_PREFIX"  value="${LOG_PATH}/${APP_NAME}/%d{yyyy-MM-dd}.%i"/> <!-- Include app name -->
     <property name="LOG_ARCHIVE_DAYS"    value="10"/>
     <property name="MAX_FILE_SIZE"       value="100MB"/>
@@ -20,7 +21,7 @@
     <!-- Define patterns (Keep your existing patterns if they work for you) -->
     <!-- Ensure MDC values (IP, S, TX, U) are set by your application (e.g., interceptor) -->
     <property name="FILE_LOG_PATTERN"    value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%15.15t] %-5level [%thread, %X{requestId}] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
-    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%thread, %X{requestId}] %clr([${APP_NAME},%X{traceId:-},%X{spanId:-}]){yellow} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%thread, %X{requestId}] %clr([${APP_NAME}]){yellow} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -89,7 +90,10 @@
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
         <destination>192.168.169.88:5000</destination>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdc>true</includeMdc>
+            <customFields>{"app":"${APP_NAME:-unknown}"}</customFields>
+        </encoder>
     </appender>
 
     <appender name="ASYNC_LOGSTASH" class="ch.qos.logback.classic.AsyncAppender">
