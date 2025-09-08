@@ -11,7 +11,7 @@
     <!-- Or ensure LOG_ROOT is reliably set -->
     <property name="LOG_ROOT"            value="${CATALINA_BASE:-.}"/>
     <property name="LOG_PATH"            value="${LOG_ROOT}/logs"/>
-    <property name="APP_NAME"            value="${spring.application.name:-anm-mbg-service}"/> <!-- Use Spring App Name -->
+    <property name="APP_NAME"            value="${spring.application.name:-anm-auth9-service}"/> <!-- Use Spring App Name -->
     <property name="LOG_ARCHIVE_PREFIX"  value="${LOG_PATH}/${APP_NAME}/%d{yyyy-MM-dd}.%i"/> <!-- Include app name -->
     <property name="LOG_ARCHIVE_DAYS"    value="10"/>
     <property name="MAX_FILE_SIZE"       value="100MB"/>
@@ -88,7 +88,7 @@
     </appender>
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>localhost:5000</destination>
+        <destination>192.168.169.88:5000</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 

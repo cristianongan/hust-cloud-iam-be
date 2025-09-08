@@ -127,7 +127,7 @@
                                       last_modified_by varchar(100),
                                       last_modified_date timestamp
             );
-            CREATE INDEX client_role_client_id ON user_role (client_id);
+            CREATE INDEX client_role_client_id ON client_role (client_id);
         </sql>
     </changeSet>
 </databaseChangeLog>
