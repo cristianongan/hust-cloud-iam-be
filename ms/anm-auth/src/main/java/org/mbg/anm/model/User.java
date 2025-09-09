@@ -52,6 +52,9 @@ public class User extends AbstractAuditingEntity implements Serializable {
     @Column(name = "fullname")
     private String fullname;
 
+    @Column(name = "type")
+    private int type;
+
     @Transient
     private List<Role> roles = new ArrayList<>();
 

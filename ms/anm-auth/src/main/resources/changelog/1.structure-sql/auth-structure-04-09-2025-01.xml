@@ -130,4 +130,10 @@
             CREATE INDEX client_role_client_id ON client_role (client_id);
         </sql>
     </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-09" author="Nganph">
+        <sql>
+            ALTER TABLE user_ add column type smallint;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

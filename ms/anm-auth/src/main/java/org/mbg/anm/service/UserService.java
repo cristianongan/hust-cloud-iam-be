@@ -2,12 +2,20 @@ package org.mbg.anm.service;
 
 import org.mbg.anm.jwt.JwtAccessToken;
 import org.mbg.anm.model.dto.UserDTO;
+import org.mbg.anm.model.dto.request.LoginReq;
+import org.mbg.anm.model.dto.request.UserReq;
+import org.mbg.anm.model.search.UserSearch;
+import org.springframework.data.domain.Page;
 
 public interface UserService {
 
-    UserDTO update(UserDTO userDTO);
+    UserDTO update(UserReq userReq);
 
-    UserDTO create(UserDTO userDTO);
+    UserDTO create(UserReq userReq);
 
-    JwtAccessToken login(UserDTO userDTO);
+    JwtAccessToken login(LoginReq userDTO);
+
+    Page<UserDTO> searchUsers(UserSearch search);
+
+    void updateStatus(UserReq userReq);
 }

@@ -7,10 +7,7 @@ validation:
   - '^[A-Z0-9]{0,15}$'
   coordinate-regex: '^(-?\d+(\.\d+)?),\s*(-?\d+(\.\d+)?)$'
   otp-regex: '^\\d{8}$'
-  name-non-accent-regex: '^[ A-Z]*$'
-  name-lao-regex: '^[\s, \u0e80-\u0eff]*$'
   user-fullname-non-accent-regex: '^[ a-zA-Z]*$'
-  email-mb-regex: '^(\\s){0,}[a-zA-Z][a-zA-Z0-9_\\.]{2,50}(@mbbank.com.vn|@evotek.vn)'
   password-random:
     uppercase-length: 1
     lowercase-length: 1
