@@ -262,7 +262,19 @@ public class UserServiceImpl implements UserService {
         if (Validator.isNotNull(userReq.getIds()) && Validator.isNotNull(userReq.getStatus())
             && Validator.isNotNull(EntityStatus.valueOfStatus(userReq.getStatus()))
         ) {
+            if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED)) {
+                throw new BadRequestException(LabelKey.ERROR_INVALID,
+                        User.class.getName(), LabelKey.ERROR_INVALID);
+            }
+
             this.userRepository.updateStatusByIdIn(userReq.getStatus(), userReq.getIds());
+        }
+    }
+
+    @Override
+    public void delete(UserReq userReq) {
+        if (Validator.isNotNull(userReq.getIds())) {
+            this.userRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), userReq.getIds());
         }
     }
 }

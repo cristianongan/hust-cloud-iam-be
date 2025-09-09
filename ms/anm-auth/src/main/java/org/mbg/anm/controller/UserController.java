@@ -40,4 +40,11 @@ public class UserController {
         this.userService.updateStatus(req);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping("delete")
+    @PreAuthorize("hasPrivilege('USER_DELETE')")
+    public ResponseEntity<Void> delete(@RequestBody UserReq req) {
+        this.userService.delete(req);
+        return ResponseEntity.ok().build();
+    }
 }

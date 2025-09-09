@@ -18,4 +18,6 @@ public interface UserService {
     Page<UserDTO> searchUsers(UserSearch search);
 
     void updateStatus(UserReq userReq);
+
+    void delete(UserReq userReq);
 }
