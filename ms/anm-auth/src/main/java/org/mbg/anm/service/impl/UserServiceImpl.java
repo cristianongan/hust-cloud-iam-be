@@ -1,23 +1,38 @@
 package org.mbg.anm.service.impl;
 
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.configuration.ValidationProperties;
+import org.mbg.anm.constant.UserType;
 import org.mbg.anm.jwt.JwtAccessToken;
 import org.mbg.anm.jwt.JwtProvider;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.UserDTO;
+import org.mbg.anm.model.dto.request.LoginReq;
+import org.mbg.anm.model.dto.request.UserReq;
+import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.TokenService;
 import org.mbg.anm.service.UserService;
+import org.mbg.anm.service.mapper.UserMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.label.LabelKey;
+import org.mbg.common.label.Labels;
 import org.mbg.common.security.RsaProvider;
 import org.mbg.common.util.Validator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -38,18 +53,156 @@ public class UserServiceImpl implements UserService {
 
     private final RsaProvider rsaProvider;
 
-    @Override
-    public UserDTO update(UserDTO userDTO) {
-        return null;
+    private final UserMapper userMapper;
+
+    private final ValidationProperties validationProperties;
+
+    private Pattern passwordPattern;
+
+    @PostConstruct
+    protected void init() {
+        this.passwordPattern = Pattern.compile(this.validationProperties.getPasswordRegex());
     }
 
     @Override
-    public UserDTO create(UserDTO userDTO) {
-        return null;
+    public UserDTO update(UserReq userReq) {
+        if (Validator.isNull(userReq.getId())) {
+            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
+                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
+        }
+
+        User user = userRepository.findById(userReq.getId()).orElse(null);
+
+        if (Validator.isNull(user)) {
+            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
+                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
+        }
+
+        this.validateUserReq(userReq);
+
+        if (Validator.isNotNull(user.getPassword()) && !this.passwordEncoder.matches(userReq.getPassword(), user.getPassword())) {
+            user.setPassword(this.passwordEncoder.encode(userReq.getPassword()));
+        }
+
+        if (!Validator.equals(user.getEmail(), userReq.getEmail()) &&
+            this.userRepository.existsByEmail(userReq.getEmail())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        if (!Validator.equals(userReq.getPhone(), user.getPhone()) &&
+            this.userRepository.existsByPhone(userReq.getPhone())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        user.setPhone(userReq.getPhone());
+        user.setEmail(userReq.getEmail());
+        user.setAddress(userReq.getAddress());
+        user.setDob(userReq.getDob());
+        user.setGender(userReq.getGender());
+        user.setFullname(userReq.getFullname());
+        user.setType(userReq.getType());
+        user.setStatus(userReq.getStatus());
+
+        return this.userMapper.toDto(userRepository.save(user));
     }
 
     @Override
-    public JwtAccessToken login(UserDTO userDTO) {
+    public UserDTO create(UserReq userReq) {
+        if (Validator.isNull(userReq.getStatus())) {
+            userReq.setStatus(EntityStatus.ACTIVE.getStatus());
+        }
+
+        if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(LabelKey.ERROR_INVALID,
+                    User.class.getName(), LabelKey.ERROR_INVALID);
+        }
+
+        this.validateUserReq(userReq);
+
+        if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
+            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
+                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
+        }
+
+        String password = this.decryptPassword(userReq.getPassword());
+
+        if (!passwordPattern.matcher(password).matches()) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_DATA_FORMAT,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PASSWORD)})
+                    , User.class.getName(), LabelKey.ERROR_INVALID_DATA_FORMAT);
+        }
+
+        if (this.userRepository.existsByUsername(userReq.getUsername())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_USERNAME)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        if (this.userRepository.existsByPhone(userReq.getPhone())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        if (this.userRepository.existsByEmail(userReq.getEmail())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        User user = new User();
+        user.setUsername(userReq.getUsername());
+        user.setPhone(userReq.getPhone());
+        user.setEmail(userReq.getEmail());
+        user.setPassword(passwordEncoder.encode(userReq.getPassword()));
+        user.setAddress(userReq.getAddress());
+        user.setDob(userReq.getDob());
+        user.setGender(userReq.getGender());
+        user.setFullname(userReq.getFullname());
+        user.setType(userReq.getType());
+        user.setStatus(userReq.getStatus());
+
+        return this.userMapper.toDto(this.userRepository.save(user));
+    }
+
+    private void validateUserReq(UserReq userReq) {
+        if (Validator.isNull(userReq.getFullname())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_FULLNAME)})
+                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        }
+
+        if (Validator.isNull(userReq.getEmail())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
+                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        }
+
+        if (Validator.isNull(userReq.getPhone())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
+                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        }
+
+        if (Validator.isNull(userReq.getStatus()) || Validator.isNull(EntityStatus.valueOfStatus(userReq.getStatus()))) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_STATUS)})
+                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        }
+
+        if (Validator.isNull(userReq.getType()) || Validator.isNull(UserType.valueOfStatus(userReq.getType()))) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_TYPE)})
+                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        }
+    }
+
+    @Override
+    public JwtAccessToken login(LoginReq userDTO) {
         if (Validator.isNull(userDTO.getUsername()) || Validator.isNull(userDTO.getPassword())) {
             throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
                     User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
@@ -61,14 +214,7 @@ public class UserServiceImpl implements UserService {
                     User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
         }
 
-        String password;
-
-        try {
-            password = this.rsaProvider.decrypt(userDTO.getPassword());
-        } catch (Exception e) {
-            _log.error("login occurred an exception {}", e.getMessage());
-            throw new BadRequestException(LabelKey.ERROR_INCORRECT_SIGNATURE, User.class.getName(), LabelKey.ERROR_INCORRECT_SIGNATURE);
-        }
+        String password = this.decryptPassword(userDTO.getPassword());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
@@ -82,5 +228,53 @@ public class UserServiceImpl implements UserService {
 
         return accessToken;
 
+    }
+
+    private String decryptPassword(String encryptedPassword) {
+        String password;
+
+        try {
+            password = this.rsaProvider.decrypt(encryptedPassword);
+        } catch (Exception e) {
+            _log.error("login occurred an exception {}", e.getMessage());
+            throw new BadRequestException(LabelKey.ERROR_INCORRECT_SIGNATURE, User.class.getName(), LabelKey.ERROR_INCORRECT_SIGNATURE);
+        }
+
+        return password;
+    }
+
+    @Override
+    public Page<UserDTO> searchUsers(UserSearch search) {
+
+        Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize());
+
+        List<User> users = this.userRepository.search(search, pageable);
+
+        List<UserDTO> content = this.userMapper.toDto(users);
+
+        Long count  = this.userRepository.count(search);
+
+        return new PageImpl<>(content, pageable, count);
+    }
+
+    @Override
+    public void updateStatus(UserReq userReq) {
+        if (Validator.isNotNull(userReq.getIds()) && Validator.isNotNull(userReq.getStatus())
+            && Validator.isNotNull(EntityStatus.valueOfStatus(userReq.getStatus()))
+        ) {
+            if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED)) {
+                throw new BadRequestException(LabelKey.ERROR_INVALID,
+                        User.class.getName(), LabelKey.ERROR_INVALID);
+            }
+
+            this.userRepository.updateStatusByIdIn(userReq.getStatus(), userReq.getIds());
+        }
+    }
+
+    @Override
+    public void delete(UserReq userReq) {
+        if (Validator.isNotNull(userReq.getIds())) {
+            this.userRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), userReq.getIds());
+        }
     }
 }

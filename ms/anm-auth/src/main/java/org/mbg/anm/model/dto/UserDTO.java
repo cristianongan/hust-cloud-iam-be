@@ -1,14 +1,19 @@
 package org.mbg.anm.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.mbg.common.base.model.AbstractAuditingEntity;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
@@ -19,8 +24,6 @@ public class UserDTO implements Serializable {
     private Long id;
 
     private String username;
-
-    private String password;
 
     private String email;
 
@@ -35,5 +38,15 @@ public class UserDTO implements Serializable {
     private int status;
 
     private String fullname;
+
+    private int type;
+
+    private String createdBy;
+
+    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+    private Instant lastModifiedDate;
 
 }
