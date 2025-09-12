@@ -1,9 +1,9 @@
 spring:
   application:
-    name: core-service
+    name: req-consumer-service
 
 server:
-  port: 9092
+  port: 9093
   servlet:
     context-path: /
     encoding:
