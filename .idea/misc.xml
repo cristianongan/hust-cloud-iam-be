@@ -10,8 +10,9 @@
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/common/keycloak-client/pom.xml" />
-        <option value="$PROJECT_DIR$/ms/anm-api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/ms/anm-core/pom.xml" />
         <option value="$PROJECT_DIR$/ms/anm-integration/pom.xml" />
+        <option value="$PROJECT_DIR$/ms/cms/pom.xml" />
       </set>
     </option>
   </component>

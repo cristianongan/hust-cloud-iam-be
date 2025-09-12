@@ -13,12 +13,15 @@
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ms/anm-api-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-auth/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ms/anm-cms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-core/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-gateway/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-integration/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-req-consumer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/anm-req-producer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ms/cms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/ms/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

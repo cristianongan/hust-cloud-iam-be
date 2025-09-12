@@ -3,7 +3,9 @@ package org.mbg.anm.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.model.Role;
+import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.RoleDTO;
+import org.mbg.anm.model.dto.UserDTO;
 import org.mbg.anm.model.dto.request.RoleReq;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
@@ -16,7 +18,13 @@ import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.util.RandomGenerator;
 import org.mbg.common.util.Validator;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -86,5 +94,18 @@ public class RoleServiceImpl implements RoleService {
         if (Validator.isNotNull(roleReq.getIds())) {
             this.roleRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), roleReq.getIds());
         }
+    }
+
+    @Override
+    public Page<RoleDTO> search(RoleReq search) {
+        Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize());
+
+        List<Role> roles = this.roleRepository.search(search, pageable);
+
+        List<RoleDTO> content = this.roleMapper.toDto(roles);
+
+        Long count  = this.roleRepository.count(search);
+
+        return new PageImpl<>(content, pageable, count);
     }
 }

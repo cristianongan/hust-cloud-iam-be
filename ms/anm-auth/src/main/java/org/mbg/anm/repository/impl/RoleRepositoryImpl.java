@@ -5,9 +5,16 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.Query;
 import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
+import org.mbg.anm.model.User;
+import org.mbg.anm.model.dto.request.RoleReq;
 import org.mbg.anm.repository.extend.RoleRepositoryExtend;
+import org.mbg.common.base.enums.EntityStatus;
+import org.mbg.common.util.Validator;
+import org.springframework.data.domain.Pageable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RoleRepositoryImpl implements RoleRepositoryExtend {
     @PersistenceContext
@@ -45,5 +52,57 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
         query.setParameter("clientId", clientId);
 
         return query.getResultList();
+    }
+
+    @Override
+    public List<Role> search(RoleReq roleReq, Pageable pageable) {
+        StringBuilder sql = new StringBuilder("select e from role_ e ");
+
+        Map<String,Object> params = new HashMap<>();
+
+        sql.append(createWhereQuery(roleReq,params));
+
+        Query query = em.createNativeQuery(sql.toString(), Role.class);
+
+        params.forEach(query::setParameter);
+
+        if (pageable != null) {
+            query.setFirstResult(pageable.getPageNumber() * pageable.getPageSize());
+
+            query.setMaxResults(pageable.getPageSize());
+        } else {
+            query.setFirstResult(0);
+
+            query.setMaxResults(10);
+        }
+
+        return query.getResultList();
+    }
+
+    @Override
+    public Long count(RoleReq roleReq) {
+        StringBuilder sql = new StringBuilder("select count(1) from role_ e ");
+
+        Map<String,Object> params = new HashMap<>();
+
+        sql.append(createWhereQuery(roleReq,params));
+
+        Query query = em.createNativeQuery(sql.toString(), Long.class);
+
+        params.forEach(query::setParameter);
+
+        return (Long) query.getSingleResult();
+    }
+
+    private StringBuilder createWhereQuery(RoleReq roleReq, Map<String, Object> params) {
+        StringBuilder sql = new StringBuilder(" WHERE 1=1 AND e.status != :deletedStatus ");
+        params.put("deletedStatus", EntityStatus.DELETED.getStatus());
+
+        if (Validator.isNotNull(roleReq.getKeyword())) {
+            sql.append(" AND e.keyword LIKE :keyword ");
+            params.put("keyword", String.format("%%%s%%", roleReq.getKeyword()));
+        }
+
+        return sql;
     }
 }

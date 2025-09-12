@@ -25,4 +25,10 @@ public class RoleReq implements Serializable {
 
     private List<Long> ids;
 
+    private String keyword;
+
+    private int page;
+
+    private int pageSize;
+
 }
