@@ -18,7 +18,9 @@
         <module>anm-auth</module>
         <module>anm-gateway</module>
         <module>anm-req-producer</module>
-        <module>anm-core</module>
+        <module>anm-req-consumer</module>
+        <module>anm-cms</module>
+        <module>anm-api-gateway</module>
     </modules>
 
     <properties>
