@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.lang.NonNull;
+import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,6 +35,7 @@ import org.zalando.problem.violations.ConstraintViolationProblemModule;
  */
 @Slf4j
 @Configuration
+@EnableRetry
 @RequiredArgsConstructor
 public class WebConfiguration {
 

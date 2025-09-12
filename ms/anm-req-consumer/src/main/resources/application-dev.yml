@@ -1,0 +1,214 @@
+logging:
+  level:
+    ROOT: INFO
+    org.mbg: DEBUG
+    org.springframework.cache: TRACE
+    org.redisson: INFO
+    org.springframework.transaction: TRACE # Rất quan trọng
+    org.springframework.orm.jpa: DEBUG     # Hoặc TRACE nếu cần chi tiết hơn về JPA
+    org.hibernate.SQL: DEBUG             # Để xem các câu lệnh SQL
+    org.hibernate.type.descriptor.sql: TRACE # Để xem các tham số được bind
+    org.postgresql: INFO
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+spring:
+  jackson:
+    date-format: dd-MM-yyyy
+    time-zone: Asia/Ho_Chi_Minh
+    serialization:
+      write-dates-as-timestamps: false
+      indent-output: true
+      fail-on-empty-beans: false
+  liquibase:
+    enabled: true
+    change-log: classpath:/changelog/changelog-master.xml
+  cloud:
+    consul:
+      host: 192.168.169.88 # Address of the Consul agent
+      port: 8500      # Port of the Consul agent (default is 8500)
+      discovery:
+        register: true # Enable service discovery with Consul
+        instance-id: ${spring.application.name}-${random.value} # Generate a unique instance ID
+        health-check-path: /actuator/health # Path for health checks (requires Spring Boot Actuator)
+        health-check-interval: 30s
+        prefer-ip-address: true # Register service with its IP address instead of hostname (optional)
+      config:
+        enabled: false # Enable Spring Cloud Consul Config
+        prefixes: config # Default prefix for configuration keys in Consul (default is /config)
+        default-context: application # Default context for configuration (often 'application')
+        profile-separator: ',' # Separator used to combine application name and profile in Consul keys
+        format: YAML # Format of the configuration files in Consul (can be YAML or PROPERTIES, default is PROPERTIES)
+        watch:
+          enabled: true # Enable watching for configuration changes in Consul for dynamic updates
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    url: jdbc:postgresql://192.168.169.88:15432/mbg_anm_be
+    username: mbg_anm_be
+    password: 123456a@A
+    #driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+      maximum-pool-size: 2
+      data-source-properties:
+        cachePrepStmts: true
+        prepStmtCacheSize: 250
+        prepStmtCacheSqlLimit: 2048
+        useServerPrepStmts: true
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      database: MYSQL
+      show-sql: true
+      properties:
+        hibernate.id.new_generator_mappings: true
+        hibernate.connection.provider_disables_autocommit: true
+        hibernate.cache.use_second_level_cache: false
+        hibernate.cache.use_query_cache: false
+        hibernate.temp.use_jdbc_metadata_defaults: false
+        # hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+        hibernate.cache.hazelcast.instance_name: vcm_mes
+        hibernate.cache.hazelcast.shutdown_on_session_factory_close: false
+        hibernate.cache.use_minimal_puts: true
+        hibernate.cache.hazelcast.use_lite_member: true
+        hibernate.session.events.log.LOG_QUERIES_SLOWER_THAN_MS: 30
+        hibernate.generate_statistics: true
+        hibernate.jdbc.batch_size: 20
+        hibernate.jdbc.time_zone: "UTC"
+        hibernate.order_inserts: true
+        hibernate.format_sql: true
+  messages:
+    encoding: 'UTF-8'
+    use-code-as-default-message: true
+    basename: i18n/labels
+    cache-duration: 60   # 60 second, see the ISO 8601 standard
+    servlet:
+      multipart:
+        max-file-size: -1 #meaning total file size is unlimited
+        max-request-size: -1 #meaning total request size for a multipart/form-data is unlimited.
+        resolve-lazily: true
+security:
+  cache:
+    url-patterns: '/i18n/*,/content/*,/app/*'
+    max-age: 86400 # Image cache max-age in second, duration: 86400 (1 day)
+  # CORS is only enabled by default with the "dev" profile, so BrowserSync can access the API
+  cors:
+    allowed-origins: '*' # http://localhost:8780
+    allowed-methods: 'GET,POST,OPTIONS'
+    allowed-headers: '*'
+    exposed-headers: 'Authorization,Link,X-Total-Count,X-Action-Message,X-Action-Params,X-CSRF-TOKEN'
+    allow-credentials: true
+    max-age: 1800
+  authentication:
+    jwt:
+      # This token must be encoded using Base64 and be at least 256 bits long (you can type openssl rand -base64 64 on your command line to generate a 512 bits one)
+      base64-secret: 'ajMywt0FWnZYET/u3Pm309ziD6eXRewGX+QsyHs6/Y4ascWDHAAK46ARsuUZKLcjMQxUa5mQfNTaujgm8Sg4TJh4wKGwwXBAtB2gsEm1TkZuSRo97/BEFIR5rEKefTBf41J4kcU/YndvNFJcMRXkgMoC6fvzjSVYx1fGNYxSJqO+neilVm3uBpQiuhQrhTMmrKZJYa5M9xutWfJsbQ1Tf6IQ6zlRKZqdt8edUD/mOuUwltlyC1UZCyALrcji2vFlgXu+eks6IjBkxlAT3LvwVe5Et4MoNaB+eHetIdL6epigf1nYxmLSPT3rWfQxRRmHAwSQnO+1atAubG/xQqvsTQ=='
+    cookie:
+      domain-name:
+      enable-ssl: false
+      http-only: true
+      path: '/'
+      same-site: 'None'
+    public-url-patterns:
+      - "/actuator/**"
+      - "/public/**"
+      - "/auth/**"
+      - "/client/**"
+    signature:
+      gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
+
+cache:
+  config-type: 'redisson' # redis/redisson/hazelcast
+  hazelcast:
+    instanceName: 'vcm_mes'
+    localIp: '127.0.0.1'
+    remoteIp: '127.0.0.1'
+    backup-count: 1
+    management-center: # Full reference is available at: http://docs.hazelcast.org/docs/management-center/3.9/manual/html/Deploying_and_Starting.html
+      enabled: false
+      update-interval: 3
+      url: http://192.168.2.100:8180/hazelcast-mancenter
+  redis:
+    mode: 'standalone' # standalone, sentinel
+    standalone:
+      host: '192.168.169.88'
+      port: 6379
+      password: 123
+    sentinel:
+      port: 26379
+      password:
+      master: masterredis
+      nodes:
+        - localhost
+        # - 10.0.0.17
+        # - 10.0.0.18
+    lettuce-pool:
+      shutdown-timeout: 200 #milliseconds
+      command-timeout: 200 #milliseconds
+      min-idle: 1
+      max-idle: 20
+      max-wait-millis: 200 #milliseconds
+      max-total: 20
+    cache-duration: 1440 # thời gian lưu cache (đơn vị phút)
+  redisson:
+    mode: single #single, sentinel
+    clientName: 'redis-client'
+    password: 123
+    subscriptionsPerConnection: 5
+    idleConnectionTimeout: 10000
+    connectTimeout: 10000
+    timeout: 3000
+    retryAttempts: 3
+    retryInterval: 1500
+    threads: 16
+    nettyThreads: 32
+    transportMode: 'NIO'
+    database: 0
+    cache-duration: 10 # thời gian lưu cache (đơn vị phút)
+    #mode single config
+    single:
+      address: 'redis://192.168.169.88:6379' #if use ssl, the address should start with rediss://
+      subscriptionConnectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 50
+      connectionMinimumIdleSize: 24
+      connectionPoolSize: 64
+      dnsMonitoringInterval: 5000
+    #mode sentinel config
+    sentinel:
+      failedSlaveReconnectionInterval: 3000
+      failedSlaveCheckInterval: 60000
+      subscriptionConnectionMinimumIdleSize: 1
+      subscriptionConnectionPoolSize: 50
+      slaveConnectionMinimumIdleSize: 24
+      slaveConnectionPoolSize: 64
+      masterConnectionMinimumIdleSize: 24
+      masterConnectionPoolSize: 64
+      readMode: 'SLAVE' #SLAVE/MASTER/MASTER_SLAVE
+      subscriptionMode: 'SLAVE' #SLAVE/MASTER
+      nodes:
+        - 'redis://127.0.0.1:26379'
+        - 'redis://127.0.0.1:26380'
+      masterName: 'masterredis'
+      checkSentinelsList: false
+  time-to-lives: # time to live in seconds
+    default: -1
+    token: 3600 # 1 hour
+    remember-me-token: 7200 # 2 hours
+    refresh-token: 86400 # 1 day
+    otp: 300 # 90 seconds
+    otp-verify: 3600 # lưu id xác thực otp trong 1 giờ
+    temp-file: 3600 #1 hour
+    login-failed: 86400 # 1 day, lưu số lần đăng nhập lỗi để hiện captcha
+    captcha: 300 # 5 phút
+    password-verify: 300 # 5 phút,
+    dashboard: 180 # 3 phút
+
+rsa:
+  algorithm: RSA/ECB/PKCS1Padding
+  key-length: 2048
+  private-key: 'MIIEpQIBAAKCAQEAoRphiRfJeoQ/hB/SgYMn6i4FFMmQt6rEyayAlPFpPgE1gtQN0jjUirrFv/bHtEAnlYxIlT/GzjMy2mmBivnBGrPlXt8GupMRibysLDS+lHDrVqKeQEpYR4jkjCgsPJ40b66VvQ1wwRGouyBqND6XeeYZwuRFEF/59ZoM/KicDi8vIlUCsZBSFJ8OCsg0cqBbszql+2IJZJ2EjxSXBKZwuThMdD5UBhYDEU0+XcKXwUWoHVgJSZ1JpiVLdtXh4TghQ06j2MZvsS8UByy+ipW8TegsWxTP5EgBanGCSA/nayh3HZh6rFgUPbnxS4YY7SCmYk6Yy+lU7gMV5H/n1LkkLwIDAQABAoIBAQCf8951TD3Ju/aIS0QpPLxroWeAHSTnhtC9390GhK5WVsL3c22JlM1KNGjU0MO1LqFetRr3vIu5/VF3U5vADXtx9L0+tbcrlYurMr3LYk76eSbgLLNs56PA2qT4l4ZcZUNww2l+fBLATrU1ndh0qNSivhhDzXrY6EH4XQyZ6xqOZSwoF38WtK/ELS+Fkcek/ZDKWlaCBnavxvjn7TTG7mijaayDGNYECeatrf7iQIuzQbdxhb97Bps4Zg/XK4wF9TZcX4WZgHsf+94athv6nWfYGkLT4lElWpqVuN3usGBBYumxXRcXm5nX1bzIoT8a6DVrk1vpAc464aZVLbrJpPG5AoGBANuhe/cLx56GwuV4tSx8KTzD9YkAkwnmum6BkzP1HJNznFRUQwfNImX5h5XZwb8DsxgIj6MiCbCUQunL+Ykb+a4kMjqNhkJXyJdWKPyRuZtljrpo2VOZMIhhMVaIskBZsvHpozFE3ReR982S5bG4V+ebWjlDG9D5uSRopCOpMwz9AoGBALvHztbZQ9a2IautfLyULZ0Pbqfm3qdW1jDYe4y1YDOzdAlao/THj9liLLXxP7R0k/z7M4qaSsb7ooLqR6ZSNV06lqdRX0NuN3fUkWarlMVGr23epp6zL50ix0mTONDtDfEspSnJGmD8UYSoFzUyZxZM1NB6eKfqM6mf8YfoN5ObAoGBAM+eszJR5227lQgZ+KLJ6K2xzS2q5lUI0Rpf0UjfoBjfxFuPoCIC0E63+W02AcpRc/73MNmU9rX/IdYj5Yuwb3Ioc3cYjF+w3kX5xBsmot/8vFUJgtBdUxzJTDuyU1cztE6tf4C2yY5bhXbHM+2yBx9Bo6PYBbaiK1v4s5mmfET9AoGAaP9Xa5D+ur8KYrlWBwf/3VN0t1ODaiRHDfbuVoZQbXhJSLWy+brgd1fK0k08JsYMvackcbrGVy769qLTP2+2QRPyi0oXr1egklN8neERBaH5k8CsgA6HcCCzODOm0EPMyO8CxzOYmWRcnIV0vJ0bQT/iu1PPxWxSSOWTI0A4W0MCgYEAz14PV1rVZkgY+5rDXLvRXNKrwZ9LqR1GQxdd5ASG211v5Wqd2uwdbYxMv16TpKD6sj53lFbmVuyeY7ik7fjTikRe59dzwJd84CPfyQ7gt0zTnlafQ6UHRxWGGjqWFbkNPa3WF4rgU2w8/Z0rETnXOhcSxIyNCJUUfR6mpRACSqI='
+  public-key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoRphiRfJeoQ/hB/SgYMn6i4FFMmQt6rEyayAlPFpPgE1gtQN0jjUirrFv/bHtEAnlYxIlT/GzjMy2mmBivnBGrPlXt8GupMRibysLDS+lHDrVqKeQEpYR4jkjCgsPJ40b66VvQ1wwRGouyBqND6XeeYZwuRFEF/59ZoM/KicDi8vIlUCsZBSFJ8OCsg0cqBbszql+2IJZJ2EjxSXBKZwuThMdD5UBhYDEU0+XcKXwUWoHVgJSZ1JpiVLdtXh4TghQ06j2MZvsS8UByy+ipW8TegsWxTP5EgBanGCSA/nayh3HZh6rFgUPbnxS4YY7SCmYk6Yy+lU7gMV5H/n1LkkLwIDAQAB'
+  signal:
+    private-key: 'MIIEogIBAAKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAECggEALah2SEouAwZo9r3LBgvo0lbPCoqMbTO5dYEqezJ6G3DO5xrpt19BwnBFHYcLOG+VhoJiX6hKqdcF92FGFIqxmiZ02L6kpkFaxC2Hh//5yb3ifjlSuVMWHrbNCP6KZCwBwCqCa1MSwP3HdwrC3fdTNAey0oh8+lU1xSBp5BA3ycLtcx1KX6Y936Wbtv9jkxBZQkrijKxB/n6vdPVAeaMbCf8PVbbI2/zYJAiUzpYQscCT5L8AqU5MNnFwFz6Oe4eFz9TeJdVeNaWhl2pafGYFVL2diVx0d71h5fMT3S4aZHUaPt/iLcnd/VkWJr6wFIA9QM0Jzrm/1zs3M2Ogm5MZAQKBgQCm+Cg+yai9KeZpEtF/7IOlT0ilOEl5kBnUGUx2X7vJVOseVnOZoQyiCGNhpyaCxoNWVoP0lkgXVu4VXBlqWey6BLdeiDkuUaCxRTWPyE3wZ/XkQQd4Z5QaKGPAHsyoAbOiHYvdD8q59Cta75kcU5jN+2BSbbWjtEkUWOKRLOz+HwKBgQCEcW1Jl8/ecWj7t3rmNUSgiW9vCk83+H89qU3qvENiD6/dpTfMrK43SbrYwjFk9/BbiQMhI2LC2kWejf3rWCTzjEJzOkMoFbMQiUktmj/IIoFGF5x6/5cfhZhr/nobU0+ADOvJIpdl89uGVyT3mxrsAC2mXdI7vSXDJGpdzMnw2QKBgQCQY5VaBsXXH77TKqTk/UEy2Yc26aAQcd8EHgSTcWJRTxAsIhLBzhXAoYRf1E5nVQgKx7JA9xzMoi4tZoHMCIvAqYdxRlg8h/ZwlislddCAj0aC5wFwzBG1NSxd3cSZnS8ciHSE7L0hZdeAQiaj6l7/8dxwK9OiB6wS3nK/nJwtfQKBgC8jqABPll7YAsPE9GtHfludTxo4kyWavr8VqXPo+hrG9pNvIMMqmv92sJhB1g7X6KbLx19eFuK/iZP7eerv/obo3yXgENMNliRGmNMwWY9EKLrn4HwuyH0hsbSOaKudJWiwMKPwOe7BstrH3ZJ7lEN3dMgIELHOishAB9PG9gFRAoGANxmGKt8RjB8A9QX7Ost8+Y2IMQIIJVlhZP4mlV4teMhpgcnEW2Xt7Z9L/PyichAq6pL/l+ZXx6YKIyNh2P+xYpwaH6GW9x/WnEAZd98nqwY9/fvw8WuVv8fJkGJvKLKX/XFrnRnS+aevG8WXSWEIU1YvMQrwKLKA2SBELyQUEeU='
+    public-key: 'MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAE='
