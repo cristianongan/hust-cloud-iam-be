@@ -19,7 +19,6 @@
     <modules>
         <module>common</module>
         <module>ms</module>
-        <module>ms/anm-req-consumer</module>
     </modules>
 
     <properties>

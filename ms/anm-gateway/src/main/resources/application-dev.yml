@@ -197,3 +197,5 @@ app:
         circuitBreakerEnabled: true # Enable CB for this route
         circuitBreakerName: productServiceCircuitBreaker # Optional: specific CB name
         tokenRelayEnabled: true # Enable token relay for this route
+client:
+  verify-token: 'http://auth-service/auth/verify'

@@ -1,5 +1,6 @@
 package org.mbg.anm.configuration;
 
+import org.mbg.anm.filer.SecurityFilter;
 import org.mbg.common.security.configuration.AuthenticationProperties;
 import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.anm.util.GatewayConstant;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
@@ -28,11 +30,13 @@ import org.springframework.security.web.server.authentication.logout.SecurityCon
 import org.springframework.security.web.server.authentication.logout.ServerLogoutHandler;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutSuccessHandler;
 import org.springframework.security.web.server.authentication.logout.WebSessionServerLogoutHandler;
+import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.security.web.server.header.ClearSiteDataServerHttpHeadersWriter;
 import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * Configuration class for Gateway Security in a WebFlux application.
@@ -49,6 +53,10 @@ public class GatewaySecurityConfiguration {
 
     private final CorsConfiguration corsConfiguration;
 
+    private final WebClient.Builder webClientBuilder;
+
+    private final ClientApiProperties webClientApiProperties;
+
     /**
      * Defines the primary security filter chain for the Gateway.
      *
@@ -59,6 +67,8 @@ public class GatewaySecurityConfiguration {
     public SecurityWebFilterChain springSecurityFilterChain(
             ServerHttpSecurity http) {
         http
+                .csrf(ServerHttpSecurity.CsrfSpec::disable)
+                .securityContextRepository(NoOpServerSecurityContextRepository.getInstance())
                 // 1. Configure Authorization Rules
                 .authorizeExchange(exchanges -> exchanges
                         // Allow access to public paths defined in SecurityConstants
@@ -68,14 +78,7 @@ public class GatewaySecurityConfiguration {
                         // Any other request requires the user to be authenticated
                         .anyExchange().authenticated()
                 )
-                // 2. Configure OAuth2 Resource Server JWT Validation
-                // This automatically sets up filters to validate Bearer tokens (JWTs)
-                // It relies on properties under 'spring.security.oauth2.resourceserver.jwt.*'
-                // in application.yml (e.g., issuer-uri)
-
-                // 3. Disable CSRF Protection (Common for stateless APIs/Gateways)
-                .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                // 4. Optional: Configure other aspects like CORS, Headers, etc. if needed
+                .addFilterAt(new SecurityFilter(webClientBuilder, webClientApiProperties), SecurityWebFiltersOrder.AUTHENTICATION)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Example: Enable CORS based on other beans/config
         // .headers(headers -> headers.frameOptions(ServerHttpSecurity.HeaderSpec.FrameOptionsSpec::disable)) // Example
         ;

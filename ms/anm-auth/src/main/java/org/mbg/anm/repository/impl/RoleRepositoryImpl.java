@@ -24,7 +24,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
     public List<Role> findByUserId(Long userId) {
         StringBuilder sql = new StringBuilder(1);
         sql.append("""
-                select *
+                select p.*
                     from role_ p
                     right join user_role rp on rp.role_code = p.code
                     where rp.user_id = :userId
@@ -41,7 +41,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
     public List<Role> findByClientId(String clientId) {
         StringBuilder sql = new StringBuilder(1);
         sql.append("""
-                select *
+                select p.*
                     from role_ p
                     right join client_role rp on rp.role_code = p.code
                     where rp.client_id = :clientId

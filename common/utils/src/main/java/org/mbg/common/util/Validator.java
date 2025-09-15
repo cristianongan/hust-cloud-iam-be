@@ -72,41 +72,7 @@ public class Validator {
 		}
 	};
 
-	/**
-	 * Returns <code>true</code> if the booleans are equal.
-	 *
-	 * @param boolean1 the first boolean
-	 * @param boolean2 the second boolean
-	 * @return <code>true</code> if the booleans are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(boolean boolean1, boolean boolean2) {
-		return boolean1 == boolean2;
-	}
 
-	/**
-	 * Returns <code>true</code> if the bytes are equal.
-	 *
-	 * @param byte1 the first byte
-	 * @param byte2 the second byte
-	 * @return <code>true</code> if the bytes are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(byte byte1, byte byte2) {
-		return byte1 == byte2;
-	}
-
-	/**
-	 * Returns <code>true</code> if the characters are equal.
-	 *
-	 * @param char1 the first character
-	 * @param char2 the second character
-	 * @return <code>true</code> if the characters are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(char char1, char char2) {
-		return char1 == char2;
-	}
 
 	/**
 	 * Returns <code>true</code> if the short integers are equal.
@@ -125,54 +91,6 @@ public class Validator {
     }
 
 	/**
-	 * Returns <code>true</code> if the doubles are equal.
-	 *
-	 * @param double1 the first double
-	 * @param double2 the second double
-	 * @return <code>true</code> if the doubles are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(double double1, double double2) {
-		return Double.compare(double1, double2) == 0;
-	}
-
-	/**
-	 * Returns <code>true</code> if the floats are equal.
-	 *
-	 * @param float1 the first float
-	 * @param float2 the second float
-	 * @return <code>true</code> if the floats are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(float float1, float float2) {
-		return Float.compare(float1, float2) == 0;
-	}
-
-	/**
-	 * Returns <code>true</code> if the integers are equal.
-	 *
-	 * @param int1 the first integer
-	 * @param int2 the second integer
-	 * @return <code>true</code> if the integers are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(int int1, int int2) {
-		return int1 == int2;
-	}
-
-	/**
-	 * Returns <code>true</code> if the long integers are equal.
-	 *
-	 * @param long1 the first long integer
-	 * @param long2 the second-long integer
-	 * @return <code>true</code> if the long integers are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(long long1, long long2) {
-		return long1 == long2;
-	}
-
-	/**
 	 * Returns <code>true</code> if the objects are either equal, the same instance,
 	 * or both <code>null</code>.
 	 *
@@ -189,18 +107,6 @@ public class Validator {
 		} else {
 			return obj1.equals(obj2);
 		}
-	}
-
-	/**
-	 * Returns <code>true</code> if the short integers are equal.
-	 *
-	 * @param short1 the first short integer
-	 * @param short2 the second short integer
-	 * @return <code>true</code> if the short integers are equal; <code>false</code>
-	 *         otherwise
-	 */
-	public static boolean equals(short short1, short short2) {
-		return short1 == short2;
 	}
 
 	public static String getNotNullString(Object object) {

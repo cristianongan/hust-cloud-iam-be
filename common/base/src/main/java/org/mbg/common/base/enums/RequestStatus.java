@@ -10,21 +10,17 @@ import java.util.stream.Stream;
 
 @Getter
 @AllArgsConstructor
-public enum EntityStatus {
+public enum RequestStatus {
     DELETED(-1, LabelKey.LABEL_DELETED),
-
-    INACTIVE(0, LabelKey.LABEL_INACTIVE),
 
     NEW(0, LabelKey.LABEL_NEW),
 
-    ACTIVE(1, LabelKey.LABEL_ACTIVE),
+    WAITING(1, LabelKey.LABEL_WAITING),
 
-    PENDING(2, LabelKey.LABEL_PENDING),
-
-    WAITING(2, LabelKey.LABEL_WAITING);
+    DONE(2, LabelKey.LABEL_DONE);
 
 
-    private Integer status;
+    private int status;
 
     private String key;
 
@@ -37,8 +33,8 @@ public enum EntityStatus {
         return Stream.of(values()).map(e -> e.status).collect(Collectors.toList());
     }
 
-    public static EntityStatus valueOfStatus(int status) {
-        for (EntityStatus e : values()) {
+    public static RequestStatus valueOfStatus(int status) {
+        for (RequestStatus e : values()) {
             if (e.getStatus() == status) {
                 return e;
             }

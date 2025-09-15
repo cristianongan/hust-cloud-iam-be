@@ -6,7 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.StringUtils;
 
+import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -73,5 +75,21 @@ public class SecurityUtils {
 
 		return Optional.ofNullable(securityContext.getAuthentication())
 				.map(authentication -> !authentication.getAuthorities().isEmpty()).orElse(false);
+	}
+
+	public static String[] getBasicAuthentication(String token) {
+		if (token == null) {
+			return null;
+		}
+
+		String rsToken = null;
+
+		if (StringUtils.hasText(token) && token.startsWith(SecurityConstants.Header.BASIC_START)) {
+			rsToken = token.substring(SecurityConstants.Header.BASIC_START.length());
+		}
+
+        assert rsToken != null;
+
+        return new String(Base64.getDecoder().decode(rsToken.getBytes())).split(":");
 	}
 }

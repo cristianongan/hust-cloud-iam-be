@@ -38,7 +38,7 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String phone;
 
     @Column(name = "gender")
-    private int gender;
+    private Integer gender;
 
     @Column(name = "date_of_birth")
     private LocalDate dob;
@@ -47,13 +47,13 @@ public class User extends AbstractAuditingEntity implements Serializable {
     private String address;
 
     @Column(name = "status")
-    private int status;
+    private Integer status;
 
     @Column(name = "fullname")
     private String fullname;
 
     @Column(name = "type")
-    private int type;
+    private Integer type;
 
     @Transient
     private List<Role> roles = new ArrayList<>();

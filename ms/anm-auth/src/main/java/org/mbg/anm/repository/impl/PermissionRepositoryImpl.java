@@ -16,7 +16,7 @@ public class PermissionRepositoryImpl implements PermissionRepositoryExtend {
     public List<Permission> findByRoleCode(String roleCode) {
         StringBuilder sql = new StringBuilder(1);
         sql.append("""
-                select *
+                select p.*
                     from permission_ p
                     right join role_permission rp on rp.permission_code = p.code
                     where rp.role_code = :roleCode
