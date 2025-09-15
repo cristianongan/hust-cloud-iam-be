@@ -4,18 +4,14 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.configuration.ValidationProperties;
-import org.mbg.anm.constant.UserType;
-import org.mbg.anm.jwt.JwtAccessToken;
-import org.mbg.anm.jwt.JwtProvider;
+import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.UserDTO;
-import org.mbg.anm.model.dto.request.LoginReq;
 import org.mbg.anm.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
-import org.mbg.anm.service.TokenService;
 import org.mbg.anm.service.UserService;
 import org.mbg.anm.service.mapper.UserMapper;
 import org.mbg.common.api.exception.BadRequestException;
@@ -46,10 +42,6 @@ public class UserServiceImpl implements UserService {
     private final PermissionRepository permissionRepository;
 
     private final PasswordEncoder passwordEncoder;
-
-    private final JwtProvider jwtProvider;
-
-    private final TokenService tokenService;
 
     private final RsaProvider rsaProvider;
 
@@ -209,34 +201,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @Override
-    public JwtAccessToken login(LoginReq userDTO) {
-        if (Validator.isNull(userDTO.getUsername()) || Validator.isNull(userDTO.getPassword())) {
-            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
-                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
-        }
 
-        User user = userRepository.findByUsername(userDTO.getUsername());
-        if (Validator.isNull(user) || !Validator.equals(user.getStatus(), EntityStatus.ACTIVE)) {
-            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
-                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
-        }
-
-        String password = this.decryptPassword(userDTO.getPassword());
-
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
-                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
-        }
-
-        JwtAccessToken accessToken = jwtProvider.createAccessToken(userDTO.getUsername());
-
-        this.tokenService.saveToken(userDTO.getUsername(), accessToken);
-        this.tokenService.saveRefreshToken(userDTO.getUsername(), accessToken.getRefreshToken());
-
-        return accessToken;
-
-    }
 
     private String decryptPassword(String encryptedPassword) {
         String password;

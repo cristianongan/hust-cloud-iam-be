@@ -13,8 +13,6 @@ public interface UserService {
 
     UserDTO create(UserReq userReq);
 
-    JwtAccessToken login(LoginReq userDTO);
-
     Page<UserDTO> searchUsers(UserSearch search);
 
     void updateStatus(UserReq userReq);

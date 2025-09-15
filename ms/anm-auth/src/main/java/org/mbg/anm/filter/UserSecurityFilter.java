@@ -9,11 +9,19 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.jwt.JwtProvider;
+import org.mbg.anm.model.User;
+import org.mbg.anm.security.UserDetailServiceImpl;
+import org.mbg.anm.security.UserPrincipal;
+import org.mbg.common.api.exception.BadRequestException;
+import org.mbg.common.label.LabelKey;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.mbg.common.security.util.SecurityConstants;
+import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -24,6 +32,8 @@ public class UserSecurityFilter implements AuthorizationFilter {
 
     private final JwtProvider jwtProvider;
 
+    private final UserDetailServiceImpl  userDetailService;
+
     @Override
     public void doFilter(ServletRequest servletRequest,
                          ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -31,16 +41,40 @@ public class UserSecurityFilter implements AuthorizationFilter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String auth = request.getHeader("Authorization");
-        String token = this.resolveToken(auth);
+        String token = null;
+        Authentication authentication = null;
+        if (StringUtils.hasText(auth) && auth.startsWith(SecurityConstants.Header.BEARER_START)) {
+            token = auth.substring(SecurityConstants.Header.BEARER_START.length());
 
-         if (Validator.isNotNull(token)) {
-             this.jwtProvider.validateToken(token);
+            if (Validator.isNotNull(token)) {
+                this.jwtProvider.validateToken(token);
 
-             Authentication authentication =
-                     this.jwtProvider.getAuthentication(token);
+                authentication = this.jwtProvider.getAuthentication(token);
 
-             SecurityContextHolder.getContext().setAuthentication(authentication);
-         }
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }
+        }
+
+        if (StringUtils.hasText(auth) && auth.startsWith(SecurityConstants.Header.BASIC_START)) {
+            token = auth.substring(SecurityConstants.Header.BASIC_START.length());
+
+            if (Validator.isNotNull(token)) {
+                String[] data = SecurityUtils.getBasicAuthentication(token);
+
+                if (Validator.isNull(data) || data.length != 2) {
+                    throw new BadRequestException(LabelKey.ERROR_INVALID_TOKEN,
+                            User.class.getName(), LabelKey.ERROR_INVALID_TOKEN);
+                }
+
+                UserPrincipal userPrincipal = (UserPrincipal) userDetailService.loadUserByClientId(data[0]);
+
+                authentication = new UsernamePasswordAuthenticationToken(userPrincipal, token, userPrincipal.getAuthorities());
+
+
+            }
+        }
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         filterChain.doFilter(request, response);
     }

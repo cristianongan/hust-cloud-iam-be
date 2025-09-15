@@ -6,11 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.MapUtils;
 import org.mbg.anm.util.GatewayConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.*;
 
@@ -40,6 +44,12 @@ public class GatewayRoutesConfiguration {
         private boolean tokenRelayEnabled;
 
         private Map<String, Object> metadata = new HashMap<>();
+    }
+
+    @Bean
+    @LoadBalanced
+    WebClient.Builder lbWebClientBuilder() {
+        return WebClient.builder();
     }
 
     /**

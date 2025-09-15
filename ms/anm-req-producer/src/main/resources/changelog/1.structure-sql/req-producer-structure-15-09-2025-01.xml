@@ -1,0 +1,21 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="req-producer-structure-15-09-2025-01-01" author="Nganph">
+        <sql>
+            create table rp_request (
+                                   id bigserial primary key,
+                                    phone varchar(50),
+                                    email varchar(320),
+                                    identification varchar(50),
+                                    request_id varchar(200),
+                                    status smallint,
+                                   created_by varchar(100),
+                                   created_date timestamp,
+                                   last_modified_by varchar(100),
+                                   last_modified_date timestamp
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

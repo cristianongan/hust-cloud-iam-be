@@ -182,4 +182,5 @@ public class JwtProvider implements InitializingBean {
 
         return new UsernamePasswordAuthenticationToken(principal, token, principal.getAuthorities());
     }
+
 }

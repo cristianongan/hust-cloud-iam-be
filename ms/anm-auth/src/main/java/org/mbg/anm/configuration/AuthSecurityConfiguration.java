@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.filter.UserSecurityFilter;
 import org.mbg.anm.jwt.JwtProvider;
+import org.mbg.anm.security.UserDetailServiceImpl;
 import org.mbg.common.security.configuration.AuthenticationProperties;
 import org.mbg.common.security.configuration.RsaProperties;
 import org.mbg.common.security.configuration.SecurityConfiguration;
@@ -27,6 +28,8 @@ public class AuthSecurityConfiguration extends SecurityConfiguration {
 
     private final JwtProvider jwtProvider;
 
+    private final UserDetailServiceImpl userDetailsService;
+
     private final RsaProperties rsaProperties;
 
     @Override
@@ -36,7 +39,7 @@ public class AuthSecurityConfiguration extends SecurityConfiguration {
 
     @Override
     protected AuthorizationFilter getAuthorizationFilter() {
-        return new UserSecurityFilter(jwtProvider);
+        return new UserSecurityFilter(jwtProvider, userDetailsService);
     }
 
     @Override

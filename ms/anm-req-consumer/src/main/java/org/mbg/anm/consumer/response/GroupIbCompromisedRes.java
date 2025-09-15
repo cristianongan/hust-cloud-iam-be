@@ -18,6 +18,7 @@ public class GroupIbCompromisedRes extends GroupIbResponse implements Serializab
     private String resultId;
     private Integer count;
     private List<Item> items;
+    private Long seqUpdate;
 
     @Data
     public static class Item {

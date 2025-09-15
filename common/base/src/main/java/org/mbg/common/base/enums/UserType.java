@@ -1,8 +1,7 @@
-package org.mbg.anm.constant;
+package org.mbg.common.base.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.mbg.common.base.enums.EntityStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;

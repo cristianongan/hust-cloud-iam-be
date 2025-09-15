@@ -29,6 +29,8 @@ public final class GatewayConstant {
         public static final String KEYCLOAK_CONFIG = "keycloak.client";
 
         public static final String GATEWAY_CONFIG = "app.gateway";
+
+        public static final String CLIENT_CONFIG = "client";
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
