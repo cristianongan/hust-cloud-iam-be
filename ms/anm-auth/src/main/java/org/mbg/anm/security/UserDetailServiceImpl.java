@@ -74,7 +74,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         roles.forEach(role -> {
             if (Validator.equals(role.getStatus(), EntityStatus.ACTIVE.getStatus())) {
-                roleNames.add(role.getName());
+                roleNames.add(role.getCode());
 
                 //get privilege by role id
                 List<Permission> pves = this.permissionRepository.findByRoleCode(role.getCode());
@@ -87,7 +87,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         });
 
         List<GrantedAuthority> grantedAuthorities = privileges.stream()
-                .map(privilege -> new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
+                .map(privilege -> new SimpleGrantedAuthority(privilege.getCode())).collect(Collectors.toList());
 
         // add role name to authority list
         roleNames.forEach(roleName -> grantedAuthorities.add(new SimpleGrantedAuthority(roleName)));
@@ -111,7 +111,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         roles.forEach(role -> {
             if (Validator.equals(role.getStatus(), EntityStatus.ACTIVE.getStatus())) {
-                roleNames.add(role.getName());
+                roleNames.add(role.getCode());
 
                 //get privilege by role id
                 List<Permission> pves = this.permissionRepository.findByRoleCode(role.getCode());
@@ -124,7 +124,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         });
 
         List<GrantedAuthority> grantedAuthorities = privileges.stream()
-                .map(privilege -> new SimpleGrantedAuthority(privilege.getName())).collect(Collectors.toList());
+                .map(privilege -> new SimpleGrantedAuthority(privilege.getCode())).collect(Collectors.toList());
 
         // add role name to authority list
         roleNames.forEach(roleName -> grantedAuthorities.add(new SimpleGrantedAuthority(roleName)));

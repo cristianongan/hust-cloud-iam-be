@@ -1,10 +1,8 @@
 package org.mbg.anm.filer;
 
-import jakarta.annotation.PostConstruct;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.configuration.ClientApiProperties;
-import org.mbg.common.base.model.response.VerifyRes;
+import org.mbg.common.base.model.dto.response.VerifyRes;
 import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.util.Validator;
 import org.springframework.http.HttpHeaders;
@@ -14,7 +12,6 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
-import org.springframework.util.AntPathMatcher;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
@@ -23,9 +20,9 @@ import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class SecurityFilter implements WebFilter {
     private final WebClient.Builder webClientBuilder;
 
@@ -44,10 +41,12 @@ public class SecurityFilter implements WebFilter {
         ServerHttpRequest req = exchange.getRequest();
         String auth = req.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
 
+        _log.info("SecurityFilter req: {}" , req.getPath().toString() );
+
         if (Validator.isNull(auth)) {
             return chain.filter(exchange);
         }
-        return webClientBuilder.build().post()
+        return webClientBuilder.build().get()
                 .uri(this.clientApiProperties.getVerifyToken())
                 .header(HttpHeaders.AUTHORIZATION, auth)
                 .retrieve()
@@ -71,7 +70,7 @@ public class SecurityFilter implements WebFilter {
                     exchange.getResponse().setStatusCode(e.getStatusCode());
                     return exchange.getResponse().setComplete();
                 })
-                .timeout(Duration.ofMillis(800),
+                .timeout(Duration.ofMillis(10000),
                         Mono.defer(() -> {
                             exchange.getResponse().setStatusCode(HttpStatus.GATEWAY_TIMEOUT);
                             return exchange.getResponse().setComplete();

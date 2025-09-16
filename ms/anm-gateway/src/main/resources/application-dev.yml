@@ -197,5 +197,12 @@ app:
         circuitBreakerEnabled: true # Enable CB for this route
         circuitBreakerName: productServiceCircuitBreaker # Optional: specific CB name
         tokenRelayEnabled: true # Enable token relay for this route
+      - id: req-producer-service
+        path: /api/req-producer-service/**
+        uri: lb://req-producer-service
+        strip-prefix: 2
+        circuitBreakerEnabled: true
+        circuitBreakerName: productServiceCircuitBreaker
+        tokenRelayEnabled: true
 client:
   verify-token: 'http://auth-service/auth/verify'

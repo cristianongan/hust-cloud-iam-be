@@ -18,4 +18,6 @@ public interface UserService {
     void updateStatus(UserReq userReq);
 
     void delete(UserReq userReq);
+
+    void assignRole(UserReq userReq);
 }

@@ -30,7 +30,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
                     where rp.user_id = :userId
                 """);
 
-        Query query = em.createNativeQuery(sql.toString(), Permission.class);
+        Query query = em.createNativeQuery(sql.toString(), Role.class);
 
         query.setParameter("userId", userId);
 
@@ -47,7 +47,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
                     where rp.client_id = :clientId
                 """);
 
-        Query query = em.createNativeQuery(sql.toString(), Permission.class);
+        Query query = em.createNativeQuery(sql.toString(), Role.class);
 
         query.setParameter("clientId", clientId);
 
