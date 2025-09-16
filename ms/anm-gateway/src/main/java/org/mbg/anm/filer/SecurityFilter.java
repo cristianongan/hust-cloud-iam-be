@@ -8,17 +8,21 @@ import org.mbg.common.util.Validator;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.stream.Collectors;
 
@@ -50,8 +54,7 @@ public class SecurityFilter implements WebFilter {
                 .uri(this.clientApiProperties.getVerifyToken())
                 .header(HttpHeaders.AUTHORIZATION, auth)
                 .retrieve()
-                .onStatus(HttpStatusCode::isError, r -> r.bodyToMono(String.class)
-                        .flatMap(b -> Mono.error(new ResponseStatusException(r.statusCode(), b))))
+                .onStatus(HttpStatusCode::isError, ClientResponse::createException)
                 .bodyToMono(VerifyRes.class)
 
                 .flatMap(user -> {
@@ -66,9 +69,20 @@ public class SecurityFilter implements WebFilter {
                             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authn));
                 })
 
-                .onErrorResume(ResponseStatusException.class, e -> {
-                    exchange.getResponse().setStatusCode(e.getStatusCode());
-                    return exchange.getResponse().setComplete();
+                .onErrorResume(WebClientResponseException.class, e -> {
+                    var resp = exchange.getResponse();
+                    resp.setStatusCode(e.getStatusCode());
+                    resp.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+
+                    byte[] body = e.getResponseBodyAsByteArray();
+                    if (body.length == 0) {
+                        // fallback nếu service verify không trả body
+                        var fallback = """
+                          {"status": %d, "error": "%s", "message": "%s"}
+                        """.formatted(e.getRawStatusCode(), e.getStatusText(), e.getMessage());
+                        body = fallback.getBytes(StandardCharsets.UTF_8);
+                    }
+                    return resp.writeWith(Mono.just(resp.bufferFactory().wrap(body)));
                 })
                 .timeout(Duration.ofMillis(10000),
                         Mono.defer(() -> {
