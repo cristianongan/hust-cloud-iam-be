@@ -60,7 +60,7 @@ public class GlobalRequestLoggingFilter implements Filter {
             String resBody = safeBody(res.getContentAsByteArray(), res.getContentType());
             long took = System.currentTimeMillis() - start;
 
-            _log.info("request id: {} - took: {} - payload : {} - response: {}",requestId, took, reqBody, resBody);
+            _log.info("request-id: {} - took: {} - payload : {} - response: {}",requestId, took, reqBody, resBody);
             MDC.remove(SecurityConstants.Header.REQUEST_ID_MDC);
             res.copyBodyToResponse();
         }

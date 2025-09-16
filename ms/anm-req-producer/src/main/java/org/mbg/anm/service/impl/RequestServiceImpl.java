@@ -6,7 +6,9 @@ import org.mbg.anm.repository.ProducerRequestRepository;
 import org.mbg.anm.service.RequestService;
 import org.mbg.anm.service.mapper.ProducerRequestMapper;
 import org.mbg.common.base.model.dto.ProducerRequestDTO;
+import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.util.Validator;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -20,7 +22,7 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public ProducerRequestDTO createRequest(ProducerRequestDTO requestDTO) {
         if (Validator.isNull(requestDTO.getRequestId())) {
-
+            requestDTO.setRequestId(MDC.get(SecurityConstants.Header.REQUEST_ID_MDC));
         }
 
         return null;
