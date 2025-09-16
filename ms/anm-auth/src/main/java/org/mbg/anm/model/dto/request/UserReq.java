@@ -36,4 +36,6 @@ public class UserReq implements Serializable {
     private int type;
 
     private List<Long> ids;
+
+    private List<String> roles;
 }

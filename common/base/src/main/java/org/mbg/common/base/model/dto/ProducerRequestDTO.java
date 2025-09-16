@@ -1,9 +1,9 @@
-package org.mbg.anm.model.dto;
+package org.mbg.common.base.model.dto;
 
 import lombok.Data;
 
 @Data
-public class RequestDTO {
+public class ProducerRequestDTO {
     private String requestId;
 
     private String email;

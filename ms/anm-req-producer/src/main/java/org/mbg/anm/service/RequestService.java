@@ -1,10 +1,10 @@
 package org.mbg.anm.service;
 
-import org.mbg.anm.model.dto.RequestDTO;
+import org.mbg.common.base.model.dto.ProducerRequestDTO;
 
 public interface RequestService {
-    RequestDTO createRequest(RequestDTO requestDTO);
+    ProducerRequestDTO createRequest(ProducerRequestDTO requestDTO);
 
-    RequestDTO updateRequest(RequestDTO requestDTO);
+    ProducerRequestDTO updateRequest(ProducerRequestDTO requestDTO);
 
 }

@@ -1,4 +1,4 @@
-package org.mbg.common.base.model.response;
+package org.mbg.common.base.model.dto.response;
 
 import lombok.Data;
 

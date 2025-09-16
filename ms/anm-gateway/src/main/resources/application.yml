@@ -10,11 +10,11 @@ server:
       charset: 'UTF-8'
       enabled: true
       force: true
-logging:
-  level:
-    sun:
-      rmi: ERROR
-    javax:
-      management:
-        remote:
-          rmi: ERROR
+#logging:
+#  level:
+#    sun:
+#      rmi: ERROR
+#    javax:
+#      management:
+#        remote:
+#          rmi: ERROR

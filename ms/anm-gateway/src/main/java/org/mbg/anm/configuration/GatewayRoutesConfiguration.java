@@ -13,6 +13,7 @@ import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -82,6 +83,7 @@ public class GatewayRoutesConfiguration {
 
             // Add a route for each definition
             routesBuilder.route(routeDef.getId(), r -> r.path(routeDef.getPath())
+                    .and().method(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
                     .filters(f -> {
 
                         // 1. Apply stripPrefix if configured

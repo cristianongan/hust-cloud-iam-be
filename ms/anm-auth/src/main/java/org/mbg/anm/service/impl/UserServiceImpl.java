@@ -4,6 +4,9 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.configuration.ValidationProperties;
+import org.mbg.anm.model.Role;
+import org.mbg.anm.model.UserRole;
+import org.mbg.anm.repository.UserRoleRepository;
 import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.UserDTO;
@@ -26,7 +29,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -50,6 +55,8 @@ public class UserServiceImpl implements UserService {
     private final ValidationProperties validationProperties;
 
     private Pattern passwordPattern;
+
+    private final UserRoleRepository userRoleRepository;
 
     @PostConstruct
     protected void init() {
@@ -249,5 +256,45 @@ public class UserServiceImpl implements UserService {
         if (Validator.isNotNull(userReq.getIds())) {
             this.userRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), userReq.getIds());
         }
+    }
+
+    @Override
+    @Transactional
+    public void assignRole(UserReq userReq) {
+        if (Validator.isNull(userReq.getId())) {
+            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
+                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
+        }
+
+        User user = userRepository.findById(userReq.getId()).orElse(null);
+
+        if (Validator.isNull(user)) {
+            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
+                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
+        }
+
+        this.userRoleRepository.removeAllRoleByUserId(user.getId());
+
+        if (Validator.isNull(user.getRoles())) {
+            return;
+        }
+
+        List<Role> roles = this.roleRepository.findByRoleCodeIn(userReq.getRoles());
+
+        List<UserRole> userRoles = new ArrayList<>();
+
+        if (Validator.isNotNull(roles)) {
+            for (Role role : roles) {
+                UserRole userRole = new UserRole();
+
+                userRole.setUserId(user.getId());
+                userRole.setRoleCode(role.getCode());
+                userRoles.add(userRole);
+            }
+
+            this.userRoleRepository.saveAll(userRoles);
+        }
+
+
     }
 }

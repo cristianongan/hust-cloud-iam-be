@@ -2,12 +2,15 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
+import org.mbg.anm.model.RolePermission;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.RoleDTO;
 import org.mbg.anm.model.dto.UserDTO;
 import org.mbg.anm.model.dto.request.RoleReq;
 import org.mbg.anm.repository.PermissionRepository;
+import org.mbg.anm.repository.RolePermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.RoleService;
@@ -23,7 +26,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -33,6 +38,8 @@ public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     private final PermissionRepository permissionRepository;
+
+    private final RolePermissionRepository rolePermissionRepository;
 
     private final UserRepository userRepository;
 
@@ -65,10 +72,13 @@ public class RoleServiceImpl implements RoleService {
         role.setName(roleReq.getName());
         role.setDescription(roleReq.getDescription());
 
+        this.savePermission(roleReq);
+
         return this.roleMapper.toDto(roleRepository.save(role));
     }
 
     @Override
+    @Transactional
     public RoleDTO updateRole(RoleReq roleReq) {
         if (Validator.isNull(roleReq.getName())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_INPUT_DATA,
@@ -86,7 +96,31 @@ public class RoleServiceImpl implements RoleService {
 
         role.setName(roleReq.getName());
 
+        this.rolePermissionRepository.removeAllPermissionByCode(role.getCode());
+
+        this.savePermission(roleReq);
+
         return this.roleMapper.toDto(roleRepository.save(role));
+    }
+
+    private void savePermission(RoleReq roleReq) {
+        List<RolePermission> rolePermissions = new ArrayList<>();
+
+        if (Validator.isNotNull(roleReq.getPermissions())) {
+            List<Permission> permissions = this.permissionRepository.findAllByCodeIn(roleReq.getPermissions());
+
+            if (Validator.isNotNull(permissions)) {
+                for (Permission permission : permissions) {
+                    RolePermission rolePermission = new  RolePermission();
+
+                    rolePermission.setRoleCode(roleReq.getCode());
+                    rolePermission.setPermissionCode(permission.getCode());
+
+                    rolePermissions.add(rolePermission);
+                }
+                this.rolePermissionRepository.saveAll(rolePermissions);
+            }
+        }
     }
 
     @Override

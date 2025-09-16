@@ -6,7 +6,7 @@ import org.mbg.anm.jwt.JwtAccessToken;
 import org.mbg.anm.jwt.JwtProvider;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.request.LoginReq;
-import org.mbg.common.base.model.response.VerifyRes;
+import org.mbg.common.base.model.dto.response.VerifyRes;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
