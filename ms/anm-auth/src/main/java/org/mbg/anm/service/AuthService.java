@@ -7,5 +7,7 @@ import org.mbg.common.base.model.dto.response.VerifyRes;
 public interface AuthService {
     JwtAccessToken login(LoginReq userDTO);
 
+    JwtAccessToken refreshToken();
+
     VerifyRes verify();
 }

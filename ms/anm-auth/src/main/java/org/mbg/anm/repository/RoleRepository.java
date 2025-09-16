@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
+import java.util.List;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role,Long>, RoleRepositoryExtend {
@@ -18,4 +19,6 @@ public interface RoleRepository extends JpaRepository<Role,Long>, RoleRepository
     @Query("update Role u set u.status = :status where u.id in :ids")
     @Modifying
     Integer updateStatusByIdIn(int status, Collection<Long> ids);
+
+    List<Role> findByCodeIn(List<String> roleCode);
 }

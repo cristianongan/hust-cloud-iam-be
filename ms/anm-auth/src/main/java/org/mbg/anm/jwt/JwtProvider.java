@@ -80,6 +80,16 @@ public class JwtProvider implements InitializingBean {
 
         try {
             Claims claims = this.jwtParser.parseSignedClaims(token).getPayload();
+
+            username = claims.getSubject();
+
+            JwtToken accessToken = this.tokenService.getToken(username);
+            JwtToken refreshToken = this.tokenService.getRefreshToken(username);
+
+            if (!Validator.equals(accessToken.getToken(), token) &&
+                !Validator.equals(refreshToken.getToken(), token)) {
+                throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_INVALID_TOKEN));
+            }
         } catch (
             MalformedJwtException ex) {
                 _log.error("Access token malformed");
@@ -110,6 +120,9 @@ public class JwtProvider implements InitializingBean {
 
     public JwtAccessToken createAccessToken(String username) {
         try {
+            // invalidate token
+            this.tokenService.invalidateToken(username);
+
             int durationAccessToken = this.timeToLives.get(CacheConstants.KEYS.TOKEN);
             int durationRefreshToken = this.timeToLives.get(CacheConstants.KEYS.REFRESH_TOKEN);
 
@@ -125,13 +138,7 @@ public class JwtProvider implements InitializingBean {
 
             JwtToken refreshToken = createRefreshToken(username, durationRefreshToken);
 
-            JwtAccessToken jwtAccessToken =
-                    JwtAccessToken.builder().accessToken(accessToken).refreshToken(refreshToken).build();
-
-            // invalidate token
-            this.tokenService.invalidateToken(username);
-
-            return jwtAccessToken;
+            return JwtAccessToken.builder().accessToken(accessToken).refreshToken(refreshToken).build();
         } catch (UsernameNotFoundException e) {
             _log.error(Labels.getLabels(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD));
 
@@ -140,20 +147,24 @@ public class JwtProvider implements InitializingBean {
         }
     }
 
-    private JwtToken createRefreshToken(String username, int duration) {
+    public JwtToken createRefreshToken(String username, int duration) {
         Map<String, Object> params = new HashMap<>();
 
         params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.REFRESH_TOKEN);
+        JwtToken token = createToken(username, duration, params);
+        this.tokenService.saveRefreshToken(username, token);
 
-        return createToken(username, duration, params);
+        return token;
     }
 
-    private JwtToken createAccessToken(String username, int duration) {
+    public JwtToken createAccessToken(String username, int duration) {
         Map<String, Object> params = new HashMap<>();
 
         params.put(SecurityConstants.CLAIM.TOKEN_TYPE, SecurityConstants.TOKEN_TYPE.ACCESS_TOKEN);
+        JwtToken accessToken = createToken(username, duration, params);
+        this.tokenService.saveToken(username, accessToken);
 
-        return createToken(username, duration, params);
+        return accessToken;
     }
 
     private JwtToken createToken(String username, int duration, Map<String, Object> params) {

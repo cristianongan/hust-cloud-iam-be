@@ -11,4 +11,8 @@ public class ProducerRequestDTO {
     private String phone;
 
     private String identification;
+
+    private String clientId;
+
+    private int status;
 }

@@ -17,6 +17,7 @@ import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.security.RsaProvider;
+import org.mbg.common.security.exception.UnauthorizedException;
 import org.mbg.common.util.Validator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -66,13 +67,21 @@ public class AuthServiceImpl implements AuthService {
                     User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
         }
 
-        JwtAccessToken accessToken = jwtProvider.createAccessToken(userDTO.getUsername());
+        return jwtProvider.createAccessToken(userDTO.getUsername());
 
-        this.tokenService.saveToken(userDTO.getUsername(), accessToken);
-        this.tokenService.saveRefreshToken(userDTO.getUsername(), accessToken.getRefreshToken());
+    }
 
-        return accessToken;
+    @Override
+    public JwtAccessToken refreshToken() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
+        if (Validator.isNull(auth)) {
+            throw new UnauthorizedException(LabelKey.ERROR_INVALID_TOKEN);
+        }
+
+        String username = auth.getName();
+
+        return this.jwtProvider.createAccessToken(username);
     }
 
     @Override

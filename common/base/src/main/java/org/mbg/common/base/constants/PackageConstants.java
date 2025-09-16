@@ -16,4 +16,6 @@ public final class PackageConstants {
 
     public static final String PACKAGE_LABEL = "org.mbg.common.label";
 
+    public static final String PACKAGE_BASE = "org.mbg.common.base.model";
+
 }
