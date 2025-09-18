@@ -419,4 +419,6 @@ public final class LabelKey {
 
 	public static final String ERROR_CLIENT_NOT_FOUND = "error.client-not-found";
 
+	public static final String LABEL_FILTER = "label.filter";
+
 }

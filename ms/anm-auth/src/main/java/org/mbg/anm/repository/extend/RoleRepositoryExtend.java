@@ -14,6 +14,4 @@ public interface RoleRepositoryExtend {
     List<Role> search(RoleReq roleReq, Pageable pageable);
 
     Long count (RoleReq roleReq);
-
-    List<Role> findByRoleCodeIn(List<String> roleCode);
 }

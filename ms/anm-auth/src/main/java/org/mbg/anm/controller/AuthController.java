@@ -20,6 +20,11 @@ public class AuthController {
         return ResponseEntity.ok(this.authService.login(userDTO));
     }
 
+    @PostMapping("refresh")
+    public ResponseEntity<?> refresh() {
+        return ResponseEntity.ok(this.authService.refreshToken());
+    }
+
     @GetMapping("verify")
     public ResponseEntity<?> verify() {
         return ResponseEntity.ok(this.authService.verify());

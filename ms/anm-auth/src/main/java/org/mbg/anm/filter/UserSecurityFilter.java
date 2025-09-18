@@ -14,6 +14,8 @@ import org.mbg.anm.security.UserDetailServiceImpl;
 import org.mbg.anm.security.UserPrincipal;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.label.LabelKey;
+import org.mbg.common.label.Labels;
+import org.mbg.common.security.exception.UnauthorizedException;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.security.util.SecurityUtils;
@@ -56,10 +58,9 @@ public class UserSecurityFilter implements AuthorizationFilter {
         }
 
         if (StringUtils.hasText(auth) && auth.startsWith(SecurityConstants.Header.BASIC_START)) {
-            token = auth.substring(SecurityConstants.Header.BASIC_START.length());
 
-            if (Validator.isNotNull(token)) {
-                String[] data = SecurityUtils.getBasicAuthentication(token);
+            if (Validator.isNotNull(auth)) {
+                String[] data = SecurityUtils.getBasicAuthentication(auth);
 
                 if (Validator.isNull(data) || data.length != 2) {
                     throw new BadRequestException(LabelKey.ERROR_INVALID_TOKEN,
@@ -68,8 +69,12 @@ public class UserSecurityFilter implements AuthorizationFilter {
 
                 UserPrincipal userPrincipal = (UserPrincipal) userDetailService.loadUserByClientId(data[0]);
 
-                authentication = new UsernamePasswordAuthenticationToken(userPrincipal, token, userPrincipal.getAuthorities());
+                if (Validator.isNull(userPrincipal) ||
+                        !Validator.equals(userPrincipal.getPassword(), data[1])) {
+                    throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_INVALID_TOKEN));
+                }
 
+                authentication = new UsernamePasswordAuthenticationToken(userPrincipal, token, userPrincipal.getAuthorities());
 
             }
         }

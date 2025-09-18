@@ -18,4 +18,10 @@
             );
         </sql>
     </changeSet>
+
+    <changeSet id="req-producer-structure-15-09-2025-01-02" author="Nganph">
+        <sql>
+            alter table rp_request add column client_id varchar(100);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

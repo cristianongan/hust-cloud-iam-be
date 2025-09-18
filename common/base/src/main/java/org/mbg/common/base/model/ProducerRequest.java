@@ -32,4 +32,7 @@ public class ProducerRequest extends AbstractAuditingEntity implements Serializa
     private String requestId;
 
     private int status;
+
+    @Column(name = "client_id")
+    private String clientId;
 }

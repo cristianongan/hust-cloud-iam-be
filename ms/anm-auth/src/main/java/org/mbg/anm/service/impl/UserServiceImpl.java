@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService {
             return;
         }
 
-        List<Role> roles = this.roleRepository.findByRoleCodeIn(userReq.getRoles());
+        List<Role> roles = this.roleRepository.findByCodeIn(userReq.getRoles());
 
         List<UserRole> userRoles = new ArrayList<>();
 

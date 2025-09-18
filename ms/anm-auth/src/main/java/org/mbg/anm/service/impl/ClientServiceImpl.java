@@ -47,12 +47,7 @@ public class ClientServiceImpl implements ClientService {
             throw new BadRequestException(LabelKey.ERROR_INVALID_CREDENTIAL, Client.class.getName(), LabelKey.ERROR_INVALID_CREDENTIAL);
         }
 
-        JwtAccessToken accessToken = jwtProvider.createAccessToken(clientDTO.getClientId());
-
-        this.tokenService.saveToken(clientDTO.getClientId(), accessToken);
-        this.tokenService.saveRefreshToken(clientDTO.getClientId(), accessToken.getRefreshToken());
-
-        return accessToken;
+        return jwtProvider.createAccessToken(clientDTO.getClientId());
     }
 
     @Override

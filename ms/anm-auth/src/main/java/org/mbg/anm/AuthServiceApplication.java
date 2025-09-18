@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
 
-@SpringBootApplication(scanBasePackages = {PackageConstants.DEFAULT_PACKAGE_SCAN})
+@SpringBootApplication(scanBasePackages = {PackageConstants.DEFAULT_PACKAGE_SCAN, "org.mbg.common.base.filter"})
 @EnableConfigurationProperties
 public class AuthServiceApplication extends BaseApplication {
     public AuthServiceApplication(Environment env) {

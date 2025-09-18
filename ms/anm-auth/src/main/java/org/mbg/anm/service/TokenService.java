@@ -30,7 +30,7 @@ public interface TokenService {
      * @return
      */
     @Cacheable(cacheNames = SecurityConstants.CACHE.TOKEN, key = "#username", unless = "#result == null")
-    default JwtAccessToken getToken(String username) {
+    default JwtToken getToken(String username) {
         return null;
     }
 
@@ -84,7 +84,7 @@ public interface TokenService {
             put = {@CachePut(cacheNames = SecurityConstants.CACHE.TOKEN, key = "#username",
                     unless = "#result == null")},
             evict = {@CacheEvict(value = SecurityConstants.CACHE.REMEMBER_ME_TOKEN, key = "#username")})
-    default JwtAccessToken saveToken(String username, JwtAccessToken token) {
+    default JwtToken saveToken(String username, JwtToken token) {
         return token;
     }
 
