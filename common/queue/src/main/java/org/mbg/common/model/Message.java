@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public interface Message {
     String getId();
 
-    String getPayload();
+    Object getPayload();
 
     int getPriority();
 

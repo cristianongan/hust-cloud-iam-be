@@ -16,4 +16,6 @@ public class RedisQueueProperties {
     private List<String> priorityTopics;
 
     private List<String> normalTopics;
+
+    private String groupIbRequestTopic;
 }

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: auth-service
+    name: cms-service
   profiles:
     group:
       "dev": "base,dev"
@@ -8,7 +8,7 @@ spring:
       "qa": "base,qa"
 
 server:
-  port: 9090
+  port: 9094
   servlet:
     context-path: /
     encoding:

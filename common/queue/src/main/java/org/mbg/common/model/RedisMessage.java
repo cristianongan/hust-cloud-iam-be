@@ -16,7 +16,7 @@ public class RedisMessage implements Message, Serializable {
 
     private String id;
 
-    private String payload;
+    private Object payload;
 
     private String topic;
 
@@ -24,7 +24,7 @@ public class RedisMessage implements Message, Serializable {
 
     private Long createdAt;
 
-    public static RedisMessage of(String payload, String topic, int priority) {
+    public static RedisMessage of(Object payload, String topic, int priority) {
         return RedisMessage.builder()
                 .id(UUID.randomUUID().toString())
                 .payload(payload)

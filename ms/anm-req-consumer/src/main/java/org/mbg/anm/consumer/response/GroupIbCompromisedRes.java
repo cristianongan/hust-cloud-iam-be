@@ -27,10 +27,10 @@ public class GroupIbCompromisedRes extends GroupIbResponse implements Serializab
         private List<String> downloadLinkList;
         private List<String> email;
         private Evaluation evaluation;
-        private String id;
+        private List<String> id;
         private String leakName;
-        private String leakPublished;   // ví dụ "04.09.2025"
-        private List<String> password;  // "Hidden data" ở mẫu
+        private String leakPublished;
+        private List<String> password;
         private String reaperMessageId;
         private List<String> taName;
         private String updateTime;      // ví dụ "2025-09-09T18:04:21"

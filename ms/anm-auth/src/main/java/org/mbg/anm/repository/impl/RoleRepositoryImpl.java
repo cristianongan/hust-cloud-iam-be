@@ -56,7 +56,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
 
     @Override
     public List<Role> search(RoleReq roleReq, Pageable pageable) {
-        StringBuilder sql = new StringBuilder("select e from role_ e ");
+        StringBuilder sql = new StringBuilder("select e.* from role_ e ");
 
         Map<String,Object> params = new HashMap<>();
 

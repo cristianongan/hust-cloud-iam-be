@@ -6,6 +6,7 @@ import org.mbg.anm.repository.ProducerRequestRepository;
 import org.mbg.anm.service.RequestService;
 import org.mbg.anm.service.mapper.ProducerRequestMapper;
 import org.mbg.common.api.exception.BadRequestException;
+import org.mbg.common.base.enums.RequestStatus;
 import org.mbg.common.base.model.ProducerRequest;
 import org.mbg.common.base.model.dto.ProducerRequestDTO;
 import org.mbg.common.label.LabelKey;
@@ -38,6 +39,7 @@ public class RequestServiceImpl implements RequestService {
 
         ProducerRequest req = this.producerRequestMapper.toEntity(requestDTO);
         req.setClientId(SecurityUtils.getCurrentUserLogin().orElse(null));
+        req.setStatus(RequestStatus.NEW.getStatus());
 
         return this.producerRequestMapper.toDto(this.producerRequestRepository.save(req));
     }

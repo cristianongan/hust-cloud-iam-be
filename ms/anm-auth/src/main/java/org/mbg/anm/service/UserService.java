@@ -8,6 +8,7 @@ import org.mbg.anm.model.search.UserSearch;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
+    UserDTO detail();
 
     UserDTO update(UserReq userReq);
 

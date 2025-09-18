@@ -85,6 +85,10 @@ public class GatewayRoutesConfiguration {
             routesBuilder.route(routeDef.getId(), r -> r.path(routeDef.getPath())
                     .and().method(HttpMethod.GET, HttpMethod.POST, HttpMethod.OPTIONS)
                     .filters(f -> {
+                        f.dedupeResponseHeader("Access-Control-Allow-Origin", "RETAIN_FIRST");
+                        f.dedupeResponseHeader("Access-Control-Allow-Credentials", "RETAIN_FIRST");
+                        f.dedupeResponseHeader("Access-Control-Expose-Headers", "RETAIN_FIRST");
+                        f.dedupeResponseHeader("Vary", "RETAIN_FIRST");
 
                         // 1. Apply stripPrefix if configured
                         if (routeDef.getStripPrefix() > 0) {
