@@ -1,0 +1,146 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="auth-structure-04-09-2025-01-01" author="Nganph">
+        <sql>
+            create table user_ (
+                id bigserial primary key,
+                username varchar(100),
+                password varchar(100),
+                email varchar(500),
+                phone varchar(50),
+                gender smallint,
+                date_of_birth DATE,
+                addess varchar(500),
+                status smallint,
+                fullname varchar(100),
+                created_by varchar(100),
+                created_date timestamp,
+                last_modified_by varchar(100),
+                last_modified_date timestamp
+            );
+
+            CREATE UNIQUE INDEX user_username ON user_ (username);
+            CREATE UNIQUE INDEX user_email ON user_ (email);
+            CREATE UNIQUE INDEX user_phone ON user_ (phone);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-02" author="Nganph">
+        <sql>
+            create table permission_ (
+                                   id bigserial primary key,
+                                   name varchar(500),
+                                   description varchar(500),
+                                   code varchar(50),
+                                   status smallint,
+                                   created_by varchar(100),
+                                   created_date timestamp,
+                                   last_modified_by varchar(100),
+                                   last_modified_date timestamp
+            );
+            CREATE UNIQUE INDEX permission_code ON permission_ (code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-03" author="Nganph">
+        <sql>
+            create table role_(
+                                         id bigserial primary key,
+                                         name varchar(500),
+                                         description varchar(500),
+                                         code varchar(50),
+                                         status smallint,
+                                         created_by varchar(100),
+                                         created_date timestamp,
+                                         last_modified_by varchar(100),
+                                         last_modified_date timestamp
+            );
+            CREATE UNIQUE INDEX role_code ON role_ (code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-04" author="Nganph">
+        <sql>
+            create table role_permission(
+                                  id bigserial primary key,
+                                  role_code varchar(50),
+                                  permission_code varchar(50),
+                                  created_by varchar(100),
+                                  created_date timestamp,
+                                  last_modified_by varchar(100),
+                                  last_modified_date timestamp
+            );
+            CREATE INDEX permission_role_code ON role_permission(role_code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-05" author="Nganph">
+        <sql>
+            create table user_role(
+                                            id bigserial primary key,
+                                            role_code varchar(50),
+                                            user_id bigint,
+                                            created_by varchar(100),
+                                            created_date timestamp,
+                                            last_modified_by varchar(100),
+                                            last_modified_date timestamp
+                );
+            CREATE INDEX user_role_user_id ON user_role (user_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-06" author="Nganph">
+        <sql>
+            create table client_(
+                                      id bigserial primary key,
+                                      client_id varchar(100),
+                                      client_name varchar(100),
+                                      client_secret varchar(100),
+                                      description varchar(500),
+                                      status smallint,
+                                      created_by varchar(100),
+                                      created_date timestamp,
+                                      last_modified_by varchar(100),
+                                      last_modified_date timestamp
+            );
+            CREATE INDEX client_client_id ON client_ (client_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-07" author="Nganph">
+        <sql>
+            alter table user_ add column address varchar(500);
+            alter table user_ drop column addess;
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-08" author="Nganph">
+        <sql>
+            create table client_role(
+                                      id bigserial primary key,
+                                      role_code varchar(50),
+                                      client_id bigint,
+                                      created_by varchar(100),
+                                      created_date timestamp,
+                                      last_modified_by varchar(100),
+                                      last_modified_date timestamp
+            );
+            CREATE INDEX client_role_client_id ON client_role (client_id);
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-09" author="Nganph">
+        <sql>
+            ALTER TABLE user_ add column type smallint;
+        </sql>
+    </changeSet>
+
+    <changeSet id="auth-structure-04-09-2025-01-10" author="Nganph">
+        <sql>
+            ALTER TABLE client_role drop column client_id;
+            ALTER TABLE client_role add column client_id varchar(100);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

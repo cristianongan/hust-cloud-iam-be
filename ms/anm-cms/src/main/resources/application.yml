@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: auth-service
+  profiles:
+    group:
+      "dev": "base,dev"
+      "prod": "base,prod"
+      "qa": "base,qa"
+
+server:
+  port: 9090
+  servlet:
+    context-path: /
+    encoding:
+      charset: 'UTF-8'
+      enabled: true
+      force: true
+logging:
+  level:
+    sun:
+      rmi: ERROR
+    javax:
+      management:
+        remote:
+          rmi: ERROR
