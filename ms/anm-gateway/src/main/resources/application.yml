@@ -18,3 +18,7 @@ server:
 #      management:
 #        remote:
 #          rmi: ERROR
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

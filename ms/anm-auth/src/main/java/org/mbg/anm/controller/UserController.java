@@ -47,4 +47,9 @@ public class UserController {
         this.userService.delete(req);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("detail")
+    public ResponseEntity<?> detail() {
+        return ResponseEntity.ok(this.userService.detail());
+    }
 }

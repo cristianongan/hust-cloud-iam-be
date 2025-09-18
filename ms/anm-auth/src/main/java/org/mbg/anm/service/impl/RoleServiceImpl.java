@@ -6,6 +6,7 @@ import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.RolePermission;
 import org.mbg.anm.model.User;
+import org.mbg.anm.model.dto.PermissionDTO;
 import org.mbg.anm.model.dto.RoleDTO;
 import org.mbg.anm.model.dto.UserDTO;
 import org.mbg.anm.model.dto.request.RoleReq;
@@ -14,6 +15,7 @@ import org.mbg.anm.repository.RolePermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.RoleService;
+import org.mbg.anm.service.mapper.PermissionMapper;
 import org.mbg.anm.service.mapper.RoleMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
@@ -40,6 +42,8 @@ public class RoleServiceImpl implements RoleService {
     private final PermissionRepository permissionRepository;
 
     private final RolePermissionRepository rolePermissionRepository;
+
+    private final PermissionMapper permissionMapper;
 
     private final UserRepository userRepository;
 
@@ -141,5 +145,10 @@ public class RoleServiceImpl implements RoleService {
         Long count  = this.roleRepository.count(search);
 
         return new PageImpl<>(content, pageable, count);
+    }
+
+    @Override
+    public List<PermissionDTO> getAllPermission() {
+        return this.permissionMapper.toDto(this.permissionRepository.findAll());
     }
 }

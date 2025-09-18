@@ -15,6 +15,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 public class UserDTO implements Serializable {
@@ -48,5 +49,7 @@ public class UserDTO implements Serializable {
     private String lastModifiedBy;
 
     private Instant lastModifiedDate;
+
+    private List<String> permissions;
 
 }

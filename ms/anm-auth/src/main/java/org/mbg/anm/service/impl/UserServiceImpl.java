@@ -7,6 +7,7 @@ import org.mbg.anm.configuration.ValidationProperties;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.UserRole;
 import org.mbg.anm.repository.UserRoleRepository;
+import org.mbg.anm.security.UserDetailServiceImpl;
 import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.UserDTO;
@@ -22,11 +23,18 @@ import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.security.RsaProvider;
+import org.mbg.common.security.exception.UnauthorizedException;
+import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -54,6 +63,8 @@ public class UserServiceImpl implements UserService {
 
     private final ValidationProperties validationProperties;
 
+    private final UserDetailServiceImpl userDetailsService;
+
     private Pattern passwordPattern;
 
     private final UserRoleRepository userRoleRepository;
@@ -61,6 +72,27 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     protected void init() {
         this.passwordPattern = Pattern.compile(this.validationProperties.getPasswordRegex());
+    }
+
+    @Override
+    public UserDTO detail() {
+        Authentication userDetails = SecurityContextHolder.getContext().getAuthentication();
+
+        if (Validator.isNull(userDetails)) {
+            throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND));
+        }
+
+        User user = this.userRepository.findByUsername(userDetails.getName());
+
+        if (Validator.isNull(user)) {
+            throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND));
+        }
+
+        UserDTO userDTO = userMapper.toDto(user);
+
+        userDTO.setPermissions(userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+
+        return userDTO;
     }
 
     @Override

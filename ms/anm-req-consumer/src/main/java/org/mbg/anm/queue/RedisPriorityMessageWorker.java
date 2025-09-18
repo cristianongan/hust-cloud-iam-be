@@ -1,18 +1,14 @@
-package org.mbg.common.queue;
+package org.mbg.anm.queue;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.common.model.RedisMessage;
+import org.mbg.common.queue.JobHandler;
+import org.mbg.common.queue.RedisQueueFactory;
 import org.mbg.common.util.Validator;
 import org.redisson.api.RPriorityBlockingQueue;
-import org.redisson.api.RedissonClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.task.TaskExecutor;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -25,6 +21,10 @@ public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
     private final TaskExecutor taskExecutor;
 
     private final String topicName;
+
+    private final String username;
+
+    private final String password;
 
     private boolean running;
 

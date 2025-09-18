@@ -95,3 +95,42 @@ services:
       - "9600:9600"
       - "5000:5000"
     networks: [mbg-anm-dev]
+  auth-service:
+    build:
+      context: .
+      dockerfile: ms/anm-auth/Dockerfile
+    image: anm-auth:latest
+    container_name: anm-auth
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9090:9090"
+    depends_on:
+      - postgres
+      - redis
+  cms-service:
+    build:
+      context: .
+      dockerfile: ms/anm-cms/Dockerfile
+    image: anm-cms:latest
+    container_name: anm-cms
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9094:9094"
+    depends_on:
+      - postgres
+      - redis
+  gateway-service:
+    build:
+      context: .
+      dockerfile: ms/anm-gateway/Dockerfile
+    image: anm-gateway:latest
+    container_name: anm-gateway
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9091:9091"
+    depends_on:
+      - postgres
+      - redis
