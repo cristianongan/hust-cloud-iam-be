@@ -23,7 +23,7 @@ public class ProducerSecurityConfiguration extends SecurityConfiguration {
 
     @Override
     protected String[] getPublicUrlPatterns() {
-        return new String[0];
+        return this.ap.getAuthentication().getPublicUrlPatterns();
     }
 
     @Override
