@@ -2,6 +2,7 @@ package org.mbg.common.api.exception;
 
 import org.mbg.common.api.util.ApiConstants;
 import lombok.Getter;
+import org.mbg.common.label.Labels;
 import org.zalando.problem.AbstractThrowableProblem;
 import org.zalando.problem.Status;
 
@@ -39,7 +40,7 @@ public class AbstractException extends AbstractThrowableProblem {
                                Map<String, Object> params, Map<String, Object> values) {
         super(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, null, null, null, params);
 
-        params.put(ApiConstants.ErrorKey.MESSAGE, defaultMessage);
+        params.put(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(defaultMessage));
         params.put(ApiConstants.ErrorKey.ERROR_KEY, errorKey);
 
         if (values != null && !values.isEmpty()) {
@@ -54,7 +55,7 @@ public class AbstractException extends AbstractThrowableProblem {
                                Map<String, Object> params) {
         super(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, null, null, null, params);
 
-        params.put(ApiConstants.ErrorKey.MESSAGE, defaultMessage);
+        params.put(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(defaultMessage));
         params.put(ApiConstants.ErrorKey.ERROR_KEY, errorKey);
 
         this.entityName = entityName;
@@ -64,7 +65,7 @@ public class AbstractException extends AbstractThrowableProblem {
     private static Map<String, Object> getAlertParameters(String message, String entityName, String errorKey) {
         Map<String, Object> parameters = new HashMap<>();
 
-        parameters.put(ApiConstants.ErrorKey.MESSAGE, message);
+        parameters.put(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(message));
         parameters.put(ApiConstants.ErrorKey.ERROR_KEY, errorKey);
         parameters.put(ApiConstants.ErrorKey.PARAMS, entityName);
 

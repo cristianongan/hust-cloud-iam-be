@@ -37,4 +37,10 @@
             CREATE INDEX IF NOT EXISTS shedlock_lock_until_idx ON shedlock (lock_util);
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-04-09-2025-01-03" author="Nganph">
+        <sql>
+            ALTER TABLE record_ ADD COLUMN meta jsonb not null default '{}'::jsonb;
+        </sql>
+    </changeSet>
 </databaseChangeLog>
