@@ -1,6 +1,11 @@
 spring:
   application:
     name: req-consumer-service
+  profiles:
+    group:
+      "dev": "base,dev"
+      "prod": "base,prod"
+      "qa": "base,qa"
 
 server:
   port: 9093
