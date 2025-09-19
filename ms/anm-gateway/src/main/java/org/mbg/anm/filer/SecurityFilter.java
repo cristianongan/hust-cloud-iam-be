@@ -84,7 +84,7 @@ public class SecurityFilter implements WebFilter {
                     }
                     return resp.writeWith(Mono.just(resp.bufferFactory().wrap(body)));
                 })
-                .timeout(Duration.ofMillis(10000),
+                .timeout(Duration.ofMillis(30000),
                         Mono.defer(() -> {
                             exchange.getResponse().setStatusCode(HttpStatus.GATEWAY_TIMEOUT);
                             return exchange.getResponse().setComplete();
