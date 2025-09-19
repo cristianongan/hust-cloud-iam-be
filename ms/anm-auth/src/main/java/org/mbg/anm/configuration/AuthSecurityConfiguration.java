@@ -11,6 +11,7 @@ import org.mbg.common.security.configuration.SecurityConfiguration;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 /**
  * Configuration class for Gateway Security in a WebFlux application.
@@ -19,7 +20,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
  */
 @Slf4j
 @Configuration
-@RequiredArgsConstructor
 public class AuthSecurityConfiguration extends SecurityConfiguration {
 
     private final AuthenticationProperties ap;
@@ -31,6 +31,15 @@ public class AuthSecurityConfiguration extends SecurityConfiguration {
     private final UserDetailServiceImpl userDetailsService;
 
     private final RsaProperties rsaProperties;
+
+    public AuthSecurityConfiguration(SecurityProblemSupport problemSupport, AuthenticationProperties ap, CorsConfigurationSource corsConfigurationSource, JwtProvider jwtProvider, UserDetailServiceImpl userDetailsService, RsaProperties rsaProperties) {
+        super(problemSupport);
+        this.ap = ap;
+        this.corsConfigurationSource = corsConfigurationSource;
+        this.jwtProvider = jwtProvider;
+        this.userDetailsService = userDetailsService;
+        this.rsaProperties = rsaProperties;
+    }
 
     @Override
     protected String[] getPublicUrlPatterns() {

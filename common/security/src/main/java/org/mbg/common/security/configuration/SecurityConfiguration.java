@@ -1,10 +1,12 @@
 package org.mbg.common.security.configuration;
 
+import lombok.RequiredArgsConstructor;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.mbg.common.security.util.SecurityConstants;
 import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 /**
  * Abstract base configuration class for Spring Security settings within VMC applications.
@@ -41,8 +44,11 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity // Enable method-level security annotations like @PreAuthorize
-@NoArgsConstructor
+@Import(SecurityProblemSupport.class)
+@RequiredArgsConstructor
 public abstract class SecurityConfiguration {
+    private final SecurityProblemSupport problemSupport;
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
@@ -74,6 +80,10 @@ public abstract class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(problemSupport)   // 401 -> Problem JSON
+                        .accessDeniedHandler(problemSupport)        // 403 -> Problem JSON
+                )
                 .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Use stateless sessions
                 .authorizeHttpRequests(authz -> authz
