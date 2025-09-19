@@ -3,9 +3,12 @@ package org.mbg.common.base.model;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Map;
 
 @Entity
 @Table(name = "record_")
@@ -45,4 +48,8 @@ public class Record extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "status")
     private int status;
+
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "jsonb")
+    private Map<String, Object> meta;
 }

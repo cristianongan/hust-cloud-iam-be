@@ -1,20 +1,34 @@
 package org.mbg.anm.configuration;
 
+import jakarta.annotation.PostConstruct;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.mbg.common.queue.RedisQueueFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.TaskExecutor;
 
 import java.util.List;
 
 @Data
 @Configuration
+@RequiredArgsConstructor
 @ConfigurationProperties(prefix = "api-consumer")
 public class ApiConsumerProperties {
 
-    private List<GroupIBAccount>  groupIbAccounts;
+    private List<Group> groups;
 
     @Data
-    public static class GroupIBAccount {
+    public static class Group {
+        private List<Account>  groupIbAccounts;
+
+        private String topic;
+    }
+
+    @Data
+    public static class Account {
         private String user;
 
         private String key;

@@ -22,10 +22,6 @@ public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
 
     private final String topicName;
 
-    private final String username;
-
-    private final String password;
-
     private boolean running;
 
     @Override
@@ -50,13 +46,13 @@ public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
                     } catch (Exception e) {
                         _log.error("RedisPriorityMessageWorker handle data occurred an exception: {}", e.getMessage());
                     }
-                } else {
-                    try {
-                        java.util.concurrent.TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        return;
-                    }
+                }
+
+                try {
+                    java.util.concurrent.TimeUnit.SECONDS.sleep(1);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
                 }
             }
 

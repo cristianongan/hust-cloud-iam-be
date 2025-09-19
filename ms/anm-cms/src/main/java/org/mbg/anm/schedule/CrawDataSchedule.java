@@ -50,7 +50,7 @@ public class CrawDataSchedule implements Worker {
 
         if (Validator.isNotNull(data)) {
             data.parallelStream().forEach(producerRequest -> {
-                RedisMessage redisMessage = RedisMessage.of(producerRequest, redisQueueProperties.getGroupIbRequestTopic(), 0);
+                RedisMessage redisMessage = RedisMessage.of(producerRequest.getId(), redisQueueProperties.getGroupIbRequestTopic(), 0);
 
                 producer.sendPriorityMessage(redisMessage);
 

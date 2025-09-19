@@ -39,3 +39,5 @@ target
 /logs
 /storage
 /indexes
+
+data/
