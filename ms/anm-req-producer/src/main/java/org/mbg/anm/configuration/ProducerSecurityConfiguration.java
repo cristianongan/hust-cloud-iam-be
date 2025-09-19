@@ -7,13 +7,19 @@ import org.mbg.common.security.configuration.SecurityConfiguration;
 import org.mbg.common.security.filter.AuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
 
 @Configuration
-@RequiredArgsConstructor
 public class ProducerSecurityConfiguration extends SecurityConfiguration {
     private final AuthenticationProperties ap;
 
     private final CorsConfigurationSource corsConfigurationSource;
+
+    public ProducerSecurityConfiguration(SecurityProblemSupport problemSupport, AuthenticationProperties ap, CorsConfigurationSource corsConfigurationSource) {
+        super(problemSupport);
+        this.ap = ap;
+        this.corsConfigurationSource = corsConfigurationSource;
+    }
 
     @Override
     protected String[] getPublicUrlPatterns() {

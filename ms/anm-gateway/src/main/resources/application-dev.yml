@@ -29,7 +29,7 @@ spring:
     cache-duration: 60
   cloud:
     consul:
-      host: 192.168.169.88 # Address of the Consul agent
+      host: localhost # Address of the Consul agent
       port: 8500      # Port of the Consul agent (default is 8500)
       discovery:
         register: true # Enable service discovery with Consul
