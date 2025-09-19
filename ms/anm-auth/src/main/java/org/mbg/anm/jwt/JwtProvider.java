@@ -86,7 +86,7 @@ public class JwtProvider implements InitializingBean {
             JwtToken accessToken = this.tokenService.getToken(username);
             JwtToken refreshToken = this.tokenService.getRefreshToken(username);
 
-            if (!Validator.equals(accessToken.getToken(), token) &&
+            if ((Validator.isNotNull(accessToken) && !Validator.equals(accessToken.getToken(), token)) &&
                 !Validator.equals(refreshToken.getToken(), token)) {
                 throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_INVALID_TOKEN));
             }
