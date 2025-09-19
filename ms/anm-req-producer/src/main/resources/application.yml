@@ -1,6 +1,11 @@
 spring:
   application:
     name: req-producer-service
+  profiles:
+    group:
+      "dev": "base,dev"
+      "prod": "base,prod"
+      "uat": "base,uat"
 
 server:
   port: 9093

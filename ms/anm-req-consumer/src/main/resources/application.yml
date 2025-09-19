@@ -5,7 +5,7 @@ spring:
     group:
       "dev": "base,dev"
       "prod": "base,prod"
-      "qa": "base,qa"
+      "uat": "base,uat"
 
 server:
   port: 9093
