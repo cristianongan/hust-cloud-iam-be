@@ -24,5 +24,7 @@ public class RoleDTO implements Serializable {
 
     private String code;
 
+    private Integer status;
+
     private List<String> permissions;
 }
