@@ -7,6 +7,7 @@ import org.mbg.common.label.Labels;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RestController
 public class FallbackController {
-    @GetMapping("/fallback/service-unavailable")
+    @RequestMapping("/fallback/service-unavailable")
     public Mono<ResponseEntity<String>> commonServiceFallback(ServerWebExchange exchange) {
         // Log the fallback event. You can inspect the original request path for context.
         String originalPath = exchange.getRequest().getPath().toString();

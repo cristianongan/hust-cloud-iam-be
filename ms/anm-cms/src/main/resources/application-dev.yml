@@ -1,7 +1,6 @@
 logging:
   level:
-    ROOT: INFO
-    org.mbg: DEBUG
+    org.mbg: TRACE
     org.springframework.cache: TRACE
     org.redisson: INFO
     org.springframework.transaction: TRACE # Rất quan trọng
@@ -9,6 +8,7 @@ logging:
     org.hibernate.SQL: DEBUG             # Để xem các câu lệnh SQL
     org.hibernate.type.descriptor.sql: TRACE # Để xem các tham số được bind
     org.postgresql: INFO
+    root: INFO
   logback:
     rollingpolicy:
       max-file-size: 100MB
@@ -226,3 +226,7 @@ scheduling:
     cron: '0 0/1 * * * *'
     lock-at-least: PT30S
     lock-at-most: PT50S
+redis-queue:
+  priority-topics:
+    - group-ib-compromised
+  group-ib-request-topic: group-ib-compromised

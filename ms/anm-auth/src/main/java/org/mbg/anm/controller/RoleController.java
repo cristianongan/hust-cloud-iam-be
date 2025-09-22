@@ -22,6 +22,12 @@ public class RoleController {
         return ResponseEntity.ok(this.roleService.search(search));
     }
 
+    @GetMapping("all")
+    @PreAuthorize("hasPrivilege('ROLE_READ')")
+    public ResponseEntity<?> all() {
+        return ResponseEntity.ok(this.roleService.getAllRole());
+    }
+
     @PostMapping("create")
     @PreAuthorize("hasPrivilege('ROLE_CREATE')")
     public ResponseEntity<?> create(@RequestBody RoleReq req) {

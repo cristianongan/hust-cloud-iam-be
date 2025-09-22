@@ -151,4 +151,9 @@ public class RoleServiceImpl implements RoleService {
     public List<PermissionDTO> getAllPermission() {
         return this.permissionMapper.toDto(this.permissionRepository.findAll());
     }
+
+    @Override
+    public List<RoleDTO> getAllRole() {
+        return this.roleMapper.toDto(this.roleRepository.findAllByStatus(EntityStatus.ACTIVE.getStatus()));
+    }
 }

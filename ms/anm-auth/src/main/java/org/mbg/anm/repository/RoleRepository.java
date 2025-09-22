@@ -21,4 +21,6 @@ public interface RoleRepository extends JpaRepository<Role,Long>, RoleRepository
     Integer updateStatusByIdIn(int status, Collection<Long> ids);
 
     List<Role> findByCodeIn(List<String> roleCode);
+
+    List<Role> findAllByStatus(Integer status);
 }

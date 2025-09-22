@@ -178,6 +178,8 @@ management:
       show-details: always # Always show full details in the /actuator/health endpoint
     gateway:
       enabled: true
+    discoveryclient:
+      enabled: true
   metrics:
     distribution:
       percentiles-histogram:

@@ -8,7 +8,7 @@ spring:
       "uat": "base,uat"
 
 server:
-  port: 9093
+  port: 9095
   servlet:
     context-path: /
     encoding:

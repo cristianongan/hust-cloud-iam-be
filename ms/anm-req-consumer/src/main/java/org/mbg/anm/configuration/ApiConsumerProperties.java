@@ -22,9 +22,13 @@ public class ApiConsumerProperties {
 
     @Data
     public static class Group {
-        private List<Account>  groupIbAccounts;
+        private List<Account>  accounts;
+
+        private String api;
 
         private String topic;
+
+        private String dataSource;
     }
 
     @Data

@@ -48,6 +48,8 @@ public class CrawDataSchedule implements Worker {
         _log.info("start CrawDataSchedule at {}", new Date());
         List<ProducerRequest> data = this.producerRequestRepository.findByStatusLimit(RequestStatus.NEW.getStatus(), pushMessageLimit);
 
+        _log.info("CrawDataSchedule found {} items", data.size());
+
         if (Validator.isNotNull(data)) {
             data.parallelStream().forEach(producerRequest -> {
                 RedisMessage redisMessage = RedisMessage.of(producerRequest.getId(), redisQueueProperties.getGroupIbRequestTopic(), 0);

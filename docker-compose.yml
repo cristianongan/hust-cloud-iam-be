@@ -121,6 +121,32 @@ services:
     depends_on:
       - postgres
       - redis
+  req-producer-service:
+    build:
+      context: .
+      dockerfile: ms/anm-req-producer/Dockerfile
+    image: anm-req-producer:latest
+    container_name: anm-req-producer
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9093:9093"
+    depends_on:
+      - postgres
+      - redis
+  req-consumer-service:
+    build:
+      context: .
+      dockerfile: ms/anm-req-consumer/Dockerfile
+    image: anm-req-consumer:latest
+    container_name: anm-req-consumer
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    ports:
+      - "9095:9095"
+    depends_on:
+      - postgres
+      - redis
   gateway-service:
     build:
       context: .

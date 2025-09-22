@@ -2,5 +2,5 @@ package org.mbg.common.queue;
 
 @FunctionalInterface
 public interface JobHandler<T> {
-    void handle(T item) throws Exception;
+    void handle(String api, String token, String dataSource,T item) throws Exception;
 }
