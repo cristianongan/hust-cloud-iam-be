@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.configuration.ValidationProperties;
 import org.mbg.anm.model.Role;
+import org.mbg.anm.model.RolePermission;
 import org.mbg.anm.model.UserRole;
 import org.mbg.anm.repository.UserRoleRepository;
 import org.mbg.anm.security.UserDetailServiceImpl;
@@ -41,6 +42,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -198,7 +200,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userReq.getUsername());
         user.setPhone(userReq.getPhone());
         user.setEmail(userReq.getEmail());
-        user.setPassword(passwordEncoder.encode(userReq.getPassword()));
+        user.setPassword(passwordEncoder.encode(password));
         user.setAddress(userReq.getAddress());
         user.setDob(userReq.getDob());
         user.setGender(userReq.getGender());
@@ -264,6 +266,21 @@ public class UserServiceImpl implements UserService {
         List<User> users = this.userRepository.search(search, pageable);
 
         List<UserDTO> content = this.userMapper.toDto(users);
+
+        List<Long> ids = users.stream().map(User::getId).collect(Collectors.toList());
+
+        List<UserRole> userRoles = this.userRoleRepository.findByUserIdIn(ids, EntityStatus.ACTIVE.getStatus());
+        Map<Long , List<String>> roleMap = userRoles.stream().collect(Collectors.groupingBy(
+                UserRole::getUserId,
+                Collectors.mapping(UserRole::getRoleCode
+                        , Collectors.toList())
+        ));
+
+        content.forEach(user -> {
+            if (roleMap.containsKey(user.getId())) {
+                user.setRoles(roleMap.get(user.getId()));
+            }
+        });
 
         Long count  = this.userRepository.count(search);
 
