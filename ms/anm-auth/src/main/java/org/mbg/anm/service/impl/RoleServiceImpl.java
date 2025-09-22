@@ -100,6 +100,8 @@ public class RoleServiceImpl implements RoleService {
         }
 
         role.setName(roleReq.getName());
+        role.setDescription(roleReq.getDescription());
+
 
         this.rolePermissionRepository.removeAllPermissionByCode(role.getCode());
 
