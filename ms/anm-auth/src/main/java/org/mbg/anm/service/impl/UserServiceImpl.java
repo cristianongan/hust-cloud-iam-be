@@ -96,6 +96,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDTO update(UserReq userReq) {
         if (Validator.isNull(userReq.getId())) {
             throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
@@ -270,6 +271,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateStatus(UserReq userReq) {
         if (Validator.isNotNull(userReq.getIds()) && Validator.isNotNull(userReq.getStatus())
             && Validator.isNotNull(EntityStatus.valueOfStatus(userReq.getStatus()))
@@ -284,6 +286,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void delete(UserReq userReq) {
         if (Validator.isNotNull(userReq.getIds())) {
             this.userRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), userReq.getIds());

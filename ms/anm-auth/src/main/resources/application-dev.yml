@@ -211,6 +211,7 @@ cache:
     captcha: 300 # 5 phút
     password-verify: 300 # 5 phút,
     dashboard: 180 # 3 phút
+    role-permission: 60
 
 rsa:
   algorithm: RSA/ECB/PKCS1Padding

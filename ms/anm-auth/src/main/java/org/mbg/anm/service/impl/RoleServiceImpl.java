@@ -50,6 +50,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleMapper roleMapper;
 
     @Override
+    @Transactional
     public RoleDTO createRole(RoleReq roleReq) {
         if (Validator.isNull(roleReq.getName())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_INPUT_DATA,
@@ -128,6 +129,7 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    @Transactional
     public void deleteRole(RoleReq roleReq) {
         if (Validator.isNotNull(roleReq.getIds())) {
             this.roleRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), roleReq.getIds());
@@ -139,6 +141,14 @@ public class RoleServiceImpl implements RoleService {
         Pageable pageable = PageRequest.of(search.getPage(), search.getPageSize());
 
         List<Role> roles = this.roleRepository.search(search, pageable);
+
+        roles.forEach(role -> {
+            if (Validator.equals(role.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+                List<Permission> pves = this.permissionRepository.findByRoleCode(role.getCode());
+
+                role.setPermissions(pves);
+            }
+        });
 
         List<RoleDTO> content = this.roleMapper.toDto(roles);
 
