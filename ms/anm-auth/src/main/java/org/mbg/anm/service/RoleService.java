@@ -19,4 +19,6 @@ public interface RoleService {
     Page<RoleDTO> search(RoleReq roleReq);
 
     List<PermissionDTO> getAllPermission();
+
+    List<RoleDTO> getAllRole();
 }

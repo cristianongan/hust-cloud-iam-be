@@ -6,6 +6,12 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -47,6 +53,46 @@ public class DateUtil {
 	public static final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 	
 	public static final String TIME_AND_DATE_PATTERN = "HH:mm dd/MM/yyyy";
+
+	public static Long utcToTimeStampSecond(String text) {
+		String pattern = "yyyy-MM-dd'T'HH:mm:ss";
+		if (text == null || text.isBlank()) throw new IllegalArgumentException("text is blank");
+		String s = text.trim();
+
+		if (s.chars().allMatch(c -> c=='-' || (c>='0' && c<='9'))) {
+			long n = Long.parseLong(s);
+			return (Math.abs(n) > 9_999_999_999L) ? n / 1000L : n; // ms -> s
+		}
+
+		DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+				.parseCaseInsensitive()
+				.appendPattern(pattern)
+				.toFormatter();
+
+		TemporalAccessor ta = fmt.parse(s);
+
+		if (ta.isSupported(ChronoField.INSTANT_SECONDS)) {
+			return Instant.from(ta).getEpochSecond();
+		}
+		if (ta.isSupported(ChronoField.OFFSET_SECONDS)) {
+			return OffsetDateTime.from(ta).toInstant().getEpochSecond();
+		}
+
+		boolean hasDate = ta.isSupported(ChronoField.YEAR) && ta.isSupported(ChronoField.MONTH_OF_YEAR) && ta.isSupported(ChronoField.DAY_OF_MONTH);
+		boolean hasTime = ta.isSupported(ChronoField.HOUR_OF_DAY);
+		if (hasDate && hasTime) {
+			return LocalDateTime.from(ta).atZone(zoneOrUTC(null)).toEpochSecond();
+		}
+		if (hasDate) {
+			return LocalDate.from(ta).atStartOfDay(zoneOrUTC(null)).toEpochSecond();
+		}
+		throw new DateTimeParseException("Pattern parsed without date component", s, 0);
+	}
+
+	private static ZoneId zoneOrUTC(ZoneId z) {
+		return Objects.requireNonNullElse(z, ZoneOffset.UTC);
+	}
+
 	
 	/**
 	 * Compare to.

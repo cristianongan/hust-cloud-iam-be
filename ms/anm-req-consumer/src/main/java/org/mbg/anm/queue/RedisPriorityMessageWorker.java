@@ -10,9 +10,12 @@ import org.redisson.api.RPriorityBlockingQueue;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.task.TaskExecutor;
 
+import java.util.function.Function;
+import java.util.function.Supplier;
+
 @Slf4j
 @RequiredArgsConstructor
-public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
+public class RedisPriorityMessageWorker implements SmartLifecycle {
 
     private final JobHandler<RedisMessage> jobHandler;
 
@@ -24,13 +27,19 @@ public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
 
     private boolean running;
 
+    private final Supplier<String> getToken;
+
+    private final String dataSource;
+
+    private final String api;
+
     @Override
     public void start() {
         running = true;
 
         RPriorityBlockingQueue<RedisMessage> queue = this.redisQueueFactory.getPriorityTopic(topicName);
 
-        if (Validator.isNull(queue)) {
+        if (queue == null) {
             throw new RuntimeException("queue not found: " + topicName);
         }
 
@@ -42,7 +51,7 @@ public abstract class RedisPriorityMessageWorker implements SmartLifecycle {
 
                 if (Validator.isNotNull(data)) {
                     try {
-                        jobHandler.handle(data);
+                        jobHandler.handle(api, getToken.get(), dataSource,data);
                     } catch (Exception e) {
                         _log.error("RedisPriorityMessageWorker handle data occurred an exception: {}", e.getMessage());
                     }

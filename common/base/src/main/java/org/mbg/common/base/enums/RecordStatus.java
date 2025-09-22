@@ -1,19 +1,17 @@
 package org.mbg.common.base.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
-@AllArgsConstructor
-public enum LeakType {
-    EMAIL(1),
-    PHONE(2),
-    BANK_ACCOUNT(3),
-    ADDRESS(4)
+@RequiredArgsConstructor
+public enum RecordStatus {
+    INIT(1),
+    UPDATED(2)
     ;
 
     final int value;
@@ -22,8 +20,8 @@ public enum LeakType {
         return Stream.of(values()).map(e -> e.value).collect(Collectors.toList());
     }
 
-    public static LeakType valueOfStatus(int value) {
-        for (LeakType e : values()) {
+    public static RecordStatus valueOfStatus(int value) {
+        for (RecordStatus e : values()) {
             if (e.getValue() == value) {
                 return e;
             }

@@ -43,4 +43,30 @@
             ALTER TABLE record_ ADD COLUMN meta jsonb not null default '{}'::jsonb;
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-04-09-2025-01-04" author="Nganph">
+        <sql>
+            ALTER TABLE record_ ADD COLUMN data_source varchar(200) not null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-04-09-2025-01-05" author="Nganph">
+        <sql>
+            ALTER TABLE record_ ADD COLUMN types varchar(255) not null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-04-09-2025-01-06" author="Nganph">
+        <sql>
+            ALTER TABLE record_ ADD COLUMN detect_time bigint not null;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-04-09-2025-01-07" author="Nganph">
+        <sql>
+            ALTER TABLE record_ DROP COLUMN description;
+            ALTER TABLE record_ ADD COLUMN description text;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

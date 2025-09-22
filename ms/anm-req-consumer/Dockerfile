@@ -5,11 +5,11 @@ WORKDIR /repo
 COPY . .
 # build module anm-auth + các module phụ thuộc (-am)
 RUN --mount=type=cache,target=/root/.m2 \
-    mvn -DskipTests -pl ms/anm-cms -am package
+    mvn -DskipTests -pl ms/anm-req-consumer -am package
 
 # ===== Run =====
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /repo/ms/anm-cms/target/*.jar app.jar
+COPY --from=build /repo/ms/anm-req-consumer/target/*.jar app.jar
 EXPOSE 9094
 ENTRYPOINT ["java","-jar","/app/app.jar"]

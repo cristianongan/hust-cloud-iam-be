@@ -17,13 +17,14 @@ public class Producer {
     private final RedisQueueFactory redisQueueFactory;
 
     public boolean sendPriorityMessage(RedisMessage message) {
+        _log.info("Producer sendPriorityMessage topic: {} - message: {}", message.getTopic(), message.getPayload());
         if (Validator.isNull(message) || Validator.isNull(message.getTopic()) || Validator.isNull(message.getPayload())) {
             return false;
         }
 
         RPriorityBlockingQueue<RedisMessage> q = this.redisQueueFactory.getPriorityTopic(message.getTopic());
 
-        if (Validator.isNull(q)) {
+        if (q == null) {
             return false;
         }
 

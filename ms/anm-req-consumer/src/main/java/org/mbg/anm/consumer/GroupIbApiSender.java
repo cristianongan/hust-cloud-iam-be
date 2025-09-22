@@ -41,8 +41,8 @@ public class GroupIbApiSender {
             backoff = @Backoff(delay = 1500L))
     public <T extends GroupIbResponse, V extends Request> T sendToGroupIb(V request, Class<T> clazz,
                                                                           MultiValueMap<String, String> params,
-                                                                          String username, String password) {
-        HttpHeaders headers = this.getHeaders(username, password);
+                                                                          String token) {
+        HttpHeaders headers = this.getHeaders(token);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromUriString(request.getBaseUrl());
 
@@ -99,10 +99,10 @@ public class GroupIbApiSender {
     }
 
 
-    private HttpHeaders getHeaders(String username, String password) {
+    private HttpHeaders getHeaders(String token) {
         HttpHeaders headers = HeaderUtil.getTypeJsonHeaders();
 
-        headers.add(HttpHeaders.AUTHORIZATION, HeaderUtil.getBasicAuthorization(username, password));
+        headers.add(HttpHeaders.AUTHORIZATION, token);
 
         return headers;
     }

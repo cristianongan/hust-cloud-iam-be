@@ -52,4 +52,11 @@ public class UserController {
     public ResponseEntity<?> detail() {
         return ResponseEntity.ok(this.userService.detail());
     }
+
+    @PostMapping("assign-role")
+    @PreAuthorize("hasPrivilege('USER_UPDATE')")
+    public ResponseEntity<?> assignRole(@RequestBody UserReq req) {
+        this.userService.assignRole(req);
+        return ResponseEntity.ok().build();
+    }
 }
