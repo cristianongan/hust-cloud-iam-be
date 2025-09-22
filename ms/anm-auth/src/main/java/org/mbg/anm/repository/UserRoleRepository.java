@@ -18,7 +18,7 @@ public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
     @Query(nativeQuery = true, value = """
     select e.* from user_role e 
-        inner join role r on r.code = e.role_code
+        inner join role_ r on r.code = e.role_code
     where e.user_id in :ids and r.status = :roleStatus
 """)
     List<UserRole> findByUserIdIn(List<Long> ids, int roleStatus);
