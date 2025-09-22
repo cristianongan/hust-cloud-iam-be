@@ -329,7 +329,7 @@ public class UserServiceImpl implements UserService {
 
         this.userRoleRepository.removeAllRoleByUserId(user.getId());
 
-        if (Validator.isNull(user.getRoles())) {
+        if (Validator.isNull(userReq.getRoles())) {
             return;
         }
 
