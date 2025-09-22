@@ -64,9 +64,9 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
         sql.append(" WHERE 1 = 1 AND e.status != :deletedStatus ");
         params.put("deletedStatus", EntityStatus.DELETED.getStatus());
 
-        if (Validator.isNotNull(search.getUserName())) {
+        if (Validator.isNotNull(search.getUsername())) {
             sql.append(" AND e.username = :username ");
-            params.put("username", search.getUserName());
+            params.put("username", search.getUsername());
         }
 
         if (Validator.isNotNull(search.getEmail())) {
@@ -80,7 +80,7 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
         }
 
         if (Validator.isNotNull(search.getStatuses())) {
-            sql.append(" AND e.statuses IN :statuses ");
+            sql.append(" AND e.status IN :statuses ");
             params.put("statuses", search.getStatuses());
         }
 

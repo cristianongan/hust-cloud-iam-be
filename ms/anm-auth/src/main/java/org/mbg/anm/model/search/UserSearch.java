@@ -6,7 +6,7 @@ import java.util.List;
 
 @Data
 public class UserSearch {
-    private String userName;
+    private String username;
 
     private String name;
 
