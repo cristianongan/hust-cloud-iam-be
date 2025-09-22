@@ -20,7 +20,7 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
 
     @Override
     public List<User> search(UserSearch search, Pageable pageable) {
-        StringBuilder sql = new StringBuilder("select e from user_ e ");
+        StringBuilder sql = new StringBuilder("select e.* from user_ e ");
 
         Map<String,Object> params = new HashMap<>();
 

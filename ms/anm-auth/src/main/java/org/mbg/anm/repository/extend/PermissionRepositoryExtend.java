@@ -8,6 +8,6 @@ import org.springframework.cache.annotation.Cacheable;
 import java.util.List;
 
 public interface PermissionRepositoryExtend {
-    @Cacheable(cacheNames = AuthConstant.CACHE.ROLE_PERMISSION, key = "#roleCode", unless = "#result == null")
+//    @Cacheable(cacheNames = AuthConstant.CACHE.ROLE_PERMISSION, key = "#roleCode", unless = "#result == null")
     List<Permission> findByRoleCode(String roleCode);
 }
