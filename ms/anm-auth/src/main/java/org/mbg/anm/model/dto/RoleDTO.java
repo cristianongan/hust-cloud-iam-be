@@ -9,6 +9,7 @@ import org.mbg.common.base.model.AbstractAuditingEntity;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class RoleDTO implements Serializable {
@@ -22,4 +23,6 @@ public class RoleDTO implements Serializable {
     private String description;
 
     private String code;
+
+    private List<String> permissions;
 }
