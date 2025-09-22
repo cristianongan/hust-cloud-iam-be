@@ -114,16 +114,18 @@ public class UserServiceImpl implements UserService {
 
         this.validateUserReq(userReq);
 
-        String password = this.decryptPassword(userReq.getPassword());
+        if (Validator.isNotNull(userReq.getPassword())) {
+            String password = this.decryptPassword(userReq.getPassword());
 
-        if (!passwordPattern.matcher(password).matches()) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_DATA_FORMAT,
-                    new String[]{Labels.getLabels(LabelKey.LABEL_PASSWORD)})
-                    , User.class.getName(), LabelKey.ERROR_INVALID_DATA_FORMAT);
-        }
+            if (!passwordPattern.matcher(password).matches()) {
+                throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_DATA_FORMAT,
+                        new String[]{Labels.getLabels(LabelKey.LABEL_PASSWORD)})
+                        , User.class.getName(), LabelKey.ERROR_INVALID_DATA_FORMAT);
+            }
 
-        if (Validator.isNotNull(password) && !this.passwordEncoder.matches(password, user.getPassword())) {
-            user.setPassword(this.passwordEncoder.encode(password));
+            if (Validator.isNotNull(password) && !this.passwordEncoder.matches(password, user.getPassword())) {
+                user.setPassword(this.passwordEncoder.encode(password));
+            }
         }
 
         if (!Validator.equals(user.getEmail(), userReq.getEmail()) &&
