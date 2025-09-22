@@ -10,6 +10,6 @@ RUN --mount=type=cache,target=/root/.m2 \
 # ===== Run =====
 FROM eclipse-temurin:21-jre
 WORKDIR /app
-COPY --from=build /repo/ms/anm-re-producer/target/*.jar app.jar
+COPY --from=build /repo/ms/anm-req-producer/target/*.jar app.jar
 EXPOSE 9090
 ENTRYPOINT ["java","-jar","/app/app.jar"]
