@@ -99,7 +99,7 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
         params.put("deletedStatus", EntityStatus.DELETED.getStatus());
 
         if (Validator.isNotNull(roleReq.getKeyword())) {
-            sql.append(" AND e.keyword LIKE :keyword ");
+            sql.append(" AND (e.name LIKE :keyword OR e.code LIKE :keyword) ");
             params.put("keyword", String.format("%%%s%%", roleReq.getKeyword()));
         }
 
