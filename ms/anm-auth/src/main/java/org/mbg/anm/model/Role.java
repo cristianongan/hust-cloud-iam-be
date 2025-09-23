@@ -35,7 +35,10 @@ public class Role extends AbstractAuditingEntity implements Serializable {
     private String code;
 
     @Column(name = "status")
-    private int status;
+    private Integer status;
+
+    @Column(name = "type")
+    private Integer type;
 
     @Transient
     private List<Permission> permissions = new ArrayList<>();

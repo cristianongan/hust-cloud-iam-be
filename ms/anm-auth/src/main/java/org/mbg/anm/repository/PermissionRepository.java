@@ -11,4 +11,6 @@ import java.util.List;
 @Repository
 public interface PermissionRepository extends JpaRepository<Permission,Long>, PermissionRepositoryExtend {
     List<Permission> findAllByCodeIn(List<String> code);
+
+    List<Permission> findAllByTypeAndStatus(Integer type, Integer status);
 }

@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.RolePermission;
-import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.PermissionDTO;
 import org.mbg.anm.model.dto.RoleDTO;
-import org.mbg.anm.model.dto.UserDTO;
 import org.mbg.anm.model.dto.request.RoleReq;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RolePermissionRepository;
@@ -19,9 +17,9 @@ import org.mbg.anm.service.mapper.PermissionMapper;
 import org.mbg.anm.service.mapper.RoleMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
+import org.mbg.common.base.enums.PermissionType;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
-import org.mbg.common.util.RandomGenerator;
 import org.mbg.common.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -161,7 +159,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<PermissionDTO> getAllPermission() {
-        return this.permissionMapper.toDto(this.permissionRepository.findAll());
+        return this.permissionMapper.toDto(this.permissionRepository.findAllByTypeAndStatus(PermissionType.USER.getValue(), EntityStatus.ACTIVE.getStatus()));
     }
 
     @Override
