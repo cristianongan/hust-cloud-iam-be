@@ -33,4 +33,7 @@ public class Permission extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "type")
+    private Integer type;
 }
