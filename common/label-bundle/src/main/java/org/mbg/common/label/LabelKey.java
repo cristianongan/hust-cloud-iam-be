@@ -421,4 +421,6 @@ public final class LabelKey {
 
 	public static final String LABEL_FILTER = "label.filter";
 
+	public static final String LABEL_LOCK = "label.lock";
+
 }

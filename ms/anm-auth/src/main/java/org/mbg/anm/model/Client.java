@@ -38,4 +38,7 @@ public class Client extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "status")
     private int status;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

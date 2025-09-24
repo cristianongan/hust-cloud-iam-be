@@ -8,6 +8,7 @@ import org.mbg.anm.model.Permission;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.dto.RoleDTO;
 import org.mbg.common.base.service.mapper.EntityMapper;
+import org.mbg.common.util.Validator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,6 +26,6 @@ public interface RoleMapper extends EntityMapper<RoleDTO, Role> {
 
     @Named("toPermission")
     default List<String> toPermission(Role role) {
-        return role.getPermissions().stream().map(Permission::getCode).collect(Collectors.toList());
+        return Validator.isNotNull(role.getPermissions()) ? role.getPermissions().stream().map(Permission::getCode).collect(Collectors.toList()) : List.of();
     }
 }

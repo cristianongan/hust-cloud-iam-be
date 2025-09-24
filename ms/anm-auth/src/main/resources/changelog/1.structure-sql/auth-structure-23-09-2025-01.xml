@@ -8,4 +8,11 @@
             ALTER TABLE permission_ add column type smallint;
         </sql>
     </changeSet>
+
+    <changeSet id="auth-structure-23-09-2025-01-02" author="Nganph">
+        <sql>
+            ALTER TABLE client_ add column user_id bigint;
+            create index client_user_id on client_(user_id);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
