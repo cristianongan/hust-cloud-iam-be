@@ -4,6 +4,7 @@ import org.mbg.anm.model.Client;
 import org.mbg.anm.model.dto.ClientDTO;
 import org.mbg.anm.repository.extend.ClientRepositoryExtend;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +19,12 @@ public interface ClientRepository extends JpaRepository<Client, Long>, ClientRep
     @Query(nativeQuery = true, value = """
     update client_ set status = :status where client_id in :ids
         """)
+    @Modifying
     void updateStatusByClientIds(List<String> ids, Integer status);
 
     @Query(nativeQuery = true, value = """
     update client_ set status = :status where user_id in :ids
         """)
+    @Modifying
     void updateStatusByUserIds(List<Long> ids, Integer status);
 }
