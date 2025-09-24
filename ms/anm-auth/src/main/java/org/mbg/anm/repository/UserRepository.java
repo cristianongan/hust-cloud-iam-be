@@ -30,4 +30,6 @@ public interface UserRepository extends JpaRepository<User,Long>, UserRepository
     Boolean existsByIdAndStatus(Long id, Integer status);
 
     Boolean existsByUsernameAndStatus(String username, Integer status);
+
+    List<User> findByIdIn(List<Long> ids);
 }

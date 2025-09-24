@@ -128,6 +128,17 @@ public class ClientServiceImpl implements ClientService {
 
         Long count  = this.clientRepository.count(clientReq);
 
+        List<Long> ids = content.stream().map(ClientDTO::getUserId).filter(Validator::isNotNull).toList();
+
+        List<User> users = this.userRepository.findByIdIn(ids);
+        Map<Long, String> userMap =
+                users.stream()
+                        .collect(Collectors.toMap(User::getId, User::getUsername));
+
+        content.forEach(item -> {
+            item.setUsername(userMap.getOrDefault(item.getUserId(), null));
+        });
+
         return new PageImpl<>(content, pageable, count);
     }
 
