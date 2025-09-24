@@ -64,8 +64,8 @@ public class ClientRepositoryImpl implements ClientRepositoryExtend {
 
     private StringBuilder createWhereQuery(ClientReq clientReq, Map<String, Object> params) {
         StringBuilder sql = new StringBuilder(" WHERE 1=1");
-        sql.append(" AND e.status = :activeStatus ");
-        params.put("activeStatus", EntityStatus.ACTIVE.getStatus());
+        sql.append(" AND e.status != :deleteStatus ");
+        params.put("deleteStatus", EntityStatus.DELETED.getStatus());
 
         if (Validator.isNotNull(clientReq.getUsername())) {
             sql.append(" AND EXISTS (SELECT 1 from user_ u where u.id = e.user_id and u.username = :username) ");

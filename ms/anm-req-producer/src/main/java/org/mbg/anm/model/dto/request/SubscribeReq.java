@@ -8,5 +8,7 @@ import java.util.List;
 public class SubscribeReq {
     private String subscriberId;
 
+    private String reference;
+
     private List<CustomerDataReq> dataReqs;
 }

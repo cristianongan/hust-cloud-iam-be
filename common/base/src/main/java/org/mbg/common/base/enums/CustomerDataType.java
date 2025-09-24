@@ -2,6 +2,7 @@ package org.mbg.common.base.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.mbg.common.util.Validator;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,5 +28,14 @@ public enum CustomerDataType {
         }
 
         return null;
+    }
+
+    public static CustomerDataType resolveByName(String name) {
+        if (name == null) return null;
+        try {
+            return CustomerDataType.valueOf(name.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
     }
 }

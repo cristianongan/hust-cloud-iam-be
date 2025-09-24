@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 @Getter
 @RequiredArgsConstructor
 public enum PermissionType {
+    ADMINISTRATOR(0),
     USER(1),
     CLIENT(2),
     ;
