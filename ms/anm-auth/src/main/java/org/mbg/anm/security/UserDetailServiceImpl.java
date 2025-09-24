@@ -10,7 +10,10 @@ import org.mbg.anm.repository.ClientRepository;
 import org.mbg.anm.repository.PermissionRepository;
 import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
+import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
+import org.mbg.common.label.LabelKey;
+import org.mbg.common.label.Labels;
 import org.mbg.common.security.exception.UserNotActivatedException;
 import org.mbg.common.util.Validator;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +43,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username);
 
+        if (!Validator.equals(user.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_YOUR_ACCOUNT_HAS_BEEN_LOCKED),
+                    User.class.getName(), LabelKey.ERROR_YOUR_ACCOUNT_HAS_BEEN_LOCKED);
+        }
+
         if (user == null) {
             _log.error("User not exist with name :{}", username);
 
@@ -50,7 +58,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
     }
 
     public UserDetails loadUserByClientId(String clientId) throws UsernameNotFoundException {
-        Client client = clientRepository.findByClientId(clientId);
+        Client client = clientRepository.findByClientIdAndStatus(clientId, EntityStatus.ACTIVE.getStatus());
 
         if (client == null) {
             _log.error("client not exist with id :{}", clientId);

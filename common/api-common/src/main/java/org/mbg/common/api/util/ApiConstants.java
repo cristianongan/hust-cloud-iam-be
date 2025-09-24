@@ -47,6 +47,7 @@ public final class ApiConstants {
         public static final String PARAMS = "params";
         public static final String PATH = "path";
         public static final String VIOLATIONS = "violations";
+        public static final String REASON_CODE = "reasonCode";
     }
 
     /**

@@ -19,11 +19,15 @@ public interface UserRepository extends JpaRepository<User,Long>, UserRepository
 
     Boolean existsByUsername(String username);
 
-    Boolean existsByEmail(String email);
+    Boolean existsByEmailAndStatusNot(String email, Integer status);
 
-    Boolean existsByPhone(String phone);
+    Boolean existsByPhoneAndStatusNot(String phone, Integer status);
 
     @Query("update User u set u.status = :status where u.id in :ids")
     @Modifying
     Integer updateStatusByIdIn(int status, Collection<Long> ids);
+
+    Boolean existsByIdAndStatus(Long id, Integer status);
+
+    Boolean existsByUsernameAndStatus(String username, Integer status);
 }

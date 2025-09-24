@@ -1,6 +1,7 @@
 package org.mbg.common.api.advice;
 
 import org.mbg.common.api.exception.BadRequestException;
+import org.mbg.common.api.exception.ClientResponseException;
 import org.mbg.common.api.exception.HttpResponseException;
 import org.mbg.common.api.exception.InternalServerErrorException;
 import org.mbg.common.security.exception.NoPermissionException;
@@ -196,6 +197,17 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 		
 		Problem problem = Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR)
 				.with(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(LabelKey.ERROR_AN_UNEXPECTED_ERROR_HAS_OCCURRED)).build();
+
+		return create(ex, problem, request);
+	}
+
+	@ExceptionHandler(ClientResponseException.class)
+	public ResponseEntity<Problem> handleClientResponseException(ClientResponseException ex, NativeWebRequest request) {
+		Problem problem = Problem.builder().withStatus(Status.BAD_REQUEST)
+				.with(ApiConstants.ErrorKey.MESSAGE,ex.getMessage())
+				.with(ApiConstants.ErrorKey.REASON_CODE, ex.getReasonCode())
+				.with(ApiConstants.ErrorKey.DATA, null)
+				.build();
 
 		return create(ex, problem, request);
 	}

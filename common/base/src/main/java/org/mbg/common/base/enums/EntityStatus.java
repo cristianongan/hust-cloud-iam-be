@@ -15,7 +15,10 @@ public enum EntityStatus {
 
     INACTIVE(0, LabelKey.LABEL_INACTIVE),
 
-    ACTIVE(1, LabelKey.LABEL_ACTIVE);
+    ACTIVE(1, LabelKey.LABEL_ACTIVE),
+
+    LOCK(2, LabelKey.LABEL_LOCK),
+    ;
 
 
     private Integer status;

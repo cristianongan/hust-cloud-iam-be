@@ -1,0 +1,44 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <changeSet id="cms-structure-23-09-2025-01-01" author="Nganph">
+        <sql>
+            create table customer (
+                id bigserial primary key,
+                customer_key varchar(255),
+                client_id varchar(255),
+                subscriber_id varchar(500),
+                reference varchar(255),
+                status smallint,
+                last_scan TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                wait_at_lease TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                created_by varchar(100),
+                created_date timestamp,
+                last_modified_by varchar(100),
+                last_modified_date timestamp
+
+            );
+
+            create index customer_wait_at_lease on customer(wait_at_lease) where status = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-02" author="Nganph">
+        <sql>
+            create table customer_data (
+                                      id bigserial primary key,
+                                      customer_id bigint,
+                                      type smallint,
+                                      value varchar(500),
+                                      created_by varchar(100),
+                                      created_date timestamp,
+                                      last_modified_by varchar(100),
+                                      last_modified_date timestamp
+
+            );
+
+            create index customer_data_customer_id on customer_data(customer_id);
+        </sql>
+    </changeSet>
+</databaseChangeLog>

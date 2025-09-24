@@ -7,16 +7,14 @@ import org.mbg.anm.configuration.ValidationProperties;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.RolePermission;
 import org.mbg.anm.model.UserRole;
-import org.mbg.anm.repository.UserRoleRepository;
+import org.mbg.anm.repository.*;
 import org.mbg.anm.security.UserDetailServiceImpl;
+import org.mbg.anm.security.UserPrincipal;
 import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.UserDTO;
 import org.mbg.anm.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
-import org.mbg.anm.repository.PermissionRepository;
-import org.mbg.anm.repository.RoleRepository;
-import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.UserService;
 import org.mbg.anm.service.mapper.UserMapper;
 import org.mbg.common.api.exception.BadRequestException;
@@ -52,6 +50,8 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final ClientRepository clientRepository;
 
     private final RoleRepository roleRepository;
 
@@ -129,14 +129,14 @@ public class UserServiceImpl implements UserService {
         }
 
         if (!Validator.equals(user.getEmail(), userReq.getEmail()) &&
-            this.userRepository.existsByEmail(userReq.getEmail())) {
+            this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
         }
 
         if (!Validator.equals(userReq.getPhone(), user.getPhone()) &&
-            this.userRepository.existsByPhone(userReq.getPhone())) {
+            this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
@@ -186,13 +186,13 @@ public class UserServiceImpl implements UserService {
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
         }
 
-        if (this.userRepository.existsByPhone(userReq.getPhone())) {
+        if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
         }
 
-        if (this.userRepository.existsByEmail(userReq.getEmail())) {
+        if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
@@ -308,7 +308,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void delete(UserReq userReq) {
         if (Validator.isNotNull(userReq.getIds())) {
+            validateSelfLock(userReq.getIds());
+
             this.userRepository.updateStatusByIdIn(EntityStatus.DELETED.getStatus(), userReq.getIds());
+            this.clientRepository.updateStatusByUserIds(userReq.getIds(), EntityStatus.DELETED.getStatus());
         }
     }
 
@@ -350,5 +353,40 @@ public class UserServiceImpl implements UserService {
         }
 
 
+    }
+
+    @Override
+    public void disable(UserReq userReq) {
+        if (Validator.isNotNull(userReq.getIds())) {
+            validateSelfLock(userReq.getIds());
+
+            this.userRepository.updateStatusByIdIn(EntityStatus.INACTIVE.getStatus(), userReq.getIds());
+            this.clientRepository.updateStatusByUserIds(userReq.getIds(), EntityStatus.INACTIVE.getStatus());
+        }
+    }
+
+    @Override
+    public void enable(UserReq userReq) {
+        if (Validator.isNotNull(userReq.getIds())) {
+            this.userRepository.updateStatusByIdIn(EntityStatus.ACTIVE.getStatus(), userReq.getIds());
+            this.clientRepository.updateStatusByUserIds(userReq.getIds(), EntityStatus.ACTIVE.getStatus());
+        }
+    }
+
+    private void validateSelfLock(List<Long> ids) {
+        Long userId = null;
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            userId = userPrincipal.getUserId();
+        } catch (Exception e) {
+            throw new UnauthorizedException(Labels.getLabels(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND));
+        }
+
+        if (ids.contains(userId)) {
+            throw new BadRequestException(LabelKey.ERROR_YOU_CANNOT_LOCK_YOURSELF,
+                    User.class.getName(), LabelKey.ERROR_YOU_CANNOT_LOCK_YOURSELF);
+        }
     }
 }

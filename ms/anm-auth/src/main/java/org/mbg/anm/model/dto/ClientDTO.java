@@ -23,4 +23,6 @@ public class ClientDTO implements Serializable {
     private String description;
 
     private int status;
+
+    private Long userId;
 }

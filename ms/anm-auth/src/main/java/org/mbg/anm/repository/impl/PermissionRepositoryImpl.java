@@ -18,7 +18,7 @@ public class PermissionRepositoryImpl implements PermissionRepositoryExtend {
         sql.append("""
                 select p.*
                     from permission_ p
-                    right join role_permission rp on rp.permission_code = p.code
+                    left join role_permission rp on rp.permission_code = p.code
                     where rp.role_code = :roleCode
                 """);
 

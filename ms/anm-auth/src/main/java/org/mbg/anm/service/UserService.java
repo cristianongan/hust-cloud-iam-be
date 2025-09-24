@@ -21,4 +21,8 @@ public interface UserService {
     void delete(UserReq userReq);
 
     void assignRole(UserReq userReq);
+
+    void disable(UserReq userReq);
+
+    void enable(UserReq userReq);
 }

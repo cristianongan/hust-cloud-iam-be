@@ -48,6 +48,21 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("enable")
+    @PreAuthorize("hasPrivilege('USER_UPDATE')")
+    public ResponseEntity<Void> enable(@RequestBody UserReq req) {
+        this.userService.enable(req);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("disable")
+    @PreAuthorize("hasPrivilege('USER_UPDATE')")
+    public ResponseEntity<Void> disable(@RequestBody UserReq req) {
+        this.userService.disable(req);
+        return ResponseEntity.ok().build();
+    }
+
+
     @GetMapping("detail")
     public ResponseEntity<?> detail() {
         return ResponseEntity.ok(this.userService.detail());
