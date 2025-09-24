@@ -27,7 +27,7 @@ public class CustomerData extends AbstractAuditingEntity implements Serializable
     private Long customerId;
 
     @Column(name = "type")
-    private String type;
+    private Integer type;
 
     @Column(name = "value")
     private String value;

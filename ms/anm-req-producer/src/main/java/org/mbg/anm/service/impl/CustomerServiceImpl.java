@@ -2,18 +2,30 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.model.dto.request.CustomerDataReq;
+import org.mbg.anm.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
+import org.mbg.anm.model.dto.response.LookupResponse;
 import org.mbg.anm.model.dto.response.SubscribeRes;
 import org.mbg.anm.repository.CustomerDataRepository;
 import org.mbg.anm.repository.CustomerRepository;
 import org.mbg.anm.service.CustomerService;
+import org.mbg.anm.service.mapper.CustomerMapper;
 import org.mbg.common.api.enums.ClientResponseError;
+import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.api.exception.ClientResponseException;
+import org.mbg.common.base.enums.CustomerDataType;
+import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.model.Customer;
+import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,6 +35,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
 
     private final CustomerDataRepository customerDataRepository;
+
+    private final CustomerMapper customerMapper;
 
     @Override
     @Transactional
@@ -39,8 +53,69 @@ public class CustomerServiceImpl implements CustomerService {
 
         final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
 
-//        Customer customer =
+        Customer customer = this.customerRepository.findByCustomerKey(key);
 
+        if (Validator.isNull(customer)) {
+            customer = new Customer();
+            customer.setCustomerKey(key);
+            customer.setSubscriberId(subscribeReq.getSubscriberId());
+            customer.setClientId(clientId);
+
+        }
+
+        customer.setReference(subscribeReq.getReference());
+        customer.setStatus(EntityStatus.ACTIVE.getStatus());
+        customer.setWaitAtLease(LocalDateTime.now());
+
+        customer = this.customerRepository.save_(customer);
+
+        List<CustomerData> datas = new ArrayList<>();
+        if (Validator.isNotNull(subscribeReq.getDataReqs())) {
+            for (CustomerDataReq item : subscribeReq.getDataReqs()) {
+                if (Validator.isNotNull(item)) {
+                    CustomerData data = new CustomerData();
+                    data.setCustomerId(customer.getId());
+                    CustomerDataType type = CustomerDataType.resolveByName(item.getType());
+                    if (Validator.isNull(type) || Validator.isNull(type.getValue())) {
+                        throw new ClientResponseException(ClientResponseError.INVALID_DATA_TYPE);
+                    }
+                    data.setType(type.getValue());
+                    data.setValue(item.getValue());
+
+                    datas.add(data);
+                }
+            }
+        }
+
+        this.customerDataRepository.saveAll(datas);
+
+        return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();
+    }
+
+    @Override
+    public SubscribeRes unSubscribe(SubscribeReq subscribeReq) {
+        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
+
+        if (Validator.isNull(clientId)) {
+            throw new ClientResponseException(ClientResponseError.UNAUTHORIZED);
+        }
+
+        final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
+
+        Customer customer = this.customerRepository.findByCustomerKey(key);
+
+        if (Validator.isNull(customer)) {
+            throw new ClientResponseException(ClientResponseError.INVALID_SUBSCRIBER_ID);
+        }
+
+        customer.setStatus(EntityStatus.INACTIVE.getStatus());
+        this.customerRepository.save_(customer);
+
+        return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();
+    }
+
+    @Override
+    public LookupResponse lookup(LookupReq lookupReq) {
         return null;
     }
 

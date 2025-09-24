@@ -12,6 +12,7 @@ public enum ClientResponseError {
     UNAUTHORIZED("2", "Unauthorized"),
     INVALID_TOKEN("3", "Invalid token"),
     INVALID_SUBSCRIBER_ID("4", "INVALID SUBSCRIBER ID"),
+    INVALID_DATA_TYPE("5", "INVALID DATA TYPE"),
     ;
 
     private final String code;

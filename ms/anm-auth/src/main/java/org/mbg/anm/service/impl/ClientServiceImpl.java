@@ -77,6 +77,7 @@ public class ClientServiceImpl implements ClientService {
         }
 
         client.setUserId(clientDTO.getUserId());
+        client.setStatus(EntityStatus.ACTIVE.getStatus());
 
         this.clientRepository.save(client);
 
