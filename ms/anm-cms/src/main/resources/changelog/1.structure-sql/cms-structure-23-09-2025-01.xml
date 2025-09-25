@@ -50,10 +50,10 @@
 
     <changeSet id="cms-structure-23-09-2025-01-04" author="Nganph">
         <sql>
-            CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_customer_status_created
+            CREATE INDEX idx_customer_status_created
                 ON customer (sync_status, created_date);
 
-            CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_customer_status_lastscan
+            CREATE INDEX idx_customer_status_lastscan
                 ON customer (sync_status, last_scan);
         </sql>
     </changeSet>

@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@EnableJpaRepositories({PackageConstants.DEFAULT_JPA_REPOSITORY})
+@EnableJpaRepositories({PackageConstants.DEFAULT_JPA_REPOSITORY, PackageConstants.PACKAGE_BASE_REPOSITORY})
 @EnableJpaAuditing(auditorAwareRef = BeanConstants.SPRING_SECURITY_AUDITOR_AWARE)
 @EnableTransactionManagement
 @EntityScan(basePackages = {
