@@ -1,6 +1,5 @@
 package org.mbg.anm.repository;
 
-import org.mbg.common.base.enums.RequestStatus;
 import org.mbg.common.base.model.ProducerRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

@@ -41,4 +41,20 @@
             create index customer_data_customer_id on customer_data(customer_id);
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-03" author="Nganph">
+        <sql>
+            alter table customer add column sync_status smallint;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-04" author="Nganph">
+        <sql>
+            CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_customer_status_created
+                ON customer (sync_status, created_date);
+
+            CREATE INDEX CONCURRENTLY IF NOT EXISTS idx_customer_status_lastscan
+                ON customer (sync_status, last_scan);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

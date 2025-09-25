@@ -88,7 +88,7 @@ public class ClientServiceImpl implements ClientService {
     @Transactional
     public void disableClient(ClientReq clientReq) {
         if (Validator.isNotNull(clientReq.getIds())) {
-            this.clientRepository.updateStatusByClientIds(clientReq.getIds(), EntityStatus.ACTIVE.getStatus());
+            this.clientRepository.updateStatusByClientIds(clientReq.getIds(), EntityStatus.INACTIVE.getStatus());
         }
     }
 

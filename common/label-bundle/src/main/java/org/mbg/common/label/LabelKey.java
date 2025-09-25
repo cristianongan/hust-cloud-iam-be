@@ -423,4 +423,6 @@ public final class LabelKey {
 
 	public static final String LABEL_LOCK = "label.lock";
 
+	public static final String LABEL_UPDATED = "label.updated";
+
 }

@@ -13,9 +13,16 @@ import org.mbg.anm.queue.RedisPriorityMessageWorker;
 import org.mbg.anm.repository.ProducerRequestRepository;
 import org.mbg.anm.repository.RecordRepository;
 import org.mbg.common.api.util.HeaderUtil;
+import org.mbg.common.base.enums.CustomerDataType;
+import org.mbg.common.base.enums.CustomerSyncStatus;
+import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.enums.LeakSeverity;
+import org.mbg.common.base.model.Customer;
+import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.base.model.ProducerRequest;
 import org.mbg.common.base.model.Record;
+import org.mbg.common.base.repository.CustomerDataRepository;
+import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.common.model.RedisMessage;
 import org.mbg.common.queue.RedisQueueFactory;
 import org.mbg.common.util.DateUtil;
@@ -46,20 +53,27 @@ public class ApiConsumerJob {
 
     private final RecordRepository recordRepository;
 
-    private final ProducerRequestRepository producerRequestRepository;
+//    private final ProducerRequestRepository producerRequestRepository;
+    private final CustomerRepository customerRepository;
+
+    private final CustomerDataRepository customerDataRepository;
 
     private final Gson gson;
 
     public ApiConsumerJob(ApiConsumerProperties props, RedisQueueFactory  redisQueueFactory,
                        GroupIbApiSender groupIbApiSender, RecordRepository recordRepository,
-                       ProducerRequestRepository producerRequestRepository, Gson gson,
+//                       ProducerRequestRepository producerRequestRepository,
+                       CustomerRepository customerRepository, CustomerDataRepository customerDataRepository,
+                       Gson gson,
                        @Qualifier("asyncExecutor") TaskExecutor taskExecutor) {
         this.apiConsumerProperties = props;
         this.taskExecutor = taskExecutor;
         this.redisQueueFactory = redisQueueFactory;
         this.groupIbApiSender = groupIbApiSender;
         this.recordRepository = recordRepository;
-        this.producerRequestRepository = producerRequestRepository;
+//        this.producerRequestRepository = producerRequestRepository;
+        this.customerRepository = customerRepository;
+        this.customerDataRepository = customerDataRepository;
         this.gson = gson;
     }
 
@@ -91,25 +105,28 @@ public class ApiConsumerJob {
             return;
         }
 
-        ProducerRequest req = this.producerRequestRepository.findById(id).orElse(null);
+//        ProducerRequest req = this.producerRequestRepository.findById(id).orElse(null);
 
-        if (Validator.isNull(req)) {
+        Customer customer = this.customerRepository.findByIdAndStatus(id, EntityStatus.ACTIVE.getStatus());
+
+        if (Validator.isNull(customer)) {
             return;
         }
+
+        List<CustomerData> data = this.customerDataRepository.findByCustomerId(customer.getId());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
         StringBuilder filter = new StringBuilder();
-        if (Validator.isNotNull(req.getEmail())) {
-            filter.append("email:").append(req.getEmail());
-        }
-
-        if (Validator.isNotNull(req.getPhone())) {
-            if (!filter.isEmpty()) {
-                filter.append(" OR ");
+        data.forEach(dataItem -> {
+            if (Validator.equals(dataItem.getType(), CustomerDataType.EMAIL.getValue())) {
+                filter.append("email:");
             }
-            filter.append("phone:").append(req.getPhone());
-        }
+            if (Validator.equals(dataItem.getType(), CustomerDataType.PHONE.getValue())) {
+                filter.append("phone:");
+            }
+            filter.append(dataItem.getValue());
+        });
 
         GroupIbReq groupIbReq = new GroupIbReq();
         groupIbReq.setMethod(HttpMethod.GET);
@@ -129,7 +146,7 @@ public class ApiConsumerJob {
         if (Validator.isNotNull(response.getItems())) {
             List<Record> records = new ArrayList<>();
             response.getItems().forEach(item -> {
-                Record record = new Record(req.getRequestId(), Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null, dataSource,
+                Record record = new Record(response.getResultId(), Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null, dataSource,
                         item.getLeakName(), DateUtil.utcToTimeStampSecond(item.getLeakPublished()),
                         DateUtil.utcToTimeStampSecond(item.getUploadTime()),
                         Validator.isNotNull(item.getEvaluation()) ? resolveSeverityGroupIb(item.getEvaluation().getSeverity()) : null ,
@@ -142,6 +159,9 @@ public class ApiConsumerJob {
 
             this.recordRepository.saveAll(records);
         }
+
+        customer.setSyncStatus(CustomerSyncStatus.UPDATED.getStatus());
+        this.customerRepository.save_(customer);
     }
 
     private Integer resolveSeverityGroupIb(String input) {

@@ -7,12 +7,12 @@ import org.mbg.anm.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
 import org.mbg.anm.model.dto.response.LookupResponse;
 import org.mbg.anm.model.dto.response.SubscribeRes;
-import org.mbg.anm.repository.CustomerDataRepository;
-import org.mbg.anm.repository.CustomerRepository;
+import org.mbg.common.base.enums.CustomerSyncStatus;
+import org.mbg.common.base.repository.CustomerDataRepository;
+import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.anm.service.CustomerService;
 import org.mbg.anm.service.mapper.CustomerMapper;
 import org.mbg.common.api.enums.ClientResponseError;
-import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.api.exception.ClientResponseException;
 import org.mbg.common.base.enums.CustomerDataType;
 import org.mbg.common.base.enums.EntityStatus;
@@ -65,6 +65,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setReference(subscribeReq.getReference());
         customer.setStatus(EntityStatus.ACTIVE.getStatus());
+        customer.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
         customer.setWaitAtLease(LocalDateTime.now());
 
         customer = this.customerRepository.save_(customer);
@@ -109,6 +110,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         customer.setStatus(EntityStatus.INACTIVE.getStatus());
+        customer.setSyncStatus(CustomerSyncStatus.CLOSED.getStatus());
         this.customerRepository.save_(customer);
 
         return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();

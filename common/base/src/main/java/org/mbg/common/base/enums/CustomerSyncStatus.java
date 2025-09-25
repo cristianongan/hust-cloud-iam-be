@@ -10,19 +10,19 @@ import java.util.stream.Stream;
 
 @Getter
 @AllArgsConstructor
-public enum RequestStatus {
-    DELETED(-1, LabelKey.LABEL_DELETED),
+public enum CustomerSyncStatus {
 
-    NEW(0, LabelKey.LABEL_NEW),
+    NEW(0),
 
-    WAITING(1, LabelKey.LABEL_WAITING),
+    WAITING(1),
 
-    DONE(2, LabelKey.LABEL_DONE);
+    UPDATED(2),
+
+    CLOSED(3)
+    ;
 
 
     private int status;
-
-    private String key;
 
     /**
      * Dùng làm input cho annotation ValueOfEnum
@@ -33,8 +33,8 @@ public enum RequestStatus {
         return Stream.of(values()).map(e -> e.status).collect(Collectors.toList());
     }
 
-    public static RequestStatus valueOfStatus(int status) {
-        for (RequestStatus e : values()) {
+    public static CustomerSyncStatus valueOfStatus(int status) {
+        for (CustomerSyncStatus e : values()) {
             if (e.getStatus() == status) {
                 return e;
             }
