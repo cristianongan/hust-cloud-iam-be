@@ -18,4 +18,6 @@ public final class PackageConstants {
 
     public static final String PACKAGE_BASE = "org.mbg.common.base.model";
 
+    public static final String PACKAGE_BASE_REPOSITORY = "org.mbg.common.base.repository";
+
 }

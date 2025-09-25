@@ -1,4 +1,4 @@
-package org.mbg.anm.repository.extend;
+package org.mbg.common.base.repository.extend;
 
 public interface CustomerRepositoryExtend {
 }
