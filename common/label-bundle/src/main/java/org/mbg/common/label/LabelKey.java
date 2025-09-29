@@ -427,4 +427,8 @@ public final class LabelKey {
 
 	public static final String ERROR_QUOTA_IS_SMALLER_THEN_IN_USE = "error.quota-is-smaller-than-in-use";
 
+	public static final String LABEL_START_TIME = "label.start-time";
+
+	public static final String LABEL_END_TIME = "label.end-time";
+
 }

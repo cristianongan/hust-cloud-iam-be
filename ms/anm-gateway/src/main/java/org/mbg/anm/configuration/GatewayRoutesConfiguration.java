@@ -1,5 +1,6 @@
 package org.mbg.anm.configuration;
 
+import io.netty.channel.ChannelOption;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +9,7 @@ import org.mbg.anm.util.GatewayConstant;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.client.loadbalancer.reactive.ReactorLoadBalancerExchangeFilterFunction;
+import org.springframework.cloud.gateway.config.HttpClientCustomizer;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.time.Duration;
 import java.util.*;
 
 @Slf4j
@@ -51,6 +54,13 @@ public class GatewayRoutesConfiguration {
     @LoadBalanced
     WebClient.Builder lbWebClientBuilder() {
         return WebClient.builder();
+    }
+
+    @Bean
+    HttpClientCustomizer longTimeouts() {
+        return httpClient -> httpClient
+                .responseTimeout(Duration.ofSeconds(300))
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000);
     }
 
     /**

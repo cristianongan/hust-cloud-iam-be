@@ -208,5 +208,12 @@ app:
         circuitBreakerEnabled: true
         circuitBreakerName: productServiceCircuitBreaker
         tokenRelayEnabled: true
+      - id: cms-service
+        path: /api/cms-service/**
+        uri: lb://cms-service
+        strip-prefix: 2
+        circuitBreakerEnabled: true
+        circuitBreakerName: productServiceCircuitBreaker
+        tokenRelayEnabled: true
 client:
   verify-token: 'http://auth-service/auth/verify'
