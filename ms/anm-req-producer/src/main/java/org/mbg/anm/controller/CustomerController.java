@@ -1,15 +1,13 @@
 package org.mbg.anm.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.mbg.common.base.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
 import org.mbg.anm.service.CustomerService;
-import org.mbg.common.base.model.dto.ProducerRequestDTO;
+import org.mbg.common.api.response.ClientResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/customer")
@@ -21,12 +19,18 @@ public class CustomerController {
     @PostMapping("subscribe")
     @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> subscribe(@RequestBody SubscribeReq req) {
-        return ResponseEntity.ok(this.customerService.subscribe(req));
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.subscribe(req)));
     }
 
     @PostMapping("unsubscribe")
     @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> unsubscribe(@RequestBody SubscribeReq req) {
-        return ResponseEntity.ok(this.customerService.unSubscribe(req));
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.unSubscribe(req)));
+    }
+
+    @GetMapping("/lookup")
+    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
+    ResponseEntity<?> lookup(LookupReq req) {
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req)));
     }
 }

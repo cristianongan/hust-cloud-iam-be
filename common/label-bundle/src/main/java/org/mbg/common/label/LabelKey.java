@@ -423,6 +423,8 @@ public final class LabelKey {
 
 	public static final String LABEL_LOCK = "label.lock";
 
-	public static final String LABEL_UPDATED = "label.updated";
+	public static final String LABEL_QUOTA = "label.quota";
+
+	public static final String ERROR_QUOTA_IS_SMALLER_THEN_IN_USE = "error.quota-is-smaller-than-in-use";
 
 }

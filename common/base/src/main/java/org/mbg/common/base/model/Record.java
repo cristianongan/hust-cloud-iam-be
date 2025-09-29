@@ -34,6 +34,9 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Column(name = "request_id")
     private String requestId;
 
+    @Column(name = "subscriber_id")
+    private String subscriberId;
+
     @Column(name = "data_source")
     private String dataSource;
 

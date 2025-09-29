@@ -1,6 +1,6 @@
 package org.mbg.anm.service;
 
-import org.mbg.anm.model.dto.request.LookupReq;
+import org.mbg.common.base.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
 import org.mbg.anm.model.dto.response.LookupResponse;
 import org.mbg.anm.model.dto.response.SubscribeRes;

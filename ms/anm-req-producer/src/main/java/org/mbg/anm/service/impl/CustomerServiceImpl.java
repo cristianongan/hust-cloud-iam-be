@@ -3,7 +3,10 @@ package org.mbg.anm.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.model.dto.request.CustomerDataReq;
-import org.mbg.anm.model.dto.request.LookupReq;
+import org.mbg.anm.model.dto.response.RecordResponse;
+import org.mbg.anm.service.mapper.RecordMapper;
+import org.mbg.common.base.model.Record;
+import org.mbg.common.base.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
 import org.mbg.anm.model.dto.response.LookupResponse;
 import org.mbg.anm.model.dto.response.SubscribeRes;
@@ -18,14 +21,20 @@ import org.mbg.common.base.enums.CustomerDataType;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.model.Customer;
 import org.mbg.common.base.model.CustomerData;
+import org.mbg.common.base.repository.RecordRepository;
 import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -37,6 +46,10 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerDataRepository customerDataRepository;
 
     private final CustomerMapper customerMapper;
+
+    private final RecordRepository recordRepository;
+
+    private final RecordMapper recordMapper;
 
     @Override
     @Transactional
@@ -118,7 +131,22 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public LookupResponse lookup(LookupReq lookupReq) {
-        return null;
+        if (Validator.isNull(lookupReq.getSubscriberId())) {
+            throw new ClientResponseException(ClientResponseError.INVALID_SUBSCRIBER_ID);
+        }
+
+        Pageable pageable = PageRequest.of(lookupReq.getPage(), lookupReq.getPageSize());
+
+        List<Record> records = this.recordRepository.search(lookupReq, pageable);
+
+        List<RecordResponse> content = this.recordMapper.toDto(records);
+
+        Long count  = this.recordRepository.count(lookupReq);
+
+        return LookupResponse.builder()
+                .page(new PageImpl<>(content, pageable, count))
+                .subscriberId(lookupReq.getSubscriberId())
+                .build();
     }
 
     private String getKey(String clientId, String key) {
