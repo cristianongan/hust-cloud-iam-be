@@ -15,11 +15,16 @@ import java.util.List;
 public interface UserMapper extends EntityMapper<UserDTO, User> {
 
     @Override
-    @Mapping(source = "dto", target = "roles", ignore = true)
+    @Mappings({
+            @Mapping(source = "dto", target = "roles", ignore = true),
+            @Mapping(source = "dto", target = "quota", ignore = true)
+    })
     User toEntity(UserDTO dto);
 
     @Override
-    @Mapping(source = "user", target = "roles", ignore = true)
+    @Mappings({
+            @Mapping(source = "user", target = "roles", ignore = true)
+    })
     UserDTO toDto(User user);
 
     @AfterMapping
