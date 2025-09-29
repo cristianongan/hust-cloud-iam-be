@@ -38,6 +38,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -279,13 +280,22 @@ public class UserServiceImpl implements UserService {
                         , Collectors.toList())
         ));
 
+        List<QuotaDTO> quotas = this.cmsClient.getBatch(QuotaBatchReq.builder().userIds(ids).build());
+
+        Map<Long, QuotaDTO> quotaMap = Validator.isNotNull(quotas) ?
+                quotas.stream().collect(Collectors.toMap(QuotaDTO::getUserId, r -> r, (a, b) -> a,                            // nếu trùng key, giữ bản a (hoặc b)
+                        HashMap::new))
+                : new HashMap<>();
+
         content.forEach(user -> {
             if (roleMap.containsKey(user.getId())) {
                 user.setRoles(roleMap.get(user.getId()));
             }
-        });
 
-        List<QuotaDTO> quotas = this.cmsClient.getBatch(QuotaBatchReq.builder().userIds(ids).build());
+            if (quotaMap.containsKey(user.getId())) {
+                user.setQuota(quotaMap.get(user.getId()));
+            }
+        });
 
         Long count  = this.userRepository.count(search);
 

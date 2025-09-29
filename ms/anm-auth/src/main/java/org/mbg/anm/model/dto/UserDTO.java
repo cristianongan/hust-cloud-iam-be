@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.mbg.common.base.model.AbstractAuditingEntity;
+import org.mbg.common.base.model.dto.QuotaDTO;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -53,5 +54,7 @@ public class UserDTO implements Serializable {
     private List<String> permissions;
 
     private List<String> roles;
+
+    private QuotaDTO quota;
 
 }
