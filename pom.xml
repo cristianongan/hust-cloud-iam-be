@@ -61,10 +61,6 @@
             <version>4.2.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>io.github.openfeign</groupId>
-            <artifactId>feign-slf4j</artifactId>
-        </dependency>
     </dependencies>
 
 </project>

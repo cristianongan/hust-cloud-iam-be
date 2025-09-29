@@ -32,6 +32,12 @@
 
         <dependency>
             <groupId>org.mbg</groupId>
+            <artifactId>mbg-integration</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mbg</groupId>
             <artifactId>mbg-api-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
