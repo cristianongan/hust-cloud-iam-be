@@ -23,3 +23,10 @@ logging:
       management:
         remote:
           rmi: ERROR
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+        loggerLevel: basic

@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.configuration.ValidationProperties;
+import org.mbg.anm.fiegn.CmsClient;
 import org.mbg.anm.model.Role;
-import org.mbg.anm.model.RolePermission;
 import org.mbg.anm.model.UserRole;
 import org.mbg.anm.repository.*;
 import org.mbg.anm.security.UserDetailServiceImpl;
@@ -19,11 +19,12 @@ import org.mbg.anm.service.UserService;
 import org.mbg.anm.service.mapper.UserMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
+import org.mbg.common.base.model.dto.QuotaDTO;
+import org.mbg.common.base.model.dto.request.QuotaBatchReq;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.security.RsaProvider;
 import org.mbg.common.security.exception.UnauthorizedException;
-import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -32,8 +33,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,6 +69,8 @@ public class UserServiceImpl implements UserService {
     private Pattern passwordPattern;
 
     private final UserRoleRepository userRoleRepository;
+
+    private final CmsClient cmsClient;
 
     @PostConstruct
     protected void init() {
@@ -283,6 +284,8 @@ public class UserServiceImpl implements UserService {
                 user.setRoles(roleMap.get(user.getId()));
             }
         });
+
+        List<QuotaDTO> quotas = this.cmsClient.getBatch(QuotaBatchReq.builder().userIds(ids).build());
 
         Long count  = this.userRepository.count(search);
 

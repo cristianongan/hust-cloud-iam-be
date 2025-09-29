@@ -3,15 +3,12 @@ package org.mbg.anm.configuration;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.consumer.GroupIbApiSender;
 import org.mbg.anm.consumer.request.GroupIbReq;
 import org.mbg.anm.consumer.response.GroupIbCompromisedRes;
-import org.mbg.anm.consumer.response.GroupIbResponse;
 import org.mbg.anm.queue.RedisPriorityMessageWorker;
-import org.mbg.anm.repository.ProducerRequestRepository;
-import org.mbg.anm.repository.RecordRepository;
+import org.mbg.common.base.repository.RecordRepository;
 import org.mbg.common.api.util.HeaderUtil;
 import org.mbg.common.base.enums.CustomerDataType;
 import org.mbg.common.base.enums.CustomerSyncStatus;
@@ -19,7 +16,6 @@ import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.enums.LeakSeverity;
 import org.mbg.common.base.model.Customer;
 import org.mbg.common.base.model.CustomerData;
-import org.mbg.common.base.model.ProducerRequest;
 import org.mbg.common.base.model.Record;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.CustomerRepository;
@@ -27,7 +23,6 @@ import org.mbg.common.model.RedisMessage;
 import org.mbg.common.queue.RedisQueueFactory;
 import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.Validator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.http.HttpMethod;
@@ -36,7 +31,6 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -153,6 +147,8 @@ public class ApiConsumerJob {
                         this.gson.fromJson(item.getAddInfo(), new TypeToken<Map<String, Object>>(){}.getType()),
                         item.getDescription()
                         );
+
+                record.setSubscriberId(customer.getSubscriberId());
 
                 records.add(record);
             });

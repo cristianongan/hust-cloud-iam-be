@@ -18,7 +18,7 @@ public class RecordResponse implements Serializable {
 
     private Long id;
 
-    private String requestId;
+//    private String requestId;
 
     private String dataSource;
 

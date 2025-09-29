@@ -57,4 +57,35 @@
                 ON customer (sync_status, last_scan);
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-05" author="Nganph">
+        <sql>
+            create table quota (
+                                           id bigserial primary key,
+                                            user_id bigint,
+                                           in_use bigint,
+                                           total bigint,
+                                           created_by varchar(100),
+                                           created_date timestamp,
+                                           last_modified_by varchar(100),
+                                           last_modified_date timestamp
+
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-06" author="Nganph">
+        <sql>
+            alter table customer drop column last_scan ;
+            alter table customer drop column wait_at_lease ;
+            alter table customer add column last_scan TIMESTAMP WITHOUT TIME ZONE;
+            alter table customer add column wait_at_lease TIMESTAMP WITHOUT TIME ZONE;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-07" author="Nganph">
+        <sql>
+            alter table record_ add column subscriber_id varchar(255);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
