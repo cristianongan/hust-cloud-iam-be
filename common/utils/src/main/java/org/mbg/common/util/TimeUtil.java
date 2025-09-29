@@ -2,6 +2,7 @@ package org.mbg.common.util;
 
 import java.sql.Timestamp;
 import java.text.Format;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -26,6 +27,8 @@ public class TimeUtil {
     public static final String RFC822_FORMAT = "EEE, dd MMM yyyy HH:mm:ss Z";
     public static final String TIMESTAMP_FORMAT = "yyyyMMddkkmmssSSS";
     public static final String SHORT_TIMESTAMP_FORMAT = "yyyyMMdd";
+
+    public static final ZoneId VN_TIME_ZONE = ZoneId.of("Asia/Ho_Chi_Minh");
 
     public static Date getDate(Calendar cal) {
         Calendar adjustedCal = Calendar.getInstance();
