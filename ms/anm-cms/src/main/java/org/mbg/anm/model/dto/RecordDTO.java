@@ -38,7 +38,7 @@ public class RecordDTO implements Serializable {
 
     private Map<String, Object> meta;
 
-    private List<Integer> types;
+    private List<String> types;
 
     private String createdBy;
 

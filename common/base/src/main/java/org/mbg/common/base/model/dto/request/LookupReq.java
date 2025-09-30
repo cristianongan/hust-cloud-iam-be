@@ -11,8 +11,4 @@ public class LookupReq implements Serializable {
     private static final long serialVersionUID = -6361858650285180690L;
 
     private String subscriberId;
-
-    private int page;
-
-    private int pageSize;
 }

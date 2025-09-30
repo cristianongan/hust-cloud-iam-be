@@ -4,27 +4,28 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
 @AllArgsConstructor
 public enum LeakType {
-    EMAIL(1),
-    PHONE(2),
-    BANK_ACCOUNT(3),
-    ADDRESS(4)
+    EMAIL("email"),
+    PHONE("phone"),
+    BANK_ACCOUNT("bank_account"),
+    ADDRESS("address")
     ;
 
-    final int value;
+    final String value;
 
-    public static List<Integer> getValues() {
+    public static List<String> getValues() {
         return Stream.of(values()).map(e -> e.value).collect(Collectors.toList());
     }
 
-    public static LeakType valueOfStatus(int value) {
+    public static LeakType valueOfStatus(String value) {
         for (LeakType e : values()) {
-            if (e.getValue() == value) {
+            if (Objects.equals(e.getValue(), value)) {
                 return e;
             }
         }

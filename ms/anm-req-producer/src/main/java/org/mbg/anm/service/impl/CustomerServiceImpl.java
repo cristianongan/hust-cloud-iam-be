@@ -135,16 +135,12 @@ public class CustomerServiceImpl implements CustomerService {
             throw new ClientResponseException(ClientResponseError.INVALID_SUBSCRIBER_ID);
         }
 
-        Pageable pageable = PageRequest.of(lookupReq.getPage(), lookupReq.getPageSize());
-
-        List<Record> records = this.recordRepository.search(lookupReq, pageable);
+        List<Record> records = this.recordRepository.search(lookupReq);
 
         List<RecordResponse> content = this.recordMapper.toDto(records);
 
-        Long count  = this.recordRepository.count(lookupReq);
-
         return LookupResponse.builder()
-                .page(new PageImpl<>(content, pageable, count))
+                .data(content)
                 .subscriberId(lookupReq.getSubscriberId())
                 .build();
     }

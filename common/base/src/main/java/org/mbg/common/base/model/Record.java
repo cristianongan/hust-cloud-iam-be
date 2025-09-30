@@ -68,9 +68,13 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Column(columnDefinition = "jsonb")
     private Map<String, Object> meta;
 
-    @Convert(converter = IntegerListConverter.class)
-    @Column(name = "types", columnDefinition = "varchar(255)")
-    private List<Integer> types;
+    @ElementCollection
+    @CollectionTable(
+            name = "record_type",
+            joinColumns = @JoinColumn(name = "record_id")
+    )
+    @Column(name = "type")
+    private List<String> types;
 
     public Record(String requestId, String leakId, String dataSource,
                   String leakName, Long dataPublishedTime, Long detectTime, Integer severity,
@@ -84,11 +88,11 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         this.meta = meta;
         this.severity = severity;
         this.status = RecordStatus.INIT.getValue();
-        this.types = this.getTypes();
+        this.types = this.resolveType();
         this.description = description;
     }
 
-    private List<Integer> getTypes() {
+    private List<String> resolveType() {
         if (Validator.isNotNull(meta)) {
             return PiiScanner.convertToEntityAttribute(meta.keySet());
         }
