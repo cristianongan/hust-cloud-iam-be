@@ -36,5 +36,5 @@ public class RecordResponse implements Serializable {
 
     private Map<String, Object> meta;
 
-    private List<Integer> types;
+    private List<String> types;
 }

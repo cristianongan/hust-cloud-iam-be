@@ -18,8 +18,8 @@ public class PiiScanner {
         bankAccountKeys.addAll(List.of("bank","bankaccount", "swift", "accountholder", "tknganhang", "taikhoannganhang", "creditcard", "debitcard", "bankcard", "atm", "atmcard"));
     }
 
-    public static List<Integer> convertToEntityAttribute(Set<String> keys) {
-        List<Integer> result = new ArrayList<>();
+    public static List<String> convertToEntityAttribute(Set<String> keys) {
+        List<String> result = new ArrayList<>();
 
         keys = normalize(keys);
 

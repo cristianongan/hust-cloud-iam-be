@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface RecordRepositoryExtend {
-    List<Record> search(LookupReq lookupReq, Pageable pageable);
+    List<Record> search(LookupReq lookupReq);
 
     Long count(LookupReq lookupReq);
 

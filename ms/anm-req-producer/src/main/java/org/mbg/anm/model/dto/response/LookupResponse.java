@@ -16,5 +16,5 @@ public class LookupResponse implements Serializable {
 
     private String subscriberId;
 
-    private Page<RecordResponse> page;
+    private List<RecordResponse> data;
 }
