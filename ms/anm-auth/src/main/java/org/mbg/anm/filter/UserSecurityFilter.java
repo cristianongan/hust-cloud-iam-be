@@ -23,6 +23,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.io.Serial;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -59,16 +60,17 @@ public class UserSecurityFilter implements AuthorizationFilter {
                 String[] data = SecurityUtils.getBasicAuthentication(auth);
 
                 if (Validator.isNull(data) || data.length != 2) {
-//                    throw new BadRequestException(LabelKey.ERROR_INVALID_TOKEN,
-//                            User.class.getName(), LabelKey.ERROR_INVALID_TOKEN);
-                    throw new ClientResponseException(ClientResponseError.INVALID_TOKEN);
+                    throw new org.springframework.security.core.AuthenticationException("Invalid token"){
+                        @Serial
+                        private static final long serialVersionUID = -5340213868525396528L;
+                    };
                 }
 
                 UserPrincipal userPrincipal = (UserPrincipal) userDetailService.loadUserByClientId(data[0]);
 
                 if (Validator.isNull(userPrincipal) ||
                         !Validator.equals(userPrincipal.getPassword(), data[1])) {
-                    throw new ClientResponseException(ClientResponseError.UNAUTHORIZED);
+                    throw new org.springframework.security.access.AccessDeniedException("No permission");
                 }
 
                 authentication = new UsernamePasswordAuthenticationToken(userPrincipal, token, userPrincipal.getAuthorities());

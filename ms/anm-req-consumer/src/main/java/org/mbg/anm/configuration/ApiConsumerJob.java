@@ -107,7 +107,7 @@ public class ApiConsumerJob {
             return;
         }
 
-        List<CustomerData> data = this.customerDataRepository.findByCustomerId(customer.getId());
+        List<CustomerData> data = this.customerDataRepository.findByCustomerIdAndStatus(customer.getId(), EntityStatus.ACTIVE.getStatus());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 

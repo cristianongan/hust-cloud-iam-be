@@ -1,4 +1,4 @@
-package org.mbg.anm.configuration;
+package org.mbg.common.base.configuration;
 
 import lombok.Data;
 import lombok.Getter;

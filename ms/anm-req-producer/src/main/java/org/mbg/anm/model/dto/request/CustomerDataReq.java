@@ -7,4 +7,12 @@ public class CustomerDataReq {
     private String type;
 
     private String value;
+
+    private Integer status;
+
+    private String subscriberId;
+
+    private String transactionId;
+
+    private String otp;
 }

@@ -12,17 +12,17 @@ public class ClientResponseException extends AbstractThrowableProblem {
     @Serial
     private static final long serialVersionUID = -3435270795345773211L;
 
-    private final String reasonCode;
-
-    private final String message;
+//    private final String reasonCode;
+//
+//    private final String message;
 
     public ClientResponseException(String reasonCode, String message) {
-        this.reasonCode = reasonCode;
-        this.message = message;
+//        this.reasonCode = reasonCode;
+//        this.message = message;
     }
 
     public ClientResponseException(ClientResponseError error) {
-        this.reasonCode = error.getCode();
-        this.message = Labels.getLabels(error.getMessage());
+//        this.reasonCode = error.getCode();
+//        this.message = Labels.getLabels(error.getMessage());
     }
 }

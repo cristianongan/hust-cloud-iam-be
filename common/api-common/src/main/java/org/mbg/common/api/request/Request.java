@@ -1,14 +1,10 @@
-/**
- * 
- */
 package org.mbg.common.api.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.http.HttpMethod;
 
 import jakarta.persistence.Transient;
@@ -23,6 +19,7 @@ import java.io.Serializable;
 @Setter
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@SuperBuilder
 @JsonIgnoreProperties(ignoreUnknown = true, value = {"clientMessageId", "requestLog", "baseUrl", "requestURI", "method"})
 public abstract class Request implements Serializable {
 	@Serial

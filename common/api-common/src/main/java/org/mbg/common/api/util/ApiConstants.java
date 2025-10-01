@@ -55,7 +55,7 @@ public final class ApiConstants {
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class ErrorType {
-        public static final String PROBLEM_BASE_URL = "http://www.mb-miniapp.vn/problem";
+        public static final String PROBLEM_BASE_URL = "org-mbg-anm";
         public static final URI DEFAULT_TYPE = URI.create(PROBLEM_BASE_URL + "/problem-with-message");
         public static final URI CONSTRAINT_VIOLATION_TYPE = URI.create(PROBLEM_BASE_URL + "/constraint-violation");
         public static final URI INVALID_PASSWORD_TYPE = URI.create(PROBLEM_BASE_URL + "/invalid-password");

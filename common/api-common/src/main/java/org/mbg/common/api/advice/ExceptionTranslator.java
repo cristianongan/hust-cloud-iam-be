@@ -4,6 +4,7 @@ import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.api.exception.ClientResponseException;
 import org.mbg.common.api.exception.HttpResponseException;
 import org.mbg.common.api.exception.InternalServerErrorException;
+import org.mbg.common.base.enums.ErrorCode;
 import org.mbg.common.security.exception.NoPermissionException;
 import org.mbg.common.api.util.ApiConstants;
 import org.mbg.common.api.util.HeaderUtil;
@@ -109,7 +110,9 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	@ExceptionHandler
 	public ResponseEntity<Problem> handleBadRequestAlertException(BadRequestException ex, NativeWebRequest request) {
 		return create(ex, request,
-				HeaderUtil.createFailureAlert(true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+				HeaderUtil.createFailureAlert(true, ex.getReasonCode(), ex.getErrorKey(), ex.getMessage()));
+
+
 	}
 	
 	@ExceptionHandler
@@ -138,6 +141,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	public ResponseEntity<Problem> handleNoPermissionException(NoPermissionException ex, NativeWebRequest request) {
 		Problem problem =
 				Problem.builder().withStatus(Status.FORBIDDEN)
+						.with(ApiConstants.ErrorKey.REASON_CODE, ErrorCode.MSG1032.name())
 						.with(ApiConstants.ErrorKey.MESSAGE,
 								Labels.getLabels(LabelKey.ERROR_YOU_MIGHT_NOT_HAVE_PERMISSION_TO_PERFORM_THIS_ACTION))
 						.build();
@@ -170,7 +174,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	public ResponseEntity<Problem> handleInternalServerErrorException(InternalServerErrorException ex,
 																	  NativeWebRequest request) {
 		return create(ex, request,
-				HeaderUtil.createFailureAlert(true, ex.getEntityName(), ex.getErrorKey(), ex.getMessage()));
+				HeaderUtil.createFailureAlert(true, ex.getReasonCode(), ex.getErrorKey(), ex.getMessage()));
 	}
 
 	@ExceptionHandler
@@ -184,7 +188,9 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	@ExceptionHandler
 	public ResponseEntity<Problem> handleUnauthorizedException(UnauthorizedException ex, NativeWebRequest request) {
 		Problem problem = Problem.builder().withStatus(Status.UNAUTHORIZED)
-				.with(ApiConstants.ErrorKey.MESSAGE, ex.getMessage()).build();
+				.with(ApiConstants.ErrorKey.MESSAGE, ex.getMessage())
+				.with(ApiConstants.ErrorKey.REASON_CODE, ErrorCode.MSG1032.name())
+				.build();
 
 		return create(ex, problem, request);
 	}
@@ -196,6 +202,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	    }
 		
 		Problem problem = Problem.builder().withStatus(Status.INTERNAL_SERVER_ERROR)
+				.with(ApiConstants.ErrorKey.REASON_CODE, ErrorCode.MSG1010.name())
 				.with(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(LabelKey.ERROR_AN_UNEXPECTED_ERROR_HAS_OCCURRED)).build();
 
 		return create(ex, problem, request);
@@ -205,7 +212,7 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 	public ResponseEntity<Problem> handleClientResponseException(ClientResponseException ex, NativeWebRequest request) {
 		Problem problem = Problem.builder().withStatus(Status.BAD_REQUEST)
 				.with(ApiConstants.ErrorKey.MESSAGE,ex.getMessage())
-				.with(ApiConstants.ErrorKey.REASON_CODE, ex.getReasonCode())
+//				.with(ApiConstants.ErrorKey.REASON_CODE, ex.getReasonCode())
 				.with(ApiConstants.ErrorKey.DATA, null)
 				.build();
 

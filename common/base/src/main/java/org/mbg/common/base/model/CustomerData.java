@@ -31,4 +31,10 @@ public class CustomerData extends AbstractAuditingEntity implements Serializable
 
     @Column(name = "value")
     private String value;
+
+    @Column(name = "verify")
+    private Integer verify;
+
+    @Column(name = "status")
+    private Integer status;
 }

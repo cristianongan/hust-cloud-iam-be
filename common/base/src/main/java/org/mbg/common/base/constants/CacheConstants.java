@@ -10,4 +10,8 @@ public final class CacheConstants {
     public static final class QUOTA {
         public static final String FIND_BY_USER_ID = "quota_find_by_id";
     }
+
+    public static final class CONTENT_TEMPLATE {
+        public static final String FIND_BY_TEMPLATE_CODE = "find_by_template_code";
+    }
 }

@@ -2,6 +2,8 @@ package org.mbg.common.api.exception;
 
 import org.mbg.common.api.util.ApiConstants;
 import lombok.Getter;
+import org.mbg.common.base.enums.ErrorCode;
+import org.mbg.common.label.Labels;
 import org.zalando.problem.Status;
 
 import java.io.Serial;
@@ -31,4 +33,8 @@ public class BadRequestException extends AbstractException {
     public BadRequestException(URI type, String defaultMessage, String entityName, String errorKey) {
         super(type, defaultMessage, Status.BAD_REQUEST, entityName, errorKey);
     }
+
+	public BadRequestException(ErrorCode errorCode) {
+		this(Labels.getLabels(errorCode.getKey()), errorCode.name(), errorCode.getKey());
+	}
 }

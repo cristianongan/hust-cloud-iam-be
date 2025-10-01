@@ -8,8 +8,10 @@
     <file url="file://$PROJECT_DIR$/common/captcha/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/integration/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/label-bundle/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/otp-generator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/queue/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/security/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/common/sms-sender/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/common/utils/src/main/java" charset="UTF-8" />
