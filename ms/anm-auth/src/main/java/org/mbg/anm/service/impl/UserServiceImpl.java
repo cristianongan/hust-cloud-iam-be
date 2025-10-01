@@ -3,7 +3,7 @@ package org.mbg.anm.service.impl;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mbg.anm.configuration.ValidationProperties;
+import org.mbg.common.base.configuration.ValidationProperties;
 import org.mbg.anm.fiegn.CmsClient;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.UserRole;

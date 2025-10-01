@@ -20,23 +20,23 @@ public class AbstractException extends AbstractThrowableProblem {
     @Serial
     private static final long serialVersionUID = -7499406014900417719L;
 
-    private final String entityName;
+    private final String reasonCode;
 
     private final String errorKey;
 
-    public AbstractException(String defaultMessage, String entityName, Status status, String errorKey) {
-        this(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, entityName, errorKey);
+    public AbstractException(String defaultMessage, String reasonCode, Status status, String errorKey) {
+        this(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, reasonCode, errorKey);
     }
 
-    public AbstractException(URI type, String defaultMessage, Status status, String entityName, String errorKey) {
+    public AbstractException(URI type, String defaultMessage, Status status, String reasonCode, String errorKey) {
         super(type, defaultMessage, status, null, null, null,
-                getAlertParameters(defaultMessage, entityName, errorKey));
+                getAlertParameters(defaultMessage, reasonCode, errorKey));
 
-        this.entityName = entityName;
+        this.reasonCode = reasonCode;
         this.errorKey = errorKey;
     }
 
-    public AbstractException(String defaultMessage, Status status, String entityName, String errorKey,
+    public AbstractException(String defaultMessage, Status status, String reasonCode, String errorKey,
                                Map<String, Object> params, Map<String, Object> values) {
         super(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, null, null, null, params);
 
@@ -47,18 +47,18 @@ public class AbstractException extends AbstractThrowableProblem {
             params.put(ApiConstants.ErrorKey.PARAMS, values);
         }
 
-        this.entityName = entityName;
+        this.reasonCode = reasonCode;
         this.errorKey = errorKey;
     }
 
-    public AbstractException(String defaultMessage, Status status, String entityName, String errorKey,
+    public AbstractException(String defaultMessage, Status status, String reasonCode, String errorKey,
                                Map<String, Object> params) {
         super(ApiConstants.ErrorType.DEFAULT_TYPE, defaultMessage, status, null, null, null, params);
 
         params.put(ApiConstants.ErrorKey.MESSAGE, Labels.getLabels(defaultMessage));
         params.put(ApiConstants.ErrorKey.ERROR_KEY, errorKey);
 
-        this.entityName = entityName;
+        this.reasonCode = reasonCode;
         this.errorKey = errorKey;
     }
 

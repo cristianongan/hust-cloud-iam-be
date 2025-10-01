@@ -64,6 +64,9 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Column(name = "status")
     private Integer status;
 
+    @Column(name = "data_lookup")
+    private String dataLookup;
+
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "jsonb")
     private Map<String, Object> meta;

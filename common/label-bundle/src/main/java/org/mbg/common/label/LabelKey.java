@@ -431,4 +431,37 @@ public final class LabelKey {
 
 	public static final String LABEL_END_TIME = "label.end-time";
 
+	public static final String ERROR_PHONE_NUMBER_IS_INVALID = "error.phone-number-is-invalid";
+
+	public static final String ERROR_MESSAGE_IS_REQUIRED = "error.message-is-required";
+
+	public static final String ERROR_CANNOT_SEND_SMS = "error.cannot-send-sms";
+
+	public static final String LABEL_TEMPLATE = "label.template";
+
+	public static final String ERROR_PHONE_NUMBER_IS_REQUIRED = "error.phone-number-is-required";
+
+	public static final String ERROR_OTP_CAN_NOT_BE_SENT = "error.otp-can-not-be-sent";
+
+	public static final String ERROR_YOU_HAVE_REACHED_THE_LIMIT_FOR_OTP_REQUESTS = "error.you-have-reached-the-limit-for-otp-requests";
+
+	public static final String ERROR_TRANSACTION_ID_IS_INVALID = "error.transaction-id-is-invalid";
+
+	public static final String ERROR_TRANSACTION_HAS_BEEN_PROCESSED = "error.transaction-has-been-processed";
+
+	public static final String ERROR_YOU_HAVE_REACHED_LIMIT_FOR_CONFIRM_OTP = "error.you-have-reached-limit-for-otp";
+
+	public static final String ERROR_OTP_IS_INVALID_ENTRIES_LEFT = "error.otp-is-invalid-entries-left";
+
+	public static final String ERROR_OTP_IS_EXPIRED = "error.otp-is-expired";
+
+	public static final String ERROR_SUBSCRIBER_IS_INVALID = "error.subscriber-is-invalid";
+
+	public static final String ERROR_CUSTOMER_NOT_FOUND = "error.customer-not-found";
+
+	public static final String INVALID_DATA_TYPE = "error.invalid-data-type";
+
+	public static final String INVALID_DATA_STATUS = "error.invalid-data-status";
+
+	public static final String ERROR_DATA_ALREADY_VERIFIED = "error.data-already-verified";
 }

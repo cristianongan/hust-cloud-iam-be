@@ -26,6 +26,8 @@
         <module>captcha</module>
         <module>integration</module>
         <module>queue</module>
+        <module>otp-generator</module>
+        <module>sms-sender</module>
     </modules>
 
     <properties>

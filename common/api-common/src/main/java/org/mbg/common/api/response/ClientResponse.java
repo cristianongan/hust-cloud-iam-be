@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.mbg.common.api.enums.ClientResponseError;
+import org.mbg.common.base.enums.ErrorCode;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -21,6 +22,6 @@ public class ClientResponse implements Serializable {
     private Object result;
 
     public static ClientResponse ok(Object data) {
-        return new ClientResponse(ClientResponseError.OK.getCode(), ClientResponseError.OK.getMessage(), data);
+        return new ClientResponse(ErrorCode.MSG0000.name(), "", data);
     }
 }

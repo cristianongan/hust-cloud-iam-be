@@ -111,4 +111,44 @@
 create index record_type_record_id on record_type(record_id);
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-10" author="Nganph">
+        <sql>
+            alter table record_ add column data_lookup varchar(255);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-11" author="Nganph">
+        <sql>
+            alter table customer_data add column verify smallint default 0;
+            alter table customer_data add column status smallint default 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-12" author="Nganph">
+        <sql>
+            create table content_template (
+                                              template_code varchar(255) primary key,
+                                              name varchar(255),
+                                         title varchar(255),
+                                         content text,
+                                         description varchar(255),
+                                         status smallint,
+                                         created_by varchar(100),
+                                         created_date timestamp,
+                                         last_modified_by varchar(100),
+                                         last_modified_date timestamp
+
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-13" author="Nganph">
+        <sql>
+            create table transaction_lock (
+                                              transaction_id varchar(255) primary key
+
+            );
+        </sql>
+    </changeSet>
 </databaseChangeLog>
