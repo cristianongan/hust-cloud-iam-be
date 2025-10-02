@@ -124,7 +124,7 @@ public class CustomerServiceImpl implements CustomerService {
                     data.setType(type.getValue());
                     data.setValue(item.getValue());
                     data.setStatus(EntityStatus.ACTIVE.getStatus());
-                    data.setVerify(1);
+                    data.setVerify(0);
 
                     datas.add(data);
                 } else {
