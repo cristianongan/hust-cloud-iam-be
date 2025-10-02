@@ -441,6 +441,8 @@ public final class LabelKey {
 
 	public static final String ERROR_PHONE_NUMBER_IS_REQUIRED = "error.phone-number-is-required";
 
+	public static final String ERROR_EMAIL_IS_REQUIRED = "error.email-is-required";
+
 	public static final String ERROR_OTP_CAN_NOT_BE_SENT = "error.otp-can-not-be-sent";
 
 	public static final String ERROR_YOU_HAVE_REACHED_THE_LIMIT_FOR_OTP_REQUESTS = "error.you-have-reached-the-limit-for-otp-requests";
@@ -464,4 +466,6 @@ public final class LabelKey {
 	public static final String INVALID_DATA_STATUS = "error.invalid-data-status";
 
 	public static final String ERROR_DATA_ALREADY_VERIFIED = "error.data-already-verified";
+
+    public static final String ERROR_TEMPLATE_NOT_FOUND = "error.template-not-found";
 }

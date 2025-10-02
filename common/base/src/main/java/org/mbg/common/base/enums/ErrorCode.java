@@ -92,6 +92,10 @@ public enum ErrorCode {
 
     MSG1034(LabelKey.ERROR_DATA_ALREADY_VERIFIED),
 
+    MSG1035(LabelKey.ERROR_EMAIL_IS_REQUIRED),
+
+    MSG1036(LabelKey.ERROR_TEMPLATE_NOT_FOUND),
+
     ;
 
     private String key;

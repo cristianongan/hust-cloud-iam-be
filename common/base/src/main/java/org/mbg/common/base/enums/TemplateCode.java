@@ -3,6 +3,8 @@ package org.mbg.common.base.enums;
 public enum TemplateCode {
     SMS_OTP,
 
+    EMAIL_OTP,
+
     NEW_DEVICE_LOGIN_NOTICE,
 
     SMS_RESET_PASSWORD,
