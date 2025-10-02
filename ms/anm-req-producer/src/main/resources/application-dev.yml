@@ -221,7 +221,8 @@ api-consumer:
     - user: 'thanglx@mobifoneglobal.vn'
       key: 'Admin@1234'
 otp:
-  enable: true
+  enable: false
+
   default-otp: 11111111 #OTP mặc định khi không bật OTP service
   number-of-digits: 8 #Độ dài OTP
   template: Nhap ma OTP %s gui ve so dien thoai %s de xac nhan. Ma OTP se het han sau %s phut
