@@ -76,7 +76,7 @@ public class ClientServiceImpl implements ClientService {
 
         this.clientRepository.save(client);
 
-        return SecretRes.builder().secret(client.getClientSecret()).build();
+        return SecretRes.builder().clientId(client.getClientId()).clientSecret(client.getClientSecret()).build();
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ClientServiceImpl implements ClientService {
         client.setClientSecret(RandomGenerator.generateRandomAlphabet(32, true));
         this.clientRepository.save(client);
 
-        return SecretRes.builder().secret(client.getClientSecret()).build();
+        return SecretRes.builder().clientId(client.getClientId()).clientSecret(client.getClientSecret()).build();
     }
 
     @Override

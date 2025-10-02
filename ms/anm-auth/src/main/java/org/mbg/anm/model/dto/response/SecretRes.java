@@ -6,5 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class SecretRes {
-    String secret;
+    String clientSecret;
+
+    String clientId;
 }

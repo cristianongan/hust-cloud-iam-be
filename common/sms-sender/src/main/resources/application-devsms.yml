@@ -8,3 +8,12 @@ sms:
   schema: 'http://impl.bulkSms.ws/'
   command-code: 'bulksms'
   content-type: '0'
+spring:
+  mail:
+    host: smtp.mailgun.org
+    port: 587
+    username: vov@solidtech.vn
+    password: f713643ca5f162b27d004f978c7ed317-191fb7b6-254e655c
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true

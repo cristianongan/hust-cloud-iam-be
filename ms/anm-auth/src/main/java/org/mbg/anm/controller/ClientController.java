@@ -65,9 +65,8 @@ public class ClientController {
 
     @PostMapping("reset")
     @PreAuthorize("hasPrivilege('CLIENT_UPDATE')")
-    public ResponseEntity<Void> reset(@RequestBody ClientReq req) {
-        this.clientService.resetSecret(req);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> reset(@RequestBody ClientReq req) {
+        return ResponseEntity.ok(this.clientService.resetSecret(req));
     }
 
 }

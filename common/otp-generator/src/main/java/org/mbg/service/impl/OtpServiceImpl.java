@@ -17,6 +17,7 @@ import org.mbg.common.label.Labels;
 import org.mbg.common.util.RandomGenerator;
 import org.mbg.common.util.StringPool;
 import org.mbg.common.util.Validator;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import org.mbg.api.response.SmsResponse;
@@ -44,6 +45,8 @@ public class OtpServiceImpl implements OtpService {
 	private final SmsService smsService;
 	
 	private final TransactionLockRepository transactionLockRepository;
+
+	private final JavaMailSender javaMailSender;
 
 	@Override
 	public OtpValue findByKey(String phoneNumber, OtpType type) {
