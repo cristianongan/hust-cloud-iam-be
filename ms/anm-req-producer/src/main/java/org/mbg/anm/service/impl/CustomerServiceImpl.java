@@ -243,7 +243,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (Validator.equals(data.getType(), CustomerDataType.EMAIL.getValue())) {
-            transactionId = this.otpService.sendOtpViaEmail(data.getValue(), OtpType.CUSTOMER_VERIFY, false, false);
+            transactionId = this.otpService.sendOtpViaEmail(data.getValue(), OtpType.CUSTOMER_VERIFY, false);
         }
 
         return TransactionResponse.builder().transactionId(transactionId).build();
