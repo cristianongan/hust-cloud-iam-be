@@ -1,0 +1,20 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="cms-master-data-02-10-2025-01-01" author="Nganph">
+        <sql>
+            <![CDATA[
+            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('SMS_OTP', NULL, NULL, NULL, NULL, 'Mẫu SMS gửi OTP', 'Mẫu SMS gửi OTP', '1', 'Your OTP code for online service is ${OTP_CODE}. DO NOT share OTP code with anyone. ${TIMESTAMP}', 'SMS OTP');
+            ]]>
+            <![CDATA[
+            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('EMAIL_OTP', NULL, NULL, NULL, NULL, 'Mẫu email gửi OTP', 'Mẫu SMS gửi OTP', '1', '<p>Hello ${EMAIL},</p>
+    <p>Your otp is:</p> <strong>${OTP_CODE}</strong>
+    <br>
+    <p>Sincerely thank.</p>', 'EMAIL OTP');
+            ]]>
+
+        </sql>
+    </changeSet>
+</databaseChangeLog>

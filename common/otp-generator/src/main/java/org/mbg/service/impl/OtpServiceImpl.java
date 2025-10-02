@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import jakarta.mail.internet.MimeMessage;
 import org.hibernate.exception.ConstraintViolationException;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.configuration.ValidationProperties;
@@ -17,7 +18,9 @@ import org.mbg.common.label.Labels;
 import org.mbg.common.util.RandomGenerator;
 import org.mbg.common.util.StringPool;
 import org.mbg.common.util.Validator;
+import org.mbg.service.EmailService;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import org.mbg.api.response.SmsResponse;
@@ -46,7 +49,7 @@ public class OtpServiceImpl implements OtpService {
 	
 	private final TransactionLockRepository transactionLockRepository;
 
-	private final JavaMailSender javaMailSender;
+	private final EmailService emailService;
 
 	@Override
 	public OtpValue findByKey(String phoneNumber, OtpType type) {
@@ -62,12 +65,54 @@ public class OtpServiceImpl implements OtpService {
 	public String sendOtpViaSms(String phoneNumber, OtpType type, boolean validate) {
 		return this.sendOtpViaSms(phoneNumber, type, validate, false);
 	}
+
+	@Override
+	public String sendOtpViaEmail(String email, OtpType type, boolean validate) {
+		return this.sendOtpViaEmail(email, type, validate, false);
+	}
+
+
+	@Override
+	public String sendOtpViaEmail(String email, OtpType type, boolean validate, boolean otpDefault) {
+		if (validate) {
+			if (Validator.isNull(email)) {
+				throw new BadRequestException(ErrorCode.MSG1035);
+			}
+		}
+
+		OtpValue otpValue = this.findByKey(email, type);
+
+		if (Validator.isNotNull(otpValue) && this.otpProperties.getOtpAttempt() > 0
+				&& otpValue.getCount() >= this.otpProperties.getOtpAttempt()) {
+			throw new BadRequestException(ErrorCode.MSG1021);
+		}
+
+		String transactionId = UUID.randomUUID().toString();
+
+		if (this.otpProperties.isEnable() && !otpDefault) {
+			// Tao tin nhan de gui
+			String otp = this.generateOtp(email, transactionId, type);
+
+			Map<String, String> valuesMap = new HashMap<>();
+
+			valuesMap.put(TemplateField.OTP_CODE.name(), otp);
+			valuesMap.put(TemplateField.EMAIL.name(), email);
+
+			this.emailService.send(email, TemplateCode.EMAIL_OTP.name(), valuesMap);
+		} else {
+			this.setOtp(email, transactionId, type, this.otpProperties.getDefaultOtp(),
+					Validator.isNotNull(otpValue) ? otpValue.getCount() : 0,
+					Validator.isNotNull(otpValue) ? otpValue.getOtpConfirmCount() : 0);
+		}
+
+		return transactionId;
+	}
 	
 	@Override
 	public String sendOtpViaSms(String phoneNumber, OtpType type, boolean validate, boolean otpDefault) {
 		if (validate) {
 			if (Validator.isNull(phoneNumber)) {
-				throw new BadRequestException(ErrorCode.MSG1010);
+				throw new BadRequestException(ErrorCode.MSG1007);
 			}
 		}
 
@@ -96,12 +141,11 @@ public class OtpServiceImpl implements OtpService {
 			if (!Validator.equals(smsResponse.getResult(), SmsResponse.Result.SUCCESS.getStatus())) {
 				this.invalidateOtp(phoneNumber, type);
 
-				_log.error("Gui tin nhan that bai: {}", smsResponse.getMessage());
+				_log.error("sendOtpViaSms failed: {}", smsResponse.getMessage());
 
 				throw new BadRequestException(ErrorCode.MSG1020);
 			}
 		} else {
-			// Setup de test
 			this.setOtp(phoneNumber, transactionId, type, this.otpProperties.getDefaultOtp(),
 					Validator.isNotNull(otpValue) ? otpValue.getCount() : 0,
 					Validator.isNotNull(otpValue) ? otpValue.getOtpConfirmCount() : 0);

@@ -25,6 +25,12 @@
 
 		<dependency>
 			<groupId>org.mbg</groupId>
+			<artifactId>mbg-api-common</artifactId>
+			<version>${app.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mbg</groupId>
 			<artifactId>mbg-security</artifactId>
 			<version>${app.version}</version>
 		</dependency>
@@ -100,11 +106,10 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 		<dependency>
-			<groupId>org.mbg</groupId>
-			<artifactId>anm-auth</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>compile</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 	</dependencies>
 </project>

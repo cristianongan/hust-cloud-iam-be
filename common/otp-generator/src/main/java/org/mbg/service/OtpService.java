@@ -11,6 +11,10 @@ public interface OtpService {
 	String sendOtpViaSms(String phoneNumber, OtpType type, boolean validate);
 	
 	String sendOtpViaSms(String phoneNumber, OtpType type, boolean validate, boolean otpDefault);
+
+	String sendOtpViaEmail(String email, OtpType type, boolean validate);
+
+	String sendOtpViaEmail(String email, OtpType type, boolean validate, boolean otpDefault);
 	
 	void validateOtp(String phoneNumber, String transactionId, OtpType type, String otp);
 }

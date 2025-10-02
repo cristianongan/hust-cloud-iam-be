@@ -123,6 +123,8 @@ public class CustomerServiceImpl implements CustomerService {
                     }
                     data.setType(type.getValue());
                     data.setValue(item.getValue());
+                    data.setStatus(EntityStatus.ACTIVE.getStatus());
+                    data.setVerify(1);
 
                     datas.add(data);
                 } else {
@@ -241,7 +243,7 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (Validator.equals(data.getType(), CustomerDataType.EMAIL.getValue())) {
-//            transactionId = this.otpService.sendOtpViaSms(data.getValue(), OtpType.CUSTOMER_VERIFY, false);
+            transactionId = this.otpService.sendOtpViaEmail(data.getValue(), OtpType.CUSTOMER_VERIFY, false, false);
         }
 
         return TransactionResponse.builder().transactionId(transactionId).build();
