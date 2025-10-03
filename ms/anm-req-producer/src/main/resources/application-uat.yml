@@ -21,7 +21,7 @@ spring:
       indent-output: true
       fail-on-empty-beans: false
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:/changelog/changelog-master.xml
   cloud:
     consul:

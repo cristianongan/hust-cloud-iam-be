@@ -21,7 +21,7 @@ spring:
       indent-output: true
       fail-on-empty-beans: false
   liquibase:
-    enabled: false
+    enabled: true
     change-log: classpath:/changelog/changelog-master.xml
   cloud:
     consul:
@@ -222,7 +222,6 @@ api-consumer:
       key: 'Admin@1234'
 otp:
   enable: false
-
   default-otp: 11111111 #OTP mặc định khi không bật OTP service
   number-of-digits: 8 #Độ dài OTP
   template: Nhap ma OTP %s gui ve so dien thoai %s de xac nhan. Ma OTP se het han sau %s phut
