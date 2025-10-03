@@ -36,7 +36,7 @@ public class RecordResponse implements Serializable {
 
     private String dataLookup;
 
-    private Map<String, Object> meta;
+//    private Map<String, Object> meta;
 
     private List<String> types;
 }
