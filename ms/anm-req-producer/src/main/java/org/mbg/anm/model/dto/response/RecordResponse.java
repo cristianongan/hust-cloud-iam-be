@@ -34,6 +34,8 @@ public class RecordResponse implements Serializable {
 
     private Long detectTime;
 
+    private String dataLookup;
+
     private Map<String, Object> meta;
 
     private List<String> types;

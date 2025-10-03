@@ -3,6 +3,7 @@ package org.mbg.anm.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.model.dto.RecordDTO;
+import org.mbg.anm.model.dto.response.RecordTypeStatisticRes;
 import org.mbg.common.api.enums.ClientResponseError;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.api.exception.ClientResponseException;
@@ -52,5 +53,10 @@ public class RecordServiceImpl implements RecordService {
         Long count  = this.recordRepository.countCms(req);
 
         return new PageImpl<>(content, pageable, count);
+    }
+
+    @Override
+    public RecordTypeStatisticRes recordStatistic() {
+        return null;
     }
 }
