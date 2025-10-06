@@ -37,7 +37,7 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ApiConsumerJob {
-    private final RedisQueueFactory redisQueueFactory;
+//    private final RedisQueueFactory redisQueueFactory;
 
     private final ApiConsumerProperties apiConsumerProperties;
 
@@ -54,7 +54,8 @@ public class ApiConsumerJob {
 
     private final Gson gson;
 
-    public ApiConsumerJob(ApiConsumerProperties props, RedisQueueFactory  redisQueueFactory,
+    public ApiConsumerJob(ApiConsumerProperties props,
+//                          RedisQueueFactory  redisQueueFactory,
                        GroupIbApiSender groupIbApiSender, RecordRepository recordRepository,
 //                       ProducerRequestRepository producerRequestRepository,
                        CustomerRepository customerRepository, CustomerDataRepository customerDataRepository,
@@ -62,7 +63,7 @@ public class ApiConsumerJob {
                        @Qualifier("asyncExecutor") TaskExecutor taskExecutor) {
         this.apiConsumerProperties = props;
         this.taskExecutor = taskExecutor;
-        this.redisQueueFactory = redisQueueFactory;
+//        this.redisQueueFactory = redisQueueFactory;
         this.groupIbApiSender = groupIbApiSender;
         this.recordRepository = recordRepository;
 //        this.producerRequestRepository = producerRequestRepository;
@@ -80,7 +81,8 @@ public class ApiConsumerJob {
                     _log.info("create consumer {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
                     RedisPriorityMessageWorker worker = new RedisPriorityMessageWorker(
                             this::craw,
-                            redisQueueFactory,
+//                            redisQueueFactory,
+                            null,
                             taskExecutor,
                             group.getTopic(),
                             () -> HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),

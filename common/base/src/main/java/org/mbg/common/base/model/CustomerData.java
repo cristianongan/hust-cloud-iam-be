@@ -37,4 +37,7 @@ public class CustomerData extends AbstractAuditingEntity implements Serializable
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "is_primary")
+    private Integer isPrimary;
 }

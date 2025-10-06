@@ -53,4 +53,18 @@ public class CustomerController {
         this.customerService.verify(req);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
+
+    @PostMapping("/lookup/add")
+    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
+    ResponseEntity<?> addDataLookup(@RequestBody SubscribeReq req) {
+        this.customerService.addDataLookup(req);
+        return ResponseEntity.ok(ClientResponse.ok(null));
+    }
+
+    @PostMapping("/lookup/remove")
+    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
+    ResponseEntity<?> removeDataLookup(@RequestBody SubscribeReq req) {
+        this.customerService.removeDataLookup(req);
+        return ResponseEntity.ok(ClientResponse.ok(null));
+    }
 }

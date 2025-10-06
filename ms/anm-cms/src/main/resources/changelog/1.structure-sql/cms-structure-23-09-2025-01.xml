@@ -151,4 +151,10 @@ create index record_type_record_id on record_type(record_id);
             );
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-14" author="Nganph">
+        <sql>
+            alter table customer_data add column is_primary smallint default 0;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

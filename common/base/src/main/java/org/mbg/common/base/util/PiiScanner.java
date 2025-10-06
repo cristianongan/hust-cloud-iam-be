@@ -13,7 +13,7 @@ public class PiiScanner {
 
     static {
         phoneKeys.addAll(List.of("phone", "mobile", "mobilephone", "sdt", "tel", "sodienthoai", "msisdn", "telephone", "mobilenumber"));
-        emailKeys.addAll(List.of("email", "mail", "thudientu"));
+        emailKeys.addAll(List.of("email", "mail", "thudientu", "maildomain"));
         addressKeys.addAll(List.of("address","addr","diachi","street","ward","district","province","city","zipcode","postal","country"));
         bankAccountKeys.addAll(List.of("bank","bankaccount", "swift", "accountholder", "tknganhang", "taikhoannganhang", "creditcard", "debitcard", "bankcard", "atm", "atmcard"));
     }
