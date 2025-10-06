@@ -2,6 +2,7 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.constant.AuthConstant;
 import org.mbg.anm.model.*;
 import org.mbg.anm.model.dto.ClientDTO;
 import org.mbg.anm.model.dto.request.ClientReq;
@@ -9,6 +10,7 @@ import org.mbg.anm.model.dto.response.SecretRes;
 import org.mbg.anm.model.dto.response.UserRes;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.repository.ClientRepository;
+import org.mbg.anm.repository.ClientRoleRepository;
 import org.mbg.anm.repository.UserRepository;
 import org.mbg.anm.service.ClientService;
 import org.mbg.anm.service.mapper.ClientMapper;
@@ -40,6 +42,8 @@ public class ClientServiceImpl implements ClientService {
     private final ClientRepository clientRepository;
 
     private final UserRepository userRepository;
+
+    private final ClientRoleRepository clientRoleRepository;
 
     @Override
     @Transactional
@@ -75,6 +79,11 @@ public class ClientServiceImpl implements ClientService {
         client.setStatus(EntityStatus.ACTIVE.getStatus());
 
         this.clientRepository.save(client);
+
+        ClientRole clientRole = new ClientRole();
+        clientRole.setClientId(client.getClientId());
+        clientRole.setRoleCode(AuthConstant.ROLES.DEFAULT_CLIENT_ROLE);
+        clientRoleRepository.save(clientRole);
 
         return SecretRes.builder().clientId(client.getClientId()).clientSecret(client.getClientSecret()).build();
     }

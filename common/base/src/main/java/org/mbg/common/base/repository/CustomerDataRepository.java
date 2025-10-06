@@ -11,4 +11,6 @@ public interface CustomerDataRepository extends JpaRepository<CustomerData,Long>
     List<CustomerData> findByCustomerIdAndStatus(Long customerId, Integer status);
 
     CustomerData findByCustomerIdAndValueAndStatus(Long customerId, String value, Integer status);
+
+    List<CustomerData> findByCustomerIdAndStatusAndValueIn(Long customerId, Integer status, List<String> values);
 }

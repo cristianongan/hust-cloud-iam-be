@@ -1,6 +1,3 @@
-/**
- * 
- */
 package org.mbg.common.cache;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
@@ -55,75 +52,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author LinhLH
- *
- */
 @Slf4j
 @Getter
 @Setter
 @Configuration(value = "cacheRedisConfiguration")
-@ConfigurationProperties(prefix = "cache.redis")
 @EnableCaching
 @RequiredArgsConstructor
 @ConditionalOnProperty(prefix = "cache", name = "config-type", havingValue = "redis", matchIfMissing = true)
 public class CacheRedisConfiguration implements CachingConfigurer {
-	private String mode;
-
-	private int cacheDuration;
-	
-	private Standalone standalone;
-	
-	private Sentinel sentinel;
-	
-	private LettucePool lettucePool;
-	
-	@Getter
-	@Setter
-	private static class Standalone {
-
-		private int port;
-		
-		private String password;
-		
-		private String host;
-	}
-	
-	@Getter
-	@Setter
-	private static class Sentinel {
-
-		private int port;
-		
-		private String password;
-		
-		private String master;
-
-		private List<String> nodes;
-	}
-
-	@Getter
-	@Setter
-	private static class LettucePool {
-
-		private long shutdownTimeout;
-		
-		private long commandTimeout;
-		
-		private int minIdle;
-		
-		private int maxIdle;
-		
-		private long maxWaitMillis;
-		
-		private int maxTotal;
-	}
-	
-	public enum Mode {
-		STANDALONE, SENTINEL
-	}
 	
 	private final CacheProperties properties;
+
+	public String getMode() {
+		return this.properties.getRedis().getMode();
+	}
 	
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
@@ -132,10 +74,10 @@ public class CacheRedisConfiguration implements CachingConfigurer {
 
 		GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
 
-		poolConfig.setMaxIdle(this.lettucePool.getMinIdle());
-        poolConfig.setMinIdle(this.lettucePool.getMinIdle());
-        poolConfig.setMaxWait(Duration.ofMillis(this.lettucePool.getMaxWaitMillis()));
-        poolConfig.setMaxTotal(this.lettucePool.getMaxTotal());
+		poolConfig.setMaxIdle(this.properties.getRedis().getLettucePool().getMaxIdle());
+        poolConfig.setMinIdle(this.properties.getRedis().getLettucePool().getMinIdle());
+        poolConfig.setMaxWait(Duration.ofMillis(this.properties.getRedis().getLettucePool().getMaxWaitMillis()));
+        poolConfig.setMaxTotal(this.properties.getRedis().getLettucePool().getMaxTotal());
 		
         // @formatter:off
         ClientOptions clientOptions = ClientOptions.builder()
@@ -144,32 +86,33 @@ public class CacheRedisConfiguration implements CachingConfigurer {
                 .build();
         
 		LettucePoolingClientConfiguration lettuceConfiguration = LettucePoolingClientConfiguration.builder()
-				.commandTimeout(Duration.ofMillis(this.lettucePool.getCommandTimeout()))
-				.shutdownTimeout(Duration.ofMillis(this.lettucePool.getShutdownTimeout()))
+				.commandTimeout(Duration.ofMillis(this.properties.getRedis().getLettucePool().getCommandTimeout()))
+				.shutdownTimeout(Duration.ofMillis(this.properties.getRedis().getLettucePool().getShutdownTimeout()))
 				.clientOptions(clientOptions)
 				.clientResources(DefaultClientResources.create())
 				.poolConfig(poolConfig)
 				.build();
 		// @formatter:on
 		
-		if (Validator.equals(this.mode, Mode.STANDALONE.name().toLowerCase())) {
+		if (Validator.equals(this.getMode(), CacheProperties.Mode.STANDALONE.name().toLowerCase())) {
 			RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
 
-			redisStandaloneConfiguration.setHostName(this.standalone.getHost());
-			redisStandaloneConfiguration.setPort(this.standalone.getPort());
-			redisStandaloneConfiguration.setPassword(RedisPassword.of(this.standalone.getPassword()));
+			redisStandaloneConfiguration.setHostName(this.properties.getRedis().getStandalone().getHost());
+			redisStandaloneConfiguration.setPort(this.properties.getRedis().getStandalone().getPort());
+			redisStandaloneConfiguration.setPassword(RedisPassword.of(this.properties.getRedis().getStandalone().getPassword()));
 
 			lettuceConnectionFactory =
 					new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceConfiguration);
 		} else {
 			RedisSentinelConfiguration sentinelConfig =
-					new RedisSentinelConfiguration().master(this.sentinel.getMaster());
+					new RedisSentinelConfiguration().master(this.properties.getRedis().getSentinel().getMaster());
 
-			this.sentinel.getNodes().forEach(s -> sentinelConfig.sentinel(s, this.sentinel.getPort()));
+			this.properties.getRedis().getSentinel().getNodes().forEach(s ->
+					sentinelConfig.sentinel(s, this.properties.getRedis().getSentinel().getPort()));
 
-			if (Objects.nonNull(this.sentinel.getPassword())) {
-				sentinelConfig.setPassword(this.sentinel.getPassword());
-				sentinelConfig.setSentinelPassword(this.sentinel.getPassword());
+			if (Objects.nonNull(this.properties.getRedis().getSentinel().getPassword())) {
+				sentinelConfig.setPassword(this.properties.getRedis().getSentinel().getPassword());
+				sentinelConfig.setSentinelPassword(this.properties.getRedis().getSentinel().getPassword());
 			}
 
 			lettuceConnectionFactory = new LettuceConnectionFactory(sentinelConfig, lettuceConfiguration);
@@ -181,6 +124,7 @@ public class CacheRedisConfiguration implements CachingConfigurer {
 
 	@Bean("redisTemplate")
 	public RedisTemplate<String, String> redisTemplate() {
+		_log.info("start create redisTemplate");
 		final StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory());
 
 		ObjectMapper om = this.createObjectMapper();
@@ -203,7 +147,7 @@ public class CacheRedisConfiguration implements CachingConfigurer {
 
 	@Bean
     public RedisCacheConfiguration cacheConfiguration() {
-        return RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(this.cacheDuration))
+        return RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(this.properties.getRedis().getCacheDuration()))
                         .disableCachingNullValues()
                         .serializeValuesWith(SerializationPair
                                         .fromSerializer(new GenericJackson2JsonRedisSerializer(createObjectMapper())));
@@ -225,7 +169,8 @@ public class CacheRedisConfiguration implements CachingConfigurer {
             }
 
 			configurationMap.put(CacheConstants.Others.DEFAULT,
-					RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(this.cacheDuration)));
+					RedisCacheConfiguration.defaultCacheConfig().entryTtl(Duration.ofMinutes(
+							this.properties.getRedis().getCacheDuration())));
             
             builder.withInitialCacheConfigurations(configurationMap);
         };

@@ -468,4 +468,16 @@ public final class LabelKey {
 	public static final String ERROR_DATA_ALREADY_VERIFIED = "error.data-already-verified";
 
     public static final String ERROR_TEMPLATE_NOT_FOUND = "error.template-not-found";
+
+    public static final String ERROR_DUPLICATE_PRIMARY_DATA = "error.duplicate-primary-data";
+
+    public static final String ERROR_CUSTOMER_ALREADY_ACTIVE = "error.customer-already-active";
+
+	public static final String LABEL_EXTEND = "label.extend";
+
+	public static final String ERROR_PRIMARY_DATA_CAN_NOT_BE_EMPTY = "error.primary-data-can-not-be-empty";
+
+	public static final String ERROR_EXTEND_DATA_HAS_REACH_LIMIT = "error.extend-data-has-reach-limit";
+
+	public static final String ERROR_PRIMARY_DATA_CAN_NOT_DELETE = "error.primary-data-can-not-be-deleted";
 }

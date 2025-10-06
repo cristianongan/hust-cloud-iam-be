@@ -21,4 +21,8 @@ public interface CustomerService {
     TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq);
 
     void verify(CustomerDataReq otpReq);
+
+    void addDataLookup(SubscribeReq subscribeReq);
+
+    void removeDataLookup(SubscribeReq subscribeReq);
 }

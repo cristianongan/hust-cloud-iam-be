@@ -1,30 +1,28 @@
 package org.mbg.anm.configuration;
 
+import io.lettuce.core.ClientOptions;
+import io.lettuce.core.resource.DefaultClientResources;
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.mbg.anm.filer.SecurityFilter;
+import org.mbg.common.cache.CacheProperties;
 import org.mbg.common.security.configuration.AuthenticationProperties;
 import org.mbg.common.security.util.SecurityConstants;
-import org.mbg.anm.util.GatewayConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.config.Config;
-import org.redisson.spring.data.connection.RedissonConnectionFactory;
+import org.mbg.common.util.Validator;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
-import org.springframework.security.config.Customizer;
+import org.springframework.data.redis.connection.*;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettucePoolingClientConfiguration;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.oidc.web.server.logout.OidcClientInitiatedServerLogoutSuccessHandler;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
-import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers;
-import org.springframework.security.oauth2.client.web.server.DefaultServerOAuth2AuthorizationRequestResolver;
-import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.client.web.server.WebSessionServerOAuth2AuthorizedClientRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.logout.DelegatingServerLogoutHandler;
 import org.springframework.security.web.server.authentication.logout.HeaderWriterServerLogoutHandler;
 import org.springframework.security.web.server.authentication.logout.SecurityContextServerLogoutHandler;
 import org.springframework.security.web.server.authentication.logout.ServerLogoutHandler;
@@ -37,6 +35,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.time.Duration;
+import java.util.Objects;
 
 /**
  * Configuration class for Gateway Security in a WebFlux application.
@@ -56,6 +57,8 @@ public class GatewaySecurityConfiguration {
     private final WebClient.Builder webClientBuilder;
 
     private final ClientApiProperties webClientApiProperties;
+
+    private final CacheProperties properties;
 
     /**
      * Defines the primary security filter chain for the Gateway.
@@ -156,17 +159,60 @@ public class GatewaySecurityConfiguration {
 //        );
 //    }
 
-    /**
-     * Provides a primary {@link ReactiveRedisConnectionFactory} bean to establish a reactive connection to a Redis database
-     * using the given Redisson configuration.
-     *
-     * @param redissonConfig the configuration object for Redisson, used to create the connection factory
-     * @return an instance of {@link ReactiveRedisConnectionFactory} created with the provided Redisson configuration
-     */
     @Bean
     @Primary
-    public ReactiveRedisConnectionFactory reactiveRedisConnectionFactory(Config redissonConfig) {
-        return new RedissonConnectionFactory(redissonConfig);
+    public LettuceConnectionFactory  reactiveFromGeneric() {
+        LettuceConnectionFactory lettuceConnectionFactory;
+
+        GenericObjectPoolConfig poolConfig = new GenericObjectPoolConfig();
+
+        poolConfig.setMaxIdle(this.properties.getRedis().getLettucePool().getMaxIdle());
+        poolConfig.setMinIdle(this.properties.getRedis().getLettucePool().getMinIdle());
+        poolConfig.setMaxWait(Duration.ofMillis(this.properties.getRedis().getLettucePool().getMaxWaitMillis()));
+        poolConfig.setMaxTotal(this.properties.getRedis().getLettucePool().getMaxTotal());
+
+        // @formatter:off
+        ClientOptions clientOptions = ClientOptions.builder()
+                .disconnectedBehavior(ClientOptions.DisconnectedBehavior.REJECT_COMMANDS)
+                .autoReconnect(true)
+                .build();
+
+        LettucePoolingClientConfiguration lettuceConfiguration = LettucePoolingClientConfiguration.builder()
+                .commandTimeout(Duration.ofMillis(this.properties.getRedis().getLettucePool().getCommandTimeout()))
+                .shutdownTimeout(Duration.ofMillis(this.properties.getRedis().getLettucePool().getShutdownTimeout()))
+                .clientOptions(clientOptions)
+                .clientResources(DefaultClientResources.create())
+                .poolConfig(poolConfig)
+                .build();
+        // @formatter:on
+
+        if (Validator.equals(this.properties.getRedis().getMode(),
+                CacheProperties.Mode.STANDALONE.name().toLowerCase())) {
+            RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
+
+            redisStandaloneConfiguration.setHostName(this.properties.getRedis().getStandalone().getHost());
+            redisStandaloneConfiguration.setPort(this.properties.getRedis().getStandalone().getPort());
+            redisStandaloneConfiguration.setPassword(RedisPassword.of(this.properties.getRedis().getStandalone().getPassword()));
+
+            lettuceConnectionFactory =
+                    new LettuceConnectionFactory(redisStandaloneConfiguration, lettuceConfiguration);
+        } else {
+            RedisSentinelConfiguration sentinelConfig =
+                    new RedisSentinelConfiguration().master(this.properties.getRedis().getSentinel().getMaster());
+
+            this.properties.getRedis().getSentinel().getNodes().forEach(s ->
+                    sentinelConfig.sentinel(s, this.properties.getRedis().getSentinel().getPort()));
+
+            if (Objects.nonNull(this.properties.getRedis().getSentinel().getPassword())) {
+                sentinelConfig.setPassword(this.properties.getRedis().getSentinel().getPassword());
+                sentinelConfig.setSentinelPassword(this.properties.getRedis().getSentinel().getPassword());
+            }
+
+            lettuceConnectionFactory = new LettuceConnectionFactory(sentinelConfig, lettuceConfiguration);
+
+        }
+
+        return lettuceConnectionFactory;
     }
 
     /**

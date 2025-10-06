@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.security.UserPrincipal;
 import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.cache.CacheProperties;
 import org.mbg.common.cache.util.CacheConstants;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;

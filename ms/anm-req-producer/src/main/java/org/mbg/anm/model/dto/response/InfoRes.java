@@ -28,5 +28,7 @@ public class InfoRes implements Serializable {
         private String value;
 
         private Integer verified;
+
+        private Integer isPrimary;
     }
 }

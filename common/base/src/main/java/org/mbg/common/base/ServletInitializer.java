@@ -1,5 +1,6 @@
 package org.mbg.common.base;
 
+import org.mbg.common.cache.CacheProperties;
 import org.mbg.common.cache.CacheRedisConfiguration;
 import org.mbg.common.cache.CachingHttpHeadersFilter;
 import org.mbg.common.security.configuration.AuthenticationProperties;
@@ -11,7 +12,7 @@ import jakarta.servlet.FilterRegistration;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RedissonClient;
+//import org.redisson.api.RedissonClient;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
@@ -40,7 +41,7 @@ public class ServletInitializer extends SpringBootServletInitializer implements 
 
 		CacheRedisConfiguration redisConfig = null;
 
-		RedissonClient redissonClient = null;
+//		RedissonClient redissonClient = null;
 
 		try {
 			redisTemplate = (RedisTemplate) this.context.getBean(RedisTemplate.class);
@@ -51,7 +52,7 @@ public class ServletInitializer extends SpringBootServletInitializer implements 
 		}
 
 		try {
-			redissonClient = this.context.getBean(RedissonClient.class);
+//			redissonClient = this.context.getBean(RedissonClient.class);
 		} catch (Exception e) {
 			_log.error("RedissonClient is not configured");
 		}
@@ -59,14 +60,15 @@ public class ServletInitializer extends SpringBootServletInitializer implements 
 		try {
 			if (Objects.nonNull(redisTemplate) && Objects.nonNull(redisConfig)) {
 				if (Validator.equals(Objects.requireNonNull(redisConfig).getMode(),
-						CacheRedisConfiguration.Mode.STANDALONE.name().toLowerCase())) {
+						CacheProperties.Mode.STANDALONE.name().toLowerCase())) {
 				    Objects.requireNonNull(redisTemplate.getConnectionFactory()).getConnection();
 				} else {
 				    Objects.requireNonNull(redisTemplate.getConnectionFactory()).getSentinelConnection();
 				}
-			} else if (Validator.isNotNull(redissonClient)) {
-			    Objects.requireNonNull(Objects.requireNonNull(redissonClient).getConfig()).getConnectionListener();
 			}
+//			else if (Validator.isNotNull(redissonClient)) {
+//			    Objects.requireNonNull(Objects.requireNonNull(redissonClient).getConfig()).getConnectionListener();
+//			}
 		} catch (Exception e) {
 			System.out.println(
 					"-------------------------------------------------------------------------------------------");
