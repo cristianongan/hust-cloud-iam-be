@@ -49,8 +49,7 @@ public abstract class AbstractMessageListener<T> implements SmartLifecycle {
                 try {
                     var opts = StreamReadOptions.empty()
                             .count(1)
-                            .count(1)
-                            .block(Duration.ofSeconds(1));
+                            .block(Duration.ofMillis(20));
 
                     List<ObjectRecord<String, T>> messages =
                             redisTemplate.opsForStream().read(payloadType, c, opts,

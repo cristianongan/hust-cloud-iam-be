@@ -120,8 +120,8 @@ public class RecordRepositoryImpl implements RecordRepositoryExtend {
         params.put("deletedStatus", EntityStatus.DELETED.getStatus());
 
         if (Validator.isNotNull(lookupReq.getSubscriberId())) {
-            sql.append(" AND e.subscriberId = :subscriberId ");
-            params.put("subscriberId",lookupReq.getSubscriberId());
+            sql.append(" AND e.customerId = :customerId ");
+            params.put("customerId",lookupReq.getCustomerId());
         }
 
         return sql;
