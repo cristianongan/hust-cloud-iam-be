@@ -37,13 +37,4 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "status")
     private Integer status;
-
-    @Column(name = "sync_status")
-    private Integer syncStatus;
-
-    @Column(name = "last_scan")
-    private LocalDateTime lastScan;
-
-    @Column(name = "wait_at_lease")
-    private LocalDateTime waitAtLease;
 }

@@ -157,4 +157,28 @@ create index record_type_record_id on record_type(record_id);
             alter table customer_data add column is_primary smallint default 0;
         </sql>
     </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-15" author="Nganph">
+        <sql>
+            alter table customer drop column last_scan ;
+            alter table customer drop column wait_at_lease ;
+            alter table customer drop column sync_status ;
+            alter table customer_data add column last_scan TIMESTAMP WITHOUT TIME ZONE;
+            alter table customer_data add column sync_status smallint;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-23-09-2025-01-16" author="Nganph">
+        <sql>
+            create index customer_data_sync_status_last_scan on customer_data(sync_status, last_scan);
+        </sql>
+    </changeSet>
+    <changeSet id="cms-structure-23-09-2025-01-17" author="Nganph">
+        <sql>
+            alter table record_ drop column subscriber_id ;
+            alter table record_ add customer_id bigint;
+            create index record_customer_id on record_(customer_id);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

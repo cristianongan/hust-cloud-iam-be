@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.mbg.anm.consumer.GroupIbApiSender;
 import org.mbg.anm.consumer.request.GroupIbReq;
 import org.mbg.anm.consumer.response.GroupIbCompromisedRes;
-import org.mbg.anm.queue.RedisPriorityMessageWorker;
+import org.mbg.anm.queue.LookUpDataMessageListener;
 import org.mbg.common.base.repository.RecordRepository;
 import org.mbg.common.api.util.HeaderUtil;
 import org.mbg.common.base.enums.CustomerDataType;
@@ -20,16 +20,18 @@ import org.mbg.common.base.model.Record;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.common.model.RedisMessage;
-import org.mbg.common.queue.RedisQueueFactory;
 import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.Validator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.task.TaskExecutor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -37,9 +39,10 @@ import java.util.Map;
 @Slf4j
 @Component
 public class ApiConsumerJob {
-//    private final RedisQueueFactory redisQueueFactory;
 
     private final ApiConsumerProperties apiConsumerProperties;
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     private final GroupIbApiSender groupIbApiSender;
 
@@ -47,7 +50,6 @@ public class ApiConsumerJob {
 
     private final RecordRepository recordRepository;
 
-//    private final ProducerRequestRepository producerRequestRepository;
     private final CustomerRepository customerRepository;
 
     private final CustomerDataRepository customerDataRepository;
@@ -55,21 +57,18 @@ public class ApiConsumerJob {
     private final Gson gson;
 
     public ApiConsumerJob(ApiConsumerProperties props,
-//                          RedisQueueFactory  redisQueueFactory,
                        GroupIbApiSender groupIbApiSender, RecordRepository recordRepository,
-//                       ProducerRequestRepository producerRequestRepository,
                        CustomerRepository customerRepository, CustomerDataRepository customerDataRepository,
-                       Gson gson,
+                       Gson gson, RedisTemplate<String, Object> redisTemplate,
                        @Qualifier("asyncExecutor") TaskExecutor taskExecutor) {
         this.apiConsumerProperties = props;
         this.taskExecutor = taskExecutor;
-//        this.redisQueueFactory = redisQueueFactory;
         this.groupIbApiSender = groupIbApiSender;
         this.recordRepository = recordRepository;
-//        this.producerRequestRepository = producerRequestRepository;
         this.customerRepository = customerRepository;
         this.customerDataRepository = customerDataRepository;
         this.gson = gson;
+        this.redisTemplate = redisTemplate;
     }
 
     @PostConstruct
@@ -79,50 +78,45 @@ public class ApiConsumerJob {
             apiConsumerProperties.getGroups().forEach(group -> {
                 group.getAccounts().forEach(account -> {
                     _log.info("create consumer {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
-                    RedisPriorityMessageWorker worker = new RedisPriorityMessageWorker(
-                            this::craw,
-//                            redisQueueFactory,
-                            null,
+                    LookUpDataMessageListener worker = new LookUpDataMessageListener(
+                            (id) -> {
+                                this.craw(id, group.getApi(),
+                                        HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),
+                                        group.getDataSource());
+                            },
+                            redisTemplate,
                             taskExecutor,
-                            group.getTopic(),
-                            () -> HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),
-                            group.getDataSource(),
-                            group.getApi());
+                            account.getUser(),
+                            group.getGroupName(),
+                            group.getTopic());
                     worker.start();
                 });
             });
         }
     }
 
-    protected void craw(String api, String token, String dataSource, RedisMessage message) {
-        Long id = (Long) message.getPayload();
-
+    @Transactional
+    protected void craw(Long id, String api , String token, String dataSource) {
         if (Validator.isNull(id)) {
             return;
         }
 
-//        ProducerRequest req = this.producerRequestRepository.findById(id).orElse(null);
+        CustomerData dataItem = this.customerDataRepository.findByIdAndStatus(id, EntityStatus.ACTIVE.getStatus());
 
-        Customer customer = this.customerRepository.findByIdAndStatus(id, EntityStatus.ACTIVE.getStatus());
-
-        if (Validator.isNull(customer)) {
+        if (Validator.isNull(dataItem)) {
             return;
         }
-
-        List<CustomerData> data = this.customerDataRepository.findByCustomerIdAndStatus(customer.getId(), EntityStatus.ACTIVE.getStatus());
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
 
         StringBuilder filter = new StringBuilder();
-        data.forEach(dataItem -> {
-            if (Validator.equals(dataItem.getType(), CustomerDataType.EMAIL.getValue())) {
-                filter.append("email:");
-            }
-            if (Validator.equals(dataItem.getType(), CustomerDataType.PHONE.getValue())) {
-                filter.append("phone:");
-            }
-            filter.append(dataItem.getValue());
-        });
+        if (Validator.equals(dataItem.getType(), CustomerDataType.EMAIL.getValue())) {
+            filter.append("email:");
+        }
+        if (Validator.equals(dataItem.getType(), CustomerDataType.PHONE.getValue())) {
+            filter.append("phone:");
+        }
+        filter.append(dataItem.getValue());
 
         GroupIbReq groupIbReq = new GroupIbReq();
         groupIbReq.setMethod(HttpMethod.GET);
@@ -142,24 +136,27 @@ public class ApiConsumerJob {
         if (Validator.isNotNull(response.getItems())) {
             List<Record> records = new ArrayList<>();
             response.getItems().forEach(item -> {
-                Record record = new Record(response.getResultId(), Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null, dataSource,
-                        item.getLeakName(), DateUtil.utcToTimeStampSecond(item.getLeakPublished()),
-                        DateUtil.utcToTimeStampSecond(item.getUploadTime()),
-                        Validator.isNotNull(item.getEvaluation()) ? resolveSeverityGroupIb(item.getEvaluation().getSeverity()) : null ,
-                        this.gson.fromJson(item.getAddInfo(), new TypeToken<Map<String, Object>>(){}.getType()),
-                        item.getDescription()
-                        );
+                String leakId = response.getResultId();
+                if (!recordRepository.existsByCustomerIdAndLeakId(dataItem.getCustomerId(), leakId)) {
+                    Record record = new Record(dataItem.getCustomerId() , leakId, Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null, dataSource,
+                            item.getLeakName(), DateUtil.utcToTimeStampSecond(item.getLeakPublished()),
+                            DateUtil.utcToTimeStampSecond(item.getUploadTime()),
+                            Validator.isNotNull(item.getEvaluation()) ? resolveSeverityGroupIb(item.getEvaluation().getSeverity()) : null ,
+                            this.gson.fromJson(item.getAddInfo(), new TypeToken<Map<String, Object>>(){}.getType()),
+                            item.getDescription()
+                    );
 
-                record.setSubscriberId(customer.getSubscriberId());
-
-                records.add(record);
+                    records.add(record);
+                }
             });
 
             this.recordRepository.saveAll(records);
         }
 
-        customer.setSyncStatus(CustomerSyncStatus.UPDATED.getStatus());
-        this.customerRepository.save_(customer);
+        dataItem.setSyncStatus(CustomerSyncStatus.UPDATED.getStatus());
+        dataItem.setLastScan(LocalDateTime.now());
+
+        this.customerDataRepository.save(dataItem);
     }
 
     private Integer resolveSeverityGroupIb(String input) {

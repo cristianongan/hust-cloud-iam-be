@@ -29,6 +29,8 @@ public class ApiConsumerProperties {
         private String topic;
 
         private String dataSource;
+
+        private String groupName;
     }
 
     @Data
