@@ -318,7 +318,7 @@ public class CustomerServiceImpl implements CustomerService {
                 });
 
                 if (dataCount.get() >= EXTEND_LIMIT) {
-                    throw new BadRequestException(ErrorCode.MSG1031);
+                    throw new BadRequestException(ErrorCode.MSG1040);
                 }
             }
 
@@ -347,7 +347,7 @@ public class CustomerServiceImpl implements CustomerService {
                 }
 
                 if (dataCount.get() >= EXTEND_LIMIT) {
-                    throw new BadRequestException(ErrorCode.MSG1031);
+                    throw new BadRequestException(ErrorCode.MSG1040);
                 }
 
                 oldSet.add(item.getType());
