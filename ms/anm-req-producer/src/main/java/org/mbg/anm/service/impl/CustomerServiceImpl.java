@@ -174,6 +174,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
+        Customer customer = this.getCus(lookupReq.getSubscriberId());
+
+        lookupReq.setCustomerId(customer.getId());
+
         List<Record> records = this.recordRepository.search(lookupReq);
 
         List<RecordResponse> content = this.recordMapper.toDto(records);
