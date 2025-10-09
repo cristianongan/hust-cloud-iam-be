@@ -38,6 +38,12 @@
 
         <dependency>
             <groupId>org.mbg</groupId>
+            <artifactId>mbg-queue</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mbg</groupId>
             <artifactId>mbg-label-bundle</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

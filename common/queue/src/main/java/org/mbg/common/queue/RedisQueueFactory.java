@@ -3,22 +3,11 @@ package org.mbg.common.queue;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mbg.common.comparator.RedisMessageComparator;
-import org.mbg.common.configuration.RedisQueueProperties;
-import org.mbg.common.model.RedisMessage;
-import org.mbg.common.util.Validator;
 //import org.redisson.api.RDelayedQueue;
 //import org.redisson.api.RPriorityBlockingQueue;
 //import org.redisson.api.RQueue;
 //import org.redisson.api.RedissonClient;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 //@Configuration

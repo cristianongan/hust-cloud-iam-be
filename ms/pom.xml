@@ -20,7 +20,6 @@
         <module>anm-req-producer</module>
         <module>anm-req-consumer</module>
         <module>anm-cms</module>
-        <module>anm-api-gateway</module>
     </modules>
 
     <properties>

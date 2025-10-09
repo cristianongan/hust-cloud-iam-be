@@ -8,6 +8,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -40,4 +41,10 @@ public class CustomerData extends AbstractAuditingEntity implements Serializable
 
     @Column(name = "is_primary")
     private Integer isPrimary;
+
+    @Column(name = "last_scan")
+    private LocalDateTime lastScan;
+
+    @Column(name = "sync_status")
+    private Integer syncStatus;
 }

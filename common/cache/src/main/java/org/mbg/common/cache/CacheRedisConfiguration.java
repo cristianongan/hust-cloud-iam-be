@@ -122,27 +122,38 @@ public class CacheRedisConfiguration implements CachingConfigurer {
 		return lettuceConnectionFactory;
 	}
 
-	@Bean("redisTemplate")
-	public RedisTemplate<String, String> redisTemplate() {
-		_log.info("start create redisTemplate");
-		final StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory());
+//	@Bean
+//	public RedisTemplate<String, String> redisTemplate() {
+//		final StringRedisTemplate template = new StringRedisTemplate(redisConnectionFactory());
+//
+//		ObjectMapper om = this.createObjectMapper();
+//
+//		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
+//				new Jackson2JsonRedisSerializer<>(om, Object.class);
+//
+//		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
+//
+//		template.setKeySerializer(stringSerializer);
+//		template.setValueSerializer(jackson2JsonRedisSerializer);
+//
+//		template.setHashKeySerializer(stringSerializer);
+//		template.setHashValueSerializer(jackson2JsonRedisSerializer);
+//
+//		template.setDefaultSerializer(stringSerializer);
+//
+//		return template;
+//	}
 
-		ObjectMapper om = this.createObjectMapper();
-
-		Jackson2JsonRedisSerializer<Object> jackson2JsonRedisSerializer =
-				new Jackson2JsonRedisSerializer<>(om, Object.class);
-
-		RedisSerializer<String> stringSerializer = new StringRedisSerializer();
-
-		template.setKeySerializer(stringSerializer);
-		template.setValueSerializer(jackson2JsonRedisSerializer);
-
-		template.setHashKeySerializer(stringSerializer);
-		template.setHashValueSerializer(jackson2JsonRedisSerializer);
-		
-		template.setDefaultSerializer(stringSerializer);
-
-		return template;
+	@Bean
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf, ObjectMapper om) {
+		RedisTemplate<String, Object> tpl = new RedisTemplate<>();
+		tpl.setConnectionFactory(cf);
+		tpl.setKeySerializer(new StringRedisSerializer());
+		tpl.setValueSerializer(new GenericJackson2JsonRedisSerializer(om));
+		tpl.setHashKeySerializer(new StringRedisSerializer());
+		tpl.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(om));
+		tpl.afterPropertiesSet();
+		return tpl;
 	}
 
 	@Bean

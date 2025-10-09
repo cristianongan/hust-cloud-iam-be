@@ -181,3 +181,7 @@ redis-queue:
   priority-topics:
     - group-ib-compromised
   group-ib-request-topic: group-ib-compromised
+
+message-listener:
+  lookup-message-limit: 60
+  lookup-topic-name: lookup

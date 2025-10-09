@@ -10,4 +10,6 @@ import java.util.List;
 
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Long>, RecordRepositoryExtend {
+
+    Boolean existsByCustomerIdAndLeakId(Long customerId, String leakId);
 }

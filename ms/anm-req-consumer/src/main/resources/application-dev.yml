@@ -172,12 +172,8 @@ api-consumer:
   groups:
   - data-source: group-ib
     api: https://tap.group-ib.com/api/v3/compromised/breached
-    topic: group-ib-compromised
+    topic: lookup
+    group-name: group-ib-lookup
     accounts:
       - user: thanglx@mobifoneglobal.vn
         key: GuFEek4ApzpCbA3gqMhtWHVPpjbQleSH
-
-redis-queue:
-  priority-topics:
-    - group-ib-compromised
-  group-ib-request-topic: group-ib-compromised

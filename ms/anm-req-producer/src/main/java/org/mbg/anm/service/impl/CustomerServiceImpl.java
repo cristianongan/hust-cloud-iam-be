@@ -93,9 +93,6 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setReference(subscribeReq.getReference());
 
-        customer.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
-        customer.setWaitAtLease(LocalDateTime.now());
-
         customer = this.customerRepository.save_(customer);
 
         if (Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())) {
@@ -134,6 +131,8 @@ public class CustomerServiceImpl implements CustomerService {
                     customerData.setValue(item.getValue());
                     customerData.setStatus(EntityStatus.ACTIVE.getStatus());
                     customerData.setIsPrimary(1);
+                    customerData.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
+                    customerData.setLastScan(LocalDateTime.MIN);
 
                     datas.add(customerData);
                 }
@@ -164,7 +163,6 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         customer.setStatus(EntityStatus.INACTIVE.getStatus());
-        customer.setSyncStatus(CustomerSyncStatus.CLOSED.getStatus());
         this.customerRepository.save_(customer);
 
         return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();
@@ -355,6 +353,8 @@ public class CustomerServiceImpl implements CustomerService {
                 customerData.setValue(item.getValue());
                 customerData.setStatus(EntityStatus.ACTIVE.getStatus());
                 customerData.setIsPrimary(0);
+                customerData.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
+                customerData.setLastScan(LocalDateTime.MIN);
 
                 data.add(customerData);
                 dataCount.getAndIncrement();
