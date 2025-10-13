@@ -142,11 +142,11 @@ cache:
         # - 10.0.0.17
         # - 10.0.0.18
     lettuce-pool:
-      shutdown-timeout: 200 #milliseconds
-      command-timeout: 200 #milliseconds
+      shutdown-timeout: 500 #milliseconds
+      command-timeout: 500 #milliseconds
       min-idle: 1
       max-idle: 20
-      max-wait-millis: 200 #milliseconds
+      max-wait-millis: 500 #milliseconds
       max-total: 20
     cache-duration: 1440 # thời gian lưu cache (đơn vị phút)
   time-to-lives: # time to live in seconds
@@ -172,7 +172,8 @@ rsa:
     public-key: 'MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAE='
 scheduling:
   craw-data:
-    enabled: false
+    name: craw-data-dev
+    enabled: true
     push-message-limit: 60
     cron: '0 0/1 * * * *'
     lock-at-least: PT30S
@@ -184,4 +185,4 @@ redis-queue:
 
 message-listener:
   lookup-message-limit: 60
-  lookup-topic-name: lookup
+  lookup-topic-name: lookupLst

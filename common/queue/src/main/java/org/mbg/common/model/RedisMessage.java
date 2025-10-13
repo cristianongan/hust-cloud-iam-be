@@ -24,12 +24,10 @@ public class RedisMessage implements Message, Serializable {
 
     private Long createdAt;
 
-    public static RedisMessage of(Object payload, String topic, int priority) {
+    public static RedisMessage of(Object payload) {
         return RedisMessage.builder()
                 .id(UUID.randomUUID().toString())
                 .payload(payload)
-                .topic(topic)
-                .priority(priority)
                 .createdAt(System.currentTimeMillis())
                 .build();
     }

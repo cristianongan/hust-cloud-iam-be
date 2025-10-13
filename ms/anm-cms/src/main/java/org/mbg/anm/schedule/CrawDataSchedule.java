@@ -10,6 +10,7 @@ import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.schedule.Worker;
+import org.mbg.common.model.RedisMessage;
 import org.mbg.common.util.Validator;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.scheduling.annotation.Async;
@@ -35,7 +36,7 @@ public class CrawDataSchedule implements Worker {
 
     @Override
     @Scheduled(cron = "${scheduling.craw-data.cron}")
-    @SchedulerLock(name = "craw-data",
+    @SchedulerLock(name = "${scheduling.craw-data.name:craw-data}",
             lockAtLeastFor = "${scheduling.craw-data.lock-at-least}",
             lockAtMostFor = "${scheduling.craw-data.lock-at-most}")
     @Async("scheduleExecutor")
@@ -52,11 +53,11 @@ public class CrawDataSchedule implements Worker {
         _log.info("CrawDataSchedule found {} items", data.size());
 
         if (Validator.isNotNull(data)) {
-            List<Long> ids = new ArrayList<>(data.size());
+            List<RedisMessage> ids = new ArrayList<>(data.size());
 
             data.parallelStream().forEach(producerRequest -> {
-                producerRequest.setStatus(CustomerSyncStatus.WAITING.getStatus());
-                ids.add(producerRequest.getId());
+                producerRequest.setSyncStatus(CustomerSyncStatus.WAITING.getStatus());
+                ids.add(RedisMessage.of(producerRequest.getId()) );
             });
 
             try {

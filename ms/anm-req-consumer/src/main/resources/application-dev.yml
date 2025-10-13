@@ -139,11 +139,11 @@ cache:
         # - 10.0.0.17
         # - 10.0.0.18
     lettuce-pool:
-      shutdown-timeout: 200 #milliseconds
-      command-timeout: 200 #milliseconds
+      shutdown-timeout: 500 #milliseconds
+      command-timeout: 500 #milliseconds
       min-idle: 1
       max-idle: 20
-      max-wait-millis: 200 #milliseconds
+      max-wait-millis: 500 #milliseconds
       max-total: 20
     cache-duration: 1440 # thời gian lưu cache (đơn vị phút)
   time-to-lives: # time to live in seconds
@@ -172,7 +172,7 @@ api-consumer:
   groups:
   - data-source: group-ib
     api: https://tap.group-ib.com/api/v3/compromised/breached
-    topic: lookup
+    topic: lookupLst
     group-name: group-ib-lookup
     accounts:
       - user: thanglx@mobifoneglobal.vn

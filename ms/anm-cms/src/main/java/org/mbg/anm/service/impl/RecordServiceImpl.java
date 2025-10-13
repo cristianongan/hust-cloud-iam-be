@@ -56,7 +56,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordTypeStatisticRes recordStatistic() {
+    public RecordTypeStatisticRes recordTypeStatistic() {
+
+
         return null;
     }
 }

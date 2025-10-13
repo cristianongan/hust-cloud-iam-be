@@ -79,8 +79,8 @@ public class ApiConsumerJob {
                 group.getAccounts().forEach(account -> {
                     _log.info("create consumer {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
                     LookUpDataMessageListener worker = new LookUpDataMessageListener(
-                            (id) -> {
-                                this.craw(id, group.getApi(),
+                            (item) -> {
+                                this.craw((Long) item.getPayload(), group.getApi(),
                                         HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),
                                         group.getDataSource());
                             },

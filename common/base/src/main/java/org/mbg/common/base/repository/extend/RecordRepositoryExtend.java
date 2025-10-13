@@ -7,6 +7,7 @@ import org.mbg.common.base.model.dto.request.RecordReq;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RecordRepositoryExtend {
     List<Record> search(LookupReq lookupReq);
@@ -16,4 +17,6 @@ public interface RecordRepositoryExtend {
     List<Record> searchCms(RecordReq recordReq, Pageable pageable);
 
     Long countCms(RecordReq recordReq);
+
+    Map<String, Long> countTypeRecords(RecordReq recordReq);
 }

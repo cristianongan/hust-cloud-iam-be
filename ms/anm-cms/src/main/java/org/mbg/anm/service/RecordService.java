@@ -9,5 +9,5 @@ import org.springframework.data.domain.Pageable;
 public interface RecordService {
     Page<RecordDTO> search(RecordReq req);
 
-    RecordTypeStatisticRes recordStatistic();
+    RecordTypeStatisticRes recordTypeStatistic();
 }
