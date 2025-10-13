@@ -93,6 +93,11 @@ public class RecordRepositoryImpl implements RecordRepositoryExtend {
         return (Long) query.getSingleResult();
     }
 
+    @Override
+    public Map<String, Long> countTypeRecords(RecordReq recordReq) {
+        return Map.of();
+    }
+
     private StringBuilder createWhereQueryCms(RecordReq recordReq, Map<String, Object> params) {
 
         StringBuilder sql = new StringBuilder(" WHERE 1=1 AND e.status != :deletedStatus ");

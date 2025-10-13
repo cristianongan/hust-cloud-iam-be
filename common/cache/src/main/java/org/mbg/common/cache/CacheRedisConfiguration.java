@@ -145,13 +145,14 @@ public class CacheRedisConfiguration implements CachingConfigurer {
 //	}
 
 	@Bean
-	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf, ObjectMapper om) {
+	public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory cf) {
+		ObjectMapper om = this.createObjectMapper();
 		RedisTemplate<String, Object> tpl = new RedisTemplate<>();
 		tpl.setConnectionFactory(cf);
 		tpl.setKeySerializer(new StringRedisSerializer());
 		tpl.setValueSerializer(new GenericJackson2JsonRedisSerializer(om));
 		tpl.setHashKeySerializer(new StringRedisSerializer());
-		tpl.setHashValueSerializer(new GenericJackson2JsonRedisSerializer(om));
+		tpl.setHashValueSerializer(new StringRedisSerializer());
 		tpl.afterPropertiesSet();
 		return tpl;
 	}

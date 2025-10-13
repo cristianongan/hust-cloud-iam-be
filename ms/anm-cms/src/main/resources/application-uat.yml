@@ -177,3 +177,11 @@ scheduling:
     cron: '0 0/1 * * * *'
     lock-at-least: PT30S
     lock-at-most: PT50S
+redis-queue:
+  priority-topics:
+    - group-ib-compromised
+  group-ib-request-topic: group-ib-compromised
+
+message-listener:
+  lookup-message-limit: 60
+  lookup-topic-name: lookupLst
