@@ -9,8 +9,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class LookUpDataMessageListener extends AbstractMessageListener<RedisMessage> {
 
     public LookUpDataMessageListener(
-                                     JobHandler<RedisMessage> jobHandler, RedisTemplate<String, Object> redisTemplate,
+                                     JobHandler<RedisMessage> jobHandler, JobHandler<RedisMessage> onFail,
+                                     RedisTemplate<String, Object> redisTemplate,
                                      TaskExecutor taskExecutor, String consumer, String group, String topicName) {
-        super(RedisMessage.class, jobHandler, redisTemplate, taskExecutor, consumer, group, topicName);
+        super(RedisMessage.class, jobHandler, onFail, redisTemplate, taskExecutor, consumer, group, topicName);
     }
 }

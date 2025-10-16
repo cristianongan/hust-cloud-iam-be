@@ -181,4 +181,11 @@ create index record_type_record_id on record_type(record_id);
         </sql>
     </changeSet>
 
+    <changeSet id="cms-structure-23-09-2025-01-18" author="Nganph">
+        <sql>
+            CREATE INDEX idx_cd_sync_lastscan_nf
+                ON customer_data (sync_status, last_scan NULLS FIRST);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

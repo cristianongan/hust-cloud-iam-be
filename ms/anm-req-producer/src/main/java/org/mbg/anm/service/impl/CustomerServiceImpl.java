@@ -135,7 +135,6 @@ public class CustomerServiceImpl implements CustomerService {
                     customerData.setStatus(EntityStatus.ACTIVE.getStatus());
                     customerData.setIsPrimary(1);
                     customerData.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
-                    customerData.setLastScan(LocalDateTime.MIN);
 
                     datas.add(customerData);
                 }
