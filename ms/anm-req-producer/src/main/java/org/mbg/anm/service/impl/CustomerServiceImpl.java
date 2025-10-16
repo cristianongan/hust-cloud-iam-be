@@ -2,6 +2,7 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.feign.CmsClient;
 import org.mbg.anm.model.dto.request.CustomerDataReq;
 import org.mbg.anm.model.dto.response.InfoRes;
 import org.mbg.anm.model.dto.response.RecordResponse;
@@ -51,6 +52,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final RecordMapper recordMapper;
 
     private final OtpService otpService;
+
+    private final CmsClient cmsClient;
 
     private static final int EXTEND_LIMIT = 3;
 
