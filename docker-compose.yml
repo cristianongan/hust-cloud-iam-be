@@ -110,6 +110,7 @@ services:
     depends_on:
       - postgres
       - redis
+    networks: [mbg-anm-dev]
   cms-service:
     build:
       context: .
@@ -123,6 +124,7 @@ services:
     depends_on:
       - postgres
       - redis
+    networks: [mbg-anm-dev]
   req-producer-service:
     build:
       context: .
@@ -136,6 +138,7 @@ services:
     depends_on:
       - postgres
       - redis
+    networks: [mbg-anm-dev]
   req-consumer-service:
     build:
       context: .
@@ -149,6 +152,7 @@ services:
     depends_on:
       - postgres
       - redis
+    networks: [mbg-anm-dev]
   gateway-service:
     build:
       context: .
@@ -162,3 +166,4 @@ services:
     depends_on:
       - postgres
       - redis
+    networks: [mbg-anm-dev]
