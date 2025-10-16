@@ -12,7 +12,9 @@ import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.schedule.Worker;
 import org.mbg.common.model.RedisMessage;
 import org.mbg.common.util.Validator;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,7 +26,6 @@ import java.util.List;
 
 @Slf4j
 @Component
-@RequiredArgsConstructor
 @Transactional
 @ConditionalOnProperty(prefix = "scheduling.craw-data", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class CrawDataSchedule implements Worker {
@@ -33,6 +34,17 @@ public class CrawDataSchedule implements Worker {
     private final CustomerDataRepository customerDataRepository;
 
     private final MessageListenerProperties properties;
+
+
+    private final TaskExecutor taskExecutor;
+
+    public CrawDataSchedule(LookupMessageProducer lookupMessageProducer, CustomerDataRepository customerDataRepository,
+                            MessageListenerProperties properties, @Qualifier("asyncExecutor") TaskExecutor taskExecutor) {
+        this.lookupMessageProducer = lookupMessageProducer;
+        this.customerDataRepository = customerDataRepository;
+        this.properties = properties;
+        this.taskExecutor = taskExecutor;
+    }
 
     @Override
     @Scheduled(cron = "${scheduling.craw-data.cron}")
@@ -60,13 +72,20 @@ public class CrawDataSchedule implements Worker {
                 ids.add(RedisMessage.of(producerRequest.getId()) );
             });
 
+            this.customerDataRepository.saveAll(data);
+            this.customerDataRepository.flush();
+
             try {
-                lookupMessageProducer.publishBatch(ids);
+                this.taskExecutor.execute(() -> {
+//                    try {
+//                        Thread.sleep(200);
+//                    } catch (InterruptedException e) {
+//                    }
+                    lookupMessageProducer.publishBatch(ids);
+                });
             } catch (Exception e) {
                 _log.error("CrawDataSchedule producer occurred an exception {}", e.getMessage());
             }
-
-            this.customerDataRepository.saveAll(data);
         }
 
         _log.info("end CrawDataSchedule at {} with {} record", new Date(), Validator.isNotNull(data) ? data.size() : 0);

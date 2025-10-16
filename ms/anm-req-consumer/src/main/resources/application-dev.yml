@@ -13,6 +13,9 @@ logging:
     rollingpolicy:
       max-file-size: 100MB
 spring:
+  threads:
+    virtual:
+      enabled: true
   jackson:
     date-format: dd-MM-yyyy
     time-zone: Asia/Ho_Chi_Minh
@@ -139,11 +142,11 @@ cache:
         # - 10.0.0.17
         # - 10.0.0.18
     lettuce-pool:
-      shutdown-timeout: 500 #milliseconds
-      command-timeout: 500 #milliseconds
+      shutdown-timeout: 5000 #milliseconds
+      command-timeout: 5000 #milliseconds
       min-idle: 1
       max-idle: 20
-      max-wait-millis: 500 #milliseconds
+      max-wait-millis: 5000 #milliseconds
       max-total: 20
     cache-duration: 1440 # thời gian lưu cache (đơn vị phút)
   time-to-lives: # time to live in seconds
@@ -171,7 +174,8 @@ rsa:
 api-consumer:
   groups:
   - data-source: group-ib
-    api: https://tap.group-ib.com/api/v3/compromised/breached
+#    api: https://tap.group-ib.com/api/v3/compromised/breached
+    api: http://localhost:9080/lookup
     topic: lookupLst
     group-name: group-ib-lookup
     accounts:

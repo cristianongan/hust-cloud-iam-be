@@ -13,6 +13,9 @@ logging:
     rollingpolicy:
       max-file-size: 100MB
 spring:
+  threads:
+    virtual:
+      enabled: true
   jackson:
     date-format: dd-MM-yyyy
     time-zone: Asia/Ho_Chi_Minh
@@ -175,7 +178,7 @@ scheduling:
     name: craw-data-dev
     enabled: true
     push-message-limit: 60
-    cron: '0 0/1 * * * *'
+    cron: '0/1 * * * * *'
     lock-at-least: PT30S
     lock-at-most: PT50S
 redis-queue:

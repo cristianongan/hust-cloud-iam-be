@@ -23,6 +23,8 @@ public abstract class AbstractMessageListener<T> implements SmartLifecycle {
 
     private final JobHandler<T> jobHandler;
 
+    private final JobHandler<T> onFail;
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final TaskExecutor taskExecutor;
@@ -68,16 +70,11 @@ public abstract class AbstractMessageListener<T> implements SmartLifecycle {
                             try {
                                 this.jobHandler.handle(value);
                             } catch (Exception ex) {
-                                _log.error("[stream] handle fail id={}: {}", id, ex.getMessage(), ex);
-                                redisTemplate.opsForStream().add(StreamRecords.newRecord()
-                                        .in(topicName + ":DLQ")
-                                        .ofMap(Map.of(
-                                                "msgId", id.getValue(),
-                                                "payload", value.toString(),
-                                                "error", ex.getClass().getSimpleName() + ": " + ex.getMessage()
-                                        )));
-                                if (ackOnFail) {
-                                    redisTemplate.opsForStream().acknowledge(topicName, group, id);
+                                _log.error("[stream] handle fail id={}: {} start onFail", id, ex.getMessage(), ex);
+                                try {
+                                    this.onFail.handle(value);
+                                } catch (Exception e) {
+                                    _log.error("[stream] handle fail id={}: {} no callback", id, ex.getMessage(), ex);
                                 }
                             }
 
@@ -87,10 +84,11 @@ public abstract class AbstractMessageListener<T> implements SmartLifecycle {
                     }
                 } catch (Exception e) {
                     _log.info("[stream] poll error: {}", e.toString());
-                    try {
-                        Thread.sleep(200);
-                    } catch (InterruptedException ignored) {
-                    }
+                }
+
+                try {
+                    Thread.sleep(900);
+                } catch (InterruptedException ignored) {
                 }
             }
         });

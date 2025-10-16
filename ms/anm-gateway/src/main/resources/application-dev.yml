@@ -13,6 +13,9 @@ logging:
     rollingpolicy:
       max-file-size: 100MB
 spring:
+  threads:
+    virtual:
+      enabled: true
   jackson:
     date-format: dd-MM-yyyy
     time-zone: Asia/Ho_Chi_Minh
