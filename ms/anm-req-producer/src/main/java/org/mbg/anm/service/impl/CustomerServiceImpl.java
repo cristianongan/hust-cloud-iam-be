@@ -2,33 +2,42 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.feign.AuthClient;
 import org.mbg.anm.feign.CmsClient;
 import org.mbg.anm.model.dto.request.CustomerDataReq;
 import org.mbg.anm.model.dto.response.InfoRes;
 import org.mbg.anm.model.dto.response.RecordResponse;
 import org.mbg.anm.service.mapper.RecordMapper;
 import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.base.enums.ErrorCode;
+import org.mbg.common.base.configuration.ValidationProperties;
+import org.mbg.common.base.enums.*;
 import org.mbg.common.base.model.Record;
+import org.mbg.common.base.model.dto.UserDTO;
 import org.mbg.common.base.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
 import org.mbg.anm.model.dto.response.LookupResponse;
 import org.mbg.anm.model.dto.response.SubscribeRes;
-import org.mbg.common.base.enums.CustomerSyncStatus;
+import org.mbg.common.base.model.dto.request.UserReq;
 import org.mbg.common.base.model.dto.response.TransactionResponse;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.anm.service.CustomerService;
 import org.mbg.anm.service.mapper.CustomerMapper;
-import org.mbg.common.base.enums.CustomerDataType;
-import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.model.Customer;
 import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.base.repository.RecordRepository;
+import org.mbg.common.label.LabelKey;
+import org.mbg.common.label.Labels;
+import org.mbg.common.security.RsaProvider;
+import org.mbg.common.security.configuration.AuthenticationProperties;
+import org.mbg.common.security.exception.UnauthorizedException;
 import org.mbg.common.security.util.SecurityUtils;
 import org.mbg.common.util.Validator;
 import org.mbg.enums.OtpType;
+import org.mbg.service.EmailService;
 import org.mbg.service.OtpService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -55,6 +64,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CmsClient cmsClient;
 
+    private final AuthClient authClient;
+
+    private final RsaProvider rsaProvider;
+
+    private final ValidationProperties validationProperties;
+
+    private final EmailService emailService;
+
     private static final int EXTEND_LIMIT = 3;
 
     @Override
@@ -72,7 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
 
-        Customer customer = this.customerRepository.findByCustomerKey(key);
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(key, EntityStatus.DELETED.getStatus());
 
         if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())) {
             throw new BadRequestException(ErrorCode.MSG1038);
@@ -83,8 +100,10 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.INACTIVE.getStatus())) {
-            customer.setStatus(EntityStatus.EXTEND.getStatus());
+            customer.setStatus(EntityStatus.ACTIVE.getStatus());
         }
+
+        boolean isCreateUser = false;
 
         if (Validator.isNull(customer)) {
             customer = new Customer();
@@ -92,14 +111,18 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setSubscriberId(subscribeReq.getSubscriberId());
             customer.setClientId(clientId);
             customer.setStatus(EntityStatus.ACTIVE.getStatus());
+            isCreateUser = true;
         }
 
         customer.setReference(subscribeReq.getReference());
 
         customer = this.customerRepository.save_(customer);
 
-        if (Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+        if (Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus()) && isCreateUser) {
             Set<String> keys = new HashSet<>();
+
+            String phone = "";
+            String email = "";
 
             List<CustomerData> datas = new ArrayList<>();
             if (Validator.isNotNull(subscribeReq.getDataReqs())) {
@@ -143,6 +166,28 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             this.customerDataRepository.saveAll(datas);
+
+            try {
+                String username = customer.getSubscriberId();
+                String password = this.validationProperties.generateRandomPassword();
+                this.authClient.createCustomerUser(UserReq.builder()
+                        .username(username)
+                        .password(this.rsaProvider.encrypt(password))
+                        .phone(phone)
+                        .email(email)
+                        .build());
+
+                if (Validator.isNotNull(email)) {
+                    Map<String, String> valuesMap = new HashMap<>();
+
+                    valuesMap.put(TemplateField._USERNAME_.name(), username);
+                    valuesMap.put(TemplateField.PASSWORD.name(), password);
+
+                    this.emailService.send(email, TemplateCode.EMAIL_NEW_CUSTOMER.name(), valuesMap);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();
@@ -158,7 +203,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
 
-        Customer customer = this.customerRepository.findByCustomerKey(key);
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(key, EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {
             throw new BadRequestException(ErrorCode.MSG1027);
@@ -176,7 +221,9 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        Customer customer = this.getCus(lookupReq.getSubscriberId());
+        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
+
+        Customer customer = this.getCus(lookupReq.getSubscriberId(), clientId);
 
         lookupReq.setCustomerId(customer.getId());
 
@@ -191,18 +238,35 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public InfoRes info(SubscribeReq subscribeReq) {
-        if (Validator.isNull(subscribeReq.getSubscriberId())) {
+    public LookupResponse lookup(LookupReq lookupReq, String clientId) {
+        if (Validator.isNull(lookupReq.getSubscriberId())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
+        Customer customer = this.getCus(lookupReq.getSubscriberId(), clientId);
 
-        if (Validator.isNull(clientId)) {
-            throw new BadRequestException(ErrorCode.MSG1028);
+        lookupReq.setCustomerId(customer.getId());
+
+        List<Record> records = this.recordRepository.search(lookupReq);
+
+        List<RecordResponse> content = this.recordMapper.toDto(records);
+
+        return LookupResponse.builder()
+                .data(content)
+                .subscriberId(lookupReq.getSubscriberId())
+                .build();
+    }
+
+    @Override
+    public InfoRes info() {
+        UserDTO dto = authClient.detail();
+
+        if (Validator.isNull(dto)) {
+            throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        Customer customer = this.customerRepository.findByCustomerKey(getKey(clientId,  subscribeReq.getSubscriberId()));
+        Customer customer = this.customerRepository.findByUserIdAndStatusNot(dto.getId(),
+                EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {
             throw new BadRequestException(ErrorCode.MSG1029);
@@ -212,6 +276,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return InfoRes.builder()
                 .subscriberId(customer.getSubscriberId())
+                .clientId(customer.getClientId())
                 .data(data.stream().map(r -> InfoRes.CustomerDataRes.builder()
                         .value(r.getValue())
                         .type(Objects.requireNonNull(CustomerDataType.valueOfStatus(r.getType())).name())
@@ -222,18 +287,17 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq) {
+    public TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq, String clientId) {
         if (Validator.isNull(customerDataReq.getSubscriberId())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
-
-        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
 
         if (Validator.isNull(clientId)) {
             throw new BadRequestException(ErrorCode.MSG1028);
         }
 
-        Customer customer = this.customerRepository.findByCustomerKey(getKey(clientId,  customerDataReq.getSubscriberId()));
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(getKey(clientId, customerDataReq.getSubscriberId()),
+                EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {
             throw new BadRequestException(ErrorCode.MSG1029);
@@ -264,8 +328,8 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public void verify(CustomerDataReq customerDataReq) {
-        Customer customer = this.getCus(customerDataReq.getSubscriberId());
+    public void verify(CustomerDataReq customerDataReq, String clientId) {
+        Customer customer = this.getCus(customerDataReq.getSubscriberId(), clientId);
 
         CustomerData data = this.customerDataRepository.findByCustomerIdAndValueAndStatus(customer.getId(),
                 customerDataReq.getValue(), EntityStatus.ACTIVE.getStatus());
@@ -293,8 +357,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void addDataLookup(SubscribeReq subscribeReq) {
-        Customer customer = this.getCus(subscribeReq.getSubscriberId());
+    public void addDataLookup(SubscribeReq subscribeReq, String clientId) {
+        Customer customer = this.getCus(subscribeReq.getSubscriberId(), clientId);
 
         if (Validator.isNotNull(subscribeReq.getDataReqs())) {
             List<String> values =
@@ -326,7 +390,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             List<CustomerData> data = new ArrayList<>();
 
-            for (CustomerDataReq item: subscribeReq.getDataReqs()) {
+            for (CustomerDataReq item : subscribeReq.getDataReqs()) {
                 if (Validator.isNull(item)) {
                     throw new BadRequestException(ErrorCode.MSG1030);
                 }
@@ -360,7 +424,6 @@ public class CustomerServiceImpl implements CustomerService {
                 customerData.setStatus(EntityStatus.ACTIVE.getStatus());
                 customerData.setIsPrimary(0);
                 customerData.setSyncStatus(CustomerSyncStatus.NEW.getStatus());
-                customerData.setLastScan(LocalDateTime.MIN);
 
                 data.add(customerData);
                 dataCount.getAndIncrement();
@@ -372,8 +435,8 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
-    public void removeDataLookup(SubscribeReq subscribeReq) {
-        Customer customer = this.getCus(subscribeReq.getSubscriberId());
+    public void removeDataLookup(SubscribeReq subscribeReq, String clientId) {
+        Customer customer = this.getCus(subscribeReq.getSubscriberId(), clientId);
 
         if (Validator.isNotNull(subscribeReq.getDataReqs())) {
             List<String> values =
@@ -390,7 +453,7 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new BadRequestException(ErrorCode.MSG1042);
             }
 
-            for (CustomerData item: data) {
+            for (CustomerData item : data) {
                 if (Validator.equals(item.getIsPrimary(), 1)) {
                     throw new BadRequestException(ErrorCode.MSG1043);
                 }
@@ -402,18 +465,19 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private Customer getCus(String subscriberId) {
+    private Customer getCus(String subscriberId, String clientId) {
         if (Validator.isNull(subscriberId)) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
+//        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
 
         if (Validator.isNull(clientId)) {
             throw new BadRequestException(ErrorCode.MSG1028);
         }
 
-        Customer customer = this.customerRepository.findByCustomerKey(getKey(clientId, subscriberId));
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(getKey(clientId, subscriberId),
+                EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {
             throw new BadRequestException(ErrorCode.MSG1029);

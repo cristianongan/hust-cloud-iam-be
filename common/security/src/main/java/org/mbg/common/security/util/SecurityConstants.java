@@ -140,5 +140,7 @@ public final class SecurityConstants {
 		public static final String TOKEN = "token";
 
 		public static final String FAST_LOGIN_REFRESH_TOKEN =  "fast_login_refresh_token";
+
+		public static final String TRANSACTION = "transaction";
 	}
 }

@@ -16,13 +16,15 @@ public interface CustomerService {
 
     LookupResponse lookup(LookupReq lookupReq);
 
-    InfoRes info(SubscribeReq subscribeReq);
+    LookupResponse lookup(LookupReq lookupReq, String clientId);
 
-    TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq);
+    InfoRes info();
 
-    void verify(CustomerDataReq otpReq);
+    TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq, String clientId);
 
-    void addDataLookup(SubscribeReq subscribeReq);
+    void verify(CustomerDataReq otpReq, String clientId);
 
-    void removeDataLookup(SubscribeReq subscribeReq);
+    void addDataLookup(SubscribeReq subscribeReq, String clientId);
+
+    void removeDataLookup(SubscribeReq subscribeReq, String clientId);
 }

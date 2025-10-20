@@ -30,35 +30,41 @@ public class CustomerController {
     }
 
     @GetMapping("/lookup")
+    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> lookup(LookupReq req) {
         return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req)));
     }
 
+    @GetMapping("{clientId}/lookup")
+    ResponseEntity<?> lookupWithClientId(LookupReq req, @PathVariable String clientId) {
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req, clientId)));
+    }
+
     @GetMapping("/info")
-    ResponseEntity<?> info(SubscribeReq req) {
-        return ResponseEntity.ok(ClientResponse.ok(this.customerService.info(req)));
+    ResponseEntity<?> info() {
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.info()));
     }
 
-    @PostMapping("/verify/send-otp")
-    ResponseEntity<?> sendOtp(@RequestBody CustomerDataReq req) {
-        return ResponseEntity.ok(ClientResponse.ok(this.customerService.sendOtpToVerify(req)));
+    @PostMapping("{clientId}/verify/send-otp")
+    ResponseEntity<?> sendOtp(@RequestBody CustomerDataReq req, @PathVariable String clientId) {
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.sendOtpToVerify(req, clientId)));
     }
 
-    @PostMapping("/verify")
-    ResponseEntity<?> verify(@RequestBody CustomerDataReq req) {
-        this.customerService.verify(req);
+    @PostMapping("{clientId}/verify")
+    ResponseEntity<?> verify(@RequestBody CustomerDataReq req, @PathVariable String clientId) {
+        this.customerService.verify(req, clientId);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
 
-    @PostMapping("/lookup/add")
-    ResponseEntity<?> addDataLookup(@RequestBody SubscribeReq req) {
-        this.customerService.addDataLookup(req);
+    @PostMapping("{clientId}/lookup/add")
+    ResponseEntity<?> addDataLookup(@RequestBody SubscribeReq req, @PathVariable String clientId) {
+        this.customerService.addDataLookup(req, clientId);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
 
-    @PostMapping("/lookup/remove")
-    ResponseEntity<?> removeDataLookup(@RequestBody SubscribeReq req) {
-        this.customerService.removeDataLookup(req);
+    @PostMapping("{clientId}/lookup/remove")
+    ResponseEntity<?> removeDataLookup(@RequestBody SubscribeReq req, @PathVariable String clientId) {
+        this.customerService.removeDataLookup(req, clientId);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
 }

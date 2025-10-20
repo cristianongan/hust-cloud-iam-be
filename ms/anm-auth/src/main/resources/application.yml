@@ -3,9 +3,9 @@ spring:
     name: auth-service
   profiles:
     group:
-      "dev": "base,dev"
-      "prod": "base,prod"
-      "uat": "base,uat"
+      "dev": "base,dev,devsms"
+      "prod": "base,prod, devsms"
+      "uat": "base,uat, devsms"
 
 server:
   port: 9090

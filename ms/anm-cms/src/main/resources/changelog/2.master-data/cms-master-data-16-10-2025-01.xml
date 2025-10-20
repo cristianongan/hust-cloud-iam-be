@@ -3,18 +3,23 @@
                    xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
 
-    <changeSet id="cms-master-data-02-10-2025-01-01" author="Nganph">
-        <sql>
-            <![CDATA[
-            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('SMS_OTP', NULL, NULL, NULL, NULL, 'Mẫu SMS gửi OTP', 'Mẫu SMS gửi OTP', '1', 'Your OTP code for online service is ${OTP_CODE}. DO NOT share OTP code with anyone. ${TIMESTAMP}', 'SMS OTP');
-            ]]>
-            <![CDATA[
-            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('EMAIL_OTP', NULL, NULL, NULL, NULL, 'Mẫu email gửi OTP', 'Mẫu SMS gửi OTP', '1', '<p>Hello ${EMAIL},</p>
-    <p>Your otp is:</p> <strong>${OTP_CODE}</strong>
-    <br>
-    <p>Sincerely thank.</p>', 'EMAIL OTP');
-            ]]>
-
-        </sql>
-    </changeSet>
+<!--    <changeSet id="cms-master-data-16-10-2025-01-01" author="Nganph">-->
+<!--        <sql>-->
+<!--            <![CDATA[-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tạo quyền', null, 'ROLE_CREATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Xóa quyền', null, 'ROLE_DELETE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Xóa user', null, 'USER_DELETE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Cập nhật user', null, 'USER_UPDATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tạo mới user', null, 'USER_CREATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Cập nhật quyền', null, 'ROLE_UPDATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tìm kiếm danh sách user', null, 'USER_READ', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tìm kiếm danh sách quyền', null, 'ROLE_READ', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('superadmin', null, 'ROLE_SUPER_ADMIN', 1, null, null, null, null, 0);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Xóa Clients', null, 'CLIENT_DELETE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Cập nhật Tìm kiếm Clients', null, 'CLIENT_UPDATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tạo mới Clients', null, 'CLIENT_CREATE', 1, null, null, null, null, 1);-->
+<!--            INSERT INTO public.permission_ (name, description, code, status, created_by, created_date, last_modified_by, last_modified_date, type) VALUES ('Tìm kiếm Clients', null, 'CLIENT_READ', 1, null, null, null, null, 1);-->
+<!--            ]]>-->
+<!--        </sql>-->
+<!--    </changeSet>-->
 </databaseChangeLog>

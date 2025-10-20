@@ -2,7 +2,8 @@ package org.mbg.anm.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mbg.anm.model.dto.request.UserReq;
+import org.mbg.common.base.enums.UserType;
+import org.mbg.common.base.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.service.UserService;
 import org.springframework.http.ResponseEntity;
@@ -73,5 +74,11 @@ public class UserController {
     public ResponseEntity<?> assignRole(@RequestBody UserReq req) {
         this.userService.assignRole(req);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("customer/create")
+    public ResponseEntity<?> customerCreate(@RequestBody UserReq req) {
+        req.setType(UserType.INDIVIDUAL.getValue());
+        return ResponseEntity.ok(this.userService.create(req));
     }
 }

@@ -18,8 +18,6 @@ public enum EntityStatus {
     ACTIVE(1, LabelKey.LABEL_ACTIVE),
 
     LOCK(2, LabelKey.LABEL_LOCK),
-
-    EXTEND(3, LabelKey.LABEL_EXTEND),
     ;
 
 
