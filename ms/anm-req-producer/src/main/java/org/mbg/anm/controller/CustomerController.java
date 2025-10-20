@@ -30,39 +30,33 @@ public class CustomerController {
     }
 
     @GetMapping("/lookup")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> lookup(LookupReq req) {
         return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req)));
     }
 
     @GetMapping("/info")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> info(SubscribeReq req) {
         return ResponseEntity.ok(ClientResponse.ok(this.customerService.info(req)));
     }
 
     @PostMapping("/verify/send-otp")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> sendOtp(@RequestBody CustomerDataReq req) {
         return ResponseEntity.ok(ClientResponse.ok(this.customerService.sendOtpToVerify(req)));
     }
 
     @PostMapping("/verify")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> verify(@RequestBody CustomerDataReq req) {
         this.customerService.verify(req);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
 
     @PostMapping("/lookup/add")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> addDataLookup(@RequestBody SubscribeReq req) {
         this.customerService.addDataLookup(req);
         return ResponseEntity.ok(ClientResponse.ok(null));
     }
 
     @PostMapping("/lookup/remove")
-    @PreAuthorize("hasPrivilege('CLIENT_DEFAULT')")
     ResponseEntity<?> removeDataLookup(@RequestBody SubscribeReq req) {
         this.customerService.removeDataLookup(req);
         return ResponseEntity.ok(ClientResponse.ok(null));
