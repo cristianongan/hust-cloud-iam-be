@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer,Long>, CustomerRepositoryExtend {
     @Cacheable(cacheNames = CacheConstants.CUSTOMER.FIND_BY_CUSTOMER_KEY, key = "#customerKey", unless = "#result == null")
-    Customer findByCustomerKey(String customerKey);
+    Customer findByCustomerKeyAndStatusNot(String customerKey, Integer status);
 
     @Caching(put = {
             @CachePut(cacheNames = {CacheConstants.CUSTOMER.FIND_BY_CUSTOMER_KEY}, key = "#entity.customerKey",
@@ -36,5 +36,9 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>, Custom
 
     @Cacheable(cacheNames = CacheConstants.CUSTOMER.FIND_BY_ID_AND_STATUS, unless = "#result == null")
     Customer findByIdAndStatus(Long id, Integer status);
+
+
+    @Cacheable(cacheNames = CacheConstants.CUSTOMER.FIND_USER_ID, key = "#userId", unless = "#result == null")
+    Customer findByUserIdAndStatusNot(Long userId, Integer status);
 
 }

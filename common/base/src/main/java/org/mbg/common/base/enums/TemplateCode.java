@@ -11,6 +11,8 @@ public enum TemplateCode {
 
     SMS_NEW_CUSTOMER,
 
+    EMAIL_NEW_CUSTOMER,
+
     SMS_APPROVAL_CREATE_CUSTOMER,
 
     SMS_APPROVAL_UNLOCK,

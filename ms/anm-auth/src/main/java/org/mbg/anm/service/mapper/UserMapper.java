@@ -3,7 +3,7 @@ package org.mbg.anm.service.mapper;
 import org.mapstruct.*;
 import org.mbg.anm.model.Role;
 import org.mbg.anm.model.User;
-import org.mbg.anm.model.dto.UserDTO;
+import org.mbg.common.base.model.dto.UserDTO;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.service.mapper.EntityMapper;
 import org.mbg.common.util.Validator;

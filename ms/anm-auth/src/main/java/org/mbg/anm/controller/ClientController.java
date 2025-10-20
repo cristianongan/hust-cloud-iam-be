@@ -1,19 +1,10 @@
 package org.mbg.anm.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.mbg.anm.model.Client;
 import org.mbg.anm.model.dto.ClientDTO;
 import org.mbg.anm.model.dto.request.ClientReq;
-import org.mbg.anm.model.dto.request.ClientTokenReq;
-import org.mbg.anm.model.dto.request.RoleReq;
-import org.mbg.anm.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.service.ClientService;
-import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.api.util.HeaderUtil;
-import org.mbg.common.label.LabelKey;
-import org.mbg.common.util.Validator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

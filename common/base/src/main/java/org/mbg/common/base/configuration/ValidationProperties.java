@@ -3,6 +3,7 @@ package org.mbg.common.base.configuration;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.mbg.common.util.RandomGenerator;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -123,5 +124,16 @@ public class ValidationProperties {
         private int specialLength;
 
         private int numberLength;
+    }
+
+    public String generateRandomPassword() {
+        StringBuilder sb = new StringBuilder(4);
+
+        sb.append(RandomGenerator.generateRandomAlphabet(this.passwordRandom.getUppercaseLength(), false));
+        sb.append(RandomGenerator.generateRandomAlphabet(this.passwordRandom.getLowercaseLength(), true));
+        sb.append(RandomGenerator.generateRandomSpecialCharacters(this.passwordRandom.getSpecialLength()));
+        sb.append(RandomGenerator.generateRandomNumbers(this.passwordRandom.getNumberLength()));
+
+        return sb.toString();
     }
 }

@@ -1,4 +1,4 @@
-package org.mbg.anm.model.dto.request;
+package org.mbg.common.base.model.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

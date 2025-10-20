@@ -17,4 +17,17 @@
 
         </sql>
     </changeSet>
+
+    <changeSet id="cms-master-data-02-10-2025-01-02" author="Nganph">
+        <sql>
+            <![CDATA[
+            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('EMAIL_NEW_CUSTOMER', NULL, NULL, NULL, NULL, 'Mẫu email gửi thông tin đăng kí', 'Mẫu email gửi thông tin đăng kí', '1', '<p>Hello ${EMAIL},</p>
+    <p>Your username:</p> <strong>${_USERNAME_}</strong>
+    <br>
+    <p>Your password:</p> <strong>${PASSWORD}</strong>
+    <p>Sincerely thank.</p>', 'EMAIL NEW CUSTOMER');
+            ]]>
+
+        </sql>
+    </changeSet>
 </databaseChangeLog>

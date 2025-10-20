@@ -37,4 +37,7 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "status")
     private Integer status;
+
+    @Column(name = "user_id")
+    private Long userId;
 }

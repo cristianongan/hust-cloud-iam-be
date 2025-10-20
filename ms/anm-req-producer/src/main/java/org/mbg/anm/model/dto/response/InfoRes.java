@@ -15,6 +15,8 @@ public class InfoRes implements Serializable {
 
     private String subscriberId;
 
+    private String clientId;
+
     private List<CustomerDataRes> data;
 
     @Data
