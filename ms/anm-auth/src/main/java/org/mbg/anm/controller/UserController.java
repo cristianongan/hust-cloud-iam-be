@@ -79,6 +79,6 @@ public class UserController {
     @PostMapping("customer/create")
     public ResponseEntity<?> customerCreate(@RequestBody UserReq req) {
         req.setType(UserType.INDIVIDUAL.getValue());
-        return ResponseEntity.ok(this.userService.create(req));
+        return ResponseEntity.ok(this.userService.customerCreate(req));
     }
 }

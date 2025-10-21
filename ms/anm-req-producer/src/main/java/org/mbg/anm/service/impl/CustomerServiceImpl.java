@@ -149,6 +149,14 @@ public class CustomerServiceImpl implements CustomerService {
                         throw new BadRequestException(ErrorCode.MSG1030);
                     }
 
+                    if (Validator.equals(type.getValue(), CustomerDataType.PHONE.getValue())) {
+                        phone = item.getValue();
+                    }
+
+                    if (Validator.equals(type.getValue(), CustomerDataType.EMAIL.getValue())) {
+                        email = item.getValue();
+                    }
+
                     if (keys.contains(item.getType())) {
                         throw new BadRequestException(ErrorCode.MSG1037);
                     }

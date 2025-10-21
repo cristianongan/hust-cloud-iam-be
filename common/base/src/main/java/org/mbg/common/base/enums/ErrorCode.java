@@ -109,6 +109,10 @@ public enum ErrorCode {
     MSG1042(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND),
 
     MSG1043(LabelKey.ERROR_PRIMARY_DATA_CAN_NOT_DELETE),
+
+    MSG1044(LabelKey.ERROR_DUPLICATE_PHONE),
+
+    MSG1045(LabelKey.ERROR_DUPLICATE_EMAIL),
     ;
 
     private String key;
