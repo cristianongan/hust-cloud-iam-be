@@ -58,26 +58,27 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtAccessToken login(LoginReq userDTO) {
         if (Validator.isNull(userDTO.getUsername()) || Validator.isNull(userDTO.getPassword())) {
-            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
-                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
+            throw new BadRequestException(ErrorCode.MSG1004);
         }
 
         User user = userRepository.findByUsername(userDTO.getUsername());
+
+        if (Validator.isNull(user)) {
+            throw new BadRequestException(ErrorCode.MSG1004);
+        }
 
         if (Validator.equals(user.getStatus(), EntityStatus.LOCK.getStatus())) {
             throw new BadRequestException(ErrorCode.MSG1005);
         }
 
         if (Validator.isNull(user) || !Validator.equals(user.getStatus(), EntityStatus.ACTIVE.getStatus())) {
-            throw new BadRequestException(LabelKey.ERROR_USER_COULD_NOT_BE_FOUND,
-                    User.class.getName(), LabelKey.ERROR_USER_COULD_NOT_BE_FOUND);
+            throw new BadRequestException(ErrorCode.MSG1029);
         }
 
         String password = this.decryptPassword(userDTO.getPassword());
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
-                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
+            throw new BadRequestException(ErrorCode.MSG1004);
         }
 
         return jwtProvider.createAccessToken(userDTO.getUsername());

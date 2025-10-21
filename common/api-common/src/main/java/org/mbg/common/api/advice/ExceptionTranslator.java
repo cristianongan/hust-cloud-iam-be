@@ -1,5 +1,6 @@
 package org.mbg.common.api.advice;
 
+import feign.FeignException;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.api.exception.ClientResponseException;
 import org.mbg.common.api.exception.HttpResponseException;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.dao.ConcurrencyFailureException;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -38,6 +40,7 @@ import javax.annotation.Nullable;
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -217,6 +220,28 @@ public class ExceptionTranslator implements ProblemHandling, SecurityAdviceTrait
 				.build();
 
 		return create(ex, problem, request);
+	}
+
+	@ExceptionHandler(FeignException.class)
+	public ResponseEntity<byte[]> handleFeign(FeignException ex) {
+		HttpHeaders headers = new HttpHeaders();
+		ex.responseHeaders().forEach((k, v) -> headers.addAll(k, v.stream().toList()));
+
+		byte[] body = ex.responseBody()
+				.map(bb -> {
+					byte[] b = new byte[bb.remaining()];
+					bb.get(b);
+					return b;
+				})
+				.orElseGet(() -> {
+					byte[] c = ex.content();
+					return c != null ? c : ex.getMessage().getBytes(StandardCharsets.UTF_8);
+				});
+
+		return ResponseEntity
+				.status(ex.status())
+				.headers(headers)
+				.body(body);
 	}
 
 	@ExceptionHandler(Exception.class)

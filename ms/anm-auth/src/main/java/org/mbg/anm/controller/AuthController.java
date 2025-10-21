@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.mbg.anm.model.dto.request.LoginReq;
 import org.mbg.anm.service.AuthService;
 import org.mbg.anm.service.UserService;
+import org.mbg.common.base.model.dto.request.OtpReq;
+import org.mbg.common.base.model.dto.request.ResetPasswordReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +32,15 @@ public class AuthController {
         return ResponseEntity.ok(this.authService.verify());
     }
 
+    @PostMapping("reset")
+    public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordReq req) {
+        return ResponseEntity.ok(this.authService.resetPassword(req));
+    }
 
-
+    @PostMapping("reset/verify")
+    public ResponseEntity<?> verifyResetPassword(@RequestBody OtpReq req) {
+        this.authService.verify(req);
+        return ResponseEntity.ok().build();
+    }
 
 }

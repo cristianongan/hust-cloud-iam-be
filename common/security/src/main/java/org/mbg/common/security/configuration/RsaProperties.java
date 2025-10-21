@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -39,6 +40,7 @@ public class RsaProperties {
 		private String privateKey;
 	}
 
+	@Primary
 	@Bean(name = "rsaProvider")
 	public RsaProvider rsaProvider()
 			throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
@@ -49,5 +51,11 @@ public class RsaProperties {
 	public RsaProvider signalRsaProvider()
 			throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
 		return RsaProvider.fromPrivateKey(algorithm, signal.getPrivateKey());
+	}
+
+	@Bean(name = "clientRsaProvider")
+	public RsaProvider clientRsaProvider()
+			throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
+		return RsaProvider.fromPublishKey(algorithm, signal.getPublicKey());
 	}
 }
