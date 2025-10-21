@@ -36,6 +36,8 @@ import org.mbg.common.util.Validator;
 import org.mbg.enums.OtpType;
 import org.mbg.service.EmailService;
 import org.mbg.service.OtpService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -66,7 +68,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final AuthClient authClient;
 
-    private final RsaProvider rsaProvider;
+    @Autowired
+    @Qualifier("clientRsaProvider")
+    private RsaProvider rsaProvider;
 
     private final ValidationProperties validationProperties;
 
@@ -116,7 +120,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setReference(subscribeReq.getReference());
 
-        customer = this.customerRepository.save_(customer);
+        customer = this.customerRepository.save(customer);
 
         if (Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus()) && isCreateUser) {
             Set<String> keys = new HashSet<>();
@@ -167,26 +171,33 @@ public class CustomerServiceImpl implements CustomerService {
 
             this.customerDataRepository.saveAll(datas);
 
+            String username;
+            String password;
+            String passEncrypted;
+
             try {
-                String username = customer.getSubscriberId();
-                String password = this.validationProperties.generateRandomPassword();
-                this.authClient.createCustomerUser(UserReq.builder()
-                        .username(username)
-                        .password(this.rsaProvider.encrypt(password))
-                        .phone(phone)
-                        .email(email)
-                        .build());
+                username = customer.getSubscriberId();
+                password = this.validationProperties.generateRandomPassword();
+                passEncrypted = this.rsaProvider.encrypt(password);
 
-                if (Validator.isNotNull(email)) {
-                    Map<String, String> valuesMap = new HashMap<>();
-
-                    valuesMap.put(TemplateField._USERNAME_.name(), username);
-                    valuesMap.put(TemplateField.PASSWORD.name(), password);
-
-                    this.emailService.send(email, TemplateCode.EMAIL_NEW_CUSTOMER.name(), valuesMap);
-                }
             } catch (Exception e) {
                 throw new RuntimeException(e);
+            }
+
+            this.authClient.createCustomerUser(UserReq.builder()
+                    .username(username)
+                    .password(passEncrypted)
+                    .phone(phone)
+                    .email(email)
+                    .build());
+
+            if (Validator.isNotNull(email)) {
+                Map<String, String> valuesMap = new HashMap<>();
+
+                valuesMap.put(TemplateField._USERNAME_.name(), username);
+                valuesMap.put(TemplateField.PASSWORD.name(), password);
+
+                this.emailService.send(email, TemplateCode.EMAIL_NEW_CUSTOMER.name(), valuesMap);
             }
         }
 
