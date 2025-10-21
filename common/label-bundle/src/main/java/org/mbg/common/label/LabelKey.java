@@ -480,4 +480,8 @@ public final class LabelKey {
 	public static final String ERROR_EXTEND_DATA_HAS_REACH_LIMIT = "error.extend-data-has-reach-limit";
 
 	public static final String ERROR_PRIMARY_DATA_CAN_NOT_DELETE = "error.primary-data-can-not-be-deleted";
+
+    public static final String ERROR_DUPLICATE_PHONE = "error.duplicate-phone";
+
+	public static final String ERROR_DUPLICATE_EMAIL = "error.duplicate-email";
 }

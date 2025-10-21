@@ -26,6 +26,8 @@ public class RsaProperties {
 	private int keyLength;
 
 	private String privateKey;
+
+	private String publicKey;
 	
 	private String algorithm;
 
@@ -56,6 +58,6 @@ public class RsaProperties {
 	@Bean(name = "clientRsaProvider")
 	public RsaProvider clientRsaProvider()
 			throws NoSuchAlgorithmException, InvalidKeySpecException, IOException {
-		return RsaProvider.fromPublishKey(algorithm, signal.getPublicKey());
+		return RsaProvider.fromPublishKey(algorithm, publicKey);
 	}
 }

@@ -10,6 +10,7 @@ import org.mbg.anm.model.UserRole;
 import org.mbg.anm.repository.*;
 import org.mbg.anm.security.UserDetailServiceImpl;
 import org.mbg.anm.security.UserPrincipal;
+import org.mbg.common.base.enums.ErrorCode;
 import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.common.base.model.dto.UserDTO;
@@ -198,6 +199,53 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        User user = new User();
+        user.setUsername(userReq.getUsername());
+        user.setPhone(userReq.getPhone());
+        user.setEmail(userReq.getEmail());
+        user.setPassword(passwordEncoder.encode(password));
+        user.setAddress(userReq.getAddress());
+        user.setDob(userReq.getDob());
+        user.setGender(userReq.getGender());
+        user.setFullname(userReq.getFullname());
+        user.setType(userReq.getType());
+        user.setStatus(userReq.getStatus());
+
+        return this.userMapper.toDto(this.userRepository.save(user));
+    }
+
+    @Override
+    public UserDTO customerCreate(UserReq userReq) {
+        if (Validator.isNull(userReq.getStatus())) {
+            userReq.setStatus(EntityStatus.ACTIVE.getStatus());
+        }
+
+        if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1016);
+        }
+
+        if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
+            throw new BadRequestException(ErrorCode.MSG1004);
+        }
+
+        String password = this.decryptPassword(userReq.getPassword());
+
+        if (!passwordPattern.matcher(password).matches()) {
+            throw new BadRequestException(ErrorCode.MSG1004);
+        }
+
+        if (this.userRepository.existsByUsername(userReq.getUsername())) {
+            throw new BadRequestException(ErrorCode.MSG1041);
+        }
+
+        if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1044);
+        }
+
+        if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1045);
         }
 
         User user = new User();

@@ -12,6 +12,8 @@ public interface UserService {
 
     UserDTO create(UserReq userReq);
 
+    UserDTO customerCreate(UserReq userReq);
+
     Page<UserDTO> searchUsers(UserSearch search);
 
     void updateStatus(UserReq userReq);
