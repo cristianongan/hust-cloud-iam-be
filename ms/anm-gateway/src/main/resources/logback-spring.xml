@@ -16,6 +16,13 @@
     <property name="LOG_ARCHIVE_DAYS"    value="10"/>
     <property name="MAX_FILE_SIZE"       value="100MB"/>
     <property name="MAX_TOTAL_FILE_SIZE" value="10GB"/>
+    <springProperty scope="context"
+                    name="LOGSTASH_HOST"
+                    source="config.logstash.host"/>
+
+    <springProperty scope="context"
+                    name="LOGSTASH_PORT"
+                    source="config.logstash.port"/>
 
     <!-- Define patterns (Keep your existing patterns if they work for you) -->
     <!-- Ensure MDC values (IP, S, TX, U) are set by your application (e.g., interceptor) -->
@@ -88,7 +95,7 @@
     </appender>
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.169.88:5000</destination>
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
