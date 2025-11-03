@@ -173,3 +173,8 @@ app:
         tokenRelayEnabled: true
 client:
   verify-token: 'http://auth-service/auth/verify'
+
+config:
+  logstash:
+    host: 192.168.169.88
+    port: 5000

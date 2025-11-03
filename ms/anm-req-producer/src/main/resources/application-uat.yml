@@ -182,3 +182,8 @@ otp:
   template: Nhap ma OTP %s gui ve so dien thoai %s de xac nhan. Ma OTP se het han sau %s phut
   otp-attempt: 3 # số lần request gửi otp nhưng không được sử dụng (tránh spam otp)
   duration: 5 # phút
+
+config:
+  logstash:
+    host: 192.168.169.88
+    port: 5000

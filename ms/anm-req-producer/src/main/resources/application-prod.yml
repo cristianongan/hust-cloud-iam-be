@@ -28,7 +28,7 @@ spring:
     change-log: classpath:/changelog/changelog-master.xml
   cloud:
     consul:
-      host: 192.168.169.88 # Address of the Consul agent
+      host: http://consul-service.anm.svc.cluster.local # Address of the Consul agent
       port: 8500      # Port of the Consul agent (default is 8500)
       discovery:
         register: true # Enable service discovery with Consul
@@ -52,9 +52,8 @@ spring:
     timeout-per-shutdown-phase: 30s
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://192.168.169.88:15432/mbg_anm_be
+    url: jdbc:postgresql://192.168.10.21:5432/mbg_anm_be
     username: mbg_anm_be
-    password: 123456a@A
     #driver-class-name: org.postgresql.Driver
     hikari:
       auto-commit: false
@@ -124,18 +123,15 @@ security:
       - "/client/**"
     signature:
       gateway-shared-secret: "X;=Lcu>6ib6dyzCfAwEqc{--k%)WA,"
-    user:
-      login-max-attempt-time: 5
-      password-max-attempt-time: 5
 
 cache:
   config-type: "redis" # redis/redisson/hazelcast
   redis:
     mode: "standalone" # standalone, sentinel
     standalone:
-      host: "192.168.169.88"
+      host: "192.168.10.23"
       port: 6379
-      password: "123"
+      password: "123456aA@"
     sentinel:
       port: 26379
       password:
@@ -173,23 +169,20 @@ rsa:
   signal:
     private-key: 'MIIEogIBAAKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAECggEALah2SEouAwZo9r3LBgvo0lbPCoqMbTO5dYEqezJ6G3DO5xrpt19BwnBFHYcLOG+VhoJiX6hKqdcF92FGFIqxmiZ02L6kpkFaxC2Hh//5yb3ifjlSuVMWHrbNCP6KZCwBwCqCa1MSwP3HdwrC3fdTNAey0oh8+lU1xSBp5BA3ycLtcx1KX6Y936Wbtv9jkxBZQkrijKxB/n6vdPVAeaMbCf8PVbbI2/zYJAiUzpYQscCT5L8AqU5MNnFwFz6Oe4eFz9TeJdVeNaWhl2pafGYFVL2diVx0d71h5fMT3S4aZHUaPt/iLcnd/VkWJr6wFIA9QM0Jzrm/1zs3M2Ogm5MZAQKBgQCm+Cg+yai9KeZpEtF/7IOlT0ilOEl5kBnUGUx2X7vJVOseVnOZoQyiCGNhpyaCxoNWVoP0lkgXVu4VXBlqWey6BLdeiDkuUaCxRTWPyE3wZ/XkQQd4Z5QaKGPAHsyoAbOiHYvdD8q59Cta75kcU5jN+2BSbbWjtEkUWOKRLOz+HwKBgQCEcW1Jl8/ecWj7t3rmNUSgiW9vCk83+H89qU3qvENiD6/dpTfMrK43SbrYwjFk9/BbiQMhI2LC2kWejf3rWCTzjEJzOkMoFbMQiUktmj/IIoFGF5x6/5cfhZhr/nobU0+ADOvJIpdl89uGVyT3mxrsAC2mXdI7vSXDJGpdzMnw2QKBgQCQY5VaBsXXH77TKqTk/UEy2Yc26aAQcd8EHgSTcWJRTxAsIhLBzhXAoYRf1E5nVQgKx7JA9xzMoi4tZoHMCIvAqYdxRlg8h/ZwlislddCAj0aC5wFwzBG1NSxd3cSZnS8ciHSE7L0hZdeAQiaj6l7/8dxwK9OiB6wS3nK/nJwtfQKBgC8jqABPll7YAsPE9GtHfludTxo4kyWavr8VqXPo+hrG9pNvIMMqmv92sJhB1g7X6KbLx19eFuK/iZP7eerv/obo3yXgENMNliRGmNMwWY9EKLrn4HwuyH0hsbSOaKudJWiwMKPwOe7BstrH3ZJ7lEN3dMgIELHOishAB9PG9gFRAoGANxmGKt8RjB8A9QX7Ost8+Y2IMQIIJVlhZP4mlV4teMhpgcnEW2Xt7Z9L/PyichAq6pL/l+ZXx6YKIyNh2P+xYpwaH6GW9x/WnEAZd98nqwY9/fvw8WuVv8fJkGJvKLKX/XFrnRnS+aevG8WXSWEIU1YvMQrwKLKA2SBELyQUEeU='
     public-key: 'MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAE='
-scheduling:
-  craw-data:
-    enabled: true
-    push-message-limit: 60
-    cron: '0 0/1 * * * *'
-    lock-at-least: PT30S
-    lock-at-most: PT50S
-redis-queue:
-  priority-topics:
-    - group-ib-compromised
-  group-ib-request-topic: group-ib-compromised
+api-consumer:
+  group-ib-accounts:
+    - user: 'thanglx@mobifoneglobal.vn'
+      key: 'Admin@1234'
 
-message-listener:
-  lookup-message-limit: 60
-  lookup-topic-name: lookupLst
+otp:
+  enable: false
+  default-otp: 11111111 #OTP mặc định khi không bật OTP service
+  number-of-digits: 8 #Độ dài OTP
+  template: Nhap ma OTP %s gui ve so dien thoai %s de xac nhan. Ma OTP se het han sau %s phut
+  otp-attempt: 3 # số lần request gửi otp nhưng không được sử dụng (tránh spam otp)
+  duration: 5 # phút
 
 config:
   logstash:
-    host: 192.168.169.88
+    host: 192.168.10.32
     port: 5000

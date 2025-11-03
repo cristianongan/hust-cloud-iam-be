@@ -181,3 +181,8 @@ api-consumer:
     accounts:
       - user: thanglx@mobifoneglobal.vn
         key: GuFEek4ApzpCbA3gqMhtWHVPpjbQleSH
+
+config:
+  logstash:
+    host: 192.168.169.88
+    port: 5000

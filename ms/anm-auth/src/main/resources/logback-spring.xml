@@ -22,6 +22,13 @@
     <!-- Ensure MDC values (IP, S, TX, U) are set by your application (e.g., interceptor) -->
     <property name="FILE_LOG_PATTERN"    value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%15.15t] %-5level [%thread, %X{requestId}] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
     <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) [%thread, %X{requestId}] %clr([${APP_NAME}]){yellow} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <springProperty scope="context"
+                    name="LOGSTASH_HOST"
+                    source="config.logstash.host"/>
+
+    <springProperty scope="context"
+                    name="LOGSTASH_PORT"
+                    source="config.logstash.port"/>
 
     <!-- Console Appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -89,7 +96,7 @@
     </appender>
 
     <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>192.168.169.88:5000</destination>
+        <destination>${LOGSTASH_HOST}:${LOGSTASH_PORT}</destination>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
             <includeMdc>true</includeMdc>
             <customFields>{"app":"${APP_NAME:-unknown}"}</customFields>
