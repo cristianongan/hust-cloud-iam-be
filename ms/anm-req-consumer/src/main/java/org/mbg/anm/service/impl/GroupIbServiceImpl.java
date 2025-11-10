@@ -19,6 +19,7 @@ import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.common.base.repository.RecordRepository;
 import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.Validator;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +35,8 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CustomerDataServiceImpl implements CustomerDataService {
+@Primary
+public class GroupIbServiceImpl implements CustomerDataService {
     private final CustomerDataRepository customerDataRepository;
 
     private final GroupIbApiSender groupIbApiSender;

@@ -8,9 +8,11 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -42,5 +44,11 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>, Custom
     Customer findByUserIdAndStatusNot(Long userId, Integer status);
 
     List<Customer> findByCustomerKeyInAndStatusNot(List<String> customerIds, Integer status);
+
+    @Modifying
+    @Query(nativeQuery = true, value = """
+    update customer set status = :status where end_time <= :now
+        """)
+    void updateStatusExpiredCustomer(Integer status, LocalDateTime now);
 
 }

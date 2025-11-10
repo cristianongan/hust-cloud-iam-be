@@ -46,17 +46,19 @@ public class CustomerController {
 //        return ResponseEntity.ok(ClientResponse.ok(this.customerService.unSubscribe(req)));
 //    }
 
+//    @ReqEncryptAes256
+//    @ResEncryptAes256
+//    @PostMapping("/lookup")
+//    ResponseEntity<?> lookup(LookupReq req) {
+//        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req)));
+//    }
+
     @ReqEncryptAes256
     @ResEncryptAes256
-    @PostMapping("/lookup")
-    ResponseEntity<?> lookup(LookupReq req) {
-        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req)));
+    @PostMapping("{org}/lookup")
+    ResponseEntity<?> lookupWithClientId(@RequestBody  LookupReq req, @PathVariable String org) {
+        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req, org)));
     }
-
-//    @GetMapping("{clientId}/lookup")
-//    ResponseEntity<?> lookupWithClientId(LookupReq req, @PathVariable String clientId) {
-//        return ResponseEntity.ok(ClientResponse.ok(this.customerService.lookup(req, clientId)));
-//    }
 
     @ResEncryptAes256
     @PostMapping("/{org}/info")

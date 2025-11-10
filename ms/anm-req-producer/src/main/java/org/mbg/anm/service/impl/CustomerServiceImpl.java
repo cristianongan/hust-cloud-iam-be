@@ -118,7 +118,10 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
 
+
         List<UserReq> userReqs = new ArrayList<>();
+
+        LocalDateTime now = LocalDateTime.now();
 
         for (SubscribeBatchReq.DataReq item : req.getDataReqs()) {
             if (Validator.isNotNull(item)) {
@@ -140,7 +143,8 @@ public class CustomerServiceImpl implements CustomerService {
                 String phone = "";
                 String email = "";
 
-                if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+                if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())
+                    && customer.getEndTime().isAfter(now)) {
                     throw new BadRequestException(ErrorCode.MSG1038);
                 }
 

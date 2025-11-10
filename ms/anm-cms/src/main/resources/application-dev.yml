@@ -181,6 +181,13 @@ scheduling:
     cron: '0/1 * * * * *'
     lock-at-least: PT30S
     lock-at-most: PT50S
+  customer-lock:
+    name: customer-lock-dev
+    enabled: true
+    push-message-limit: 60
+    cron: '0 0/5 * * * *'
+    lock-at-least: PT30S
+    lock-at-most: PT50S
 redis-queue:
   priority-topics:
     - group-ib-compromised
