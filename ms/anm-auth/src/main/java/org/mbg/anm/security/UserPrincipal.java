@@ -18,21 +18,21 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
 
     private Client client;
 
+    private String organization;
+
     private Collection<String> roles;
 
-    public UserPrincipal(User user, Collection<String> roles, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(User user, Collection<String> roles, String organization,Collection<? extends GrantedAuthority> authorities) {
         super(user.getUsername(), user.getPassword(), authorities);
-
+        this.organization = organization;
         this.user = user;
-
         this.roles = roles;
     }
 
-    public UserPrincipal(Client client, Collection<String> roles, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Client client, Collection<String> roles, String organization,Collection<? extends GrantedAuthority> authorities) {
         super(client.getClientId(), client.getClientSecret(), authorities);
-
+        this.organization = organization;
         this.client = client;
-
         this.roles = roles;
     }
 
@@ -48,5 +48,9 @@ public class UserPrincipal extends org.springframework.security.core.userdetails
     @Override
     public String getPassword() {
         return Validator.isNotNull(user) ? user.getPassword() : client.getClientSecret();
+    }
+
+    public String getUserOrganization() {
+        return organization;
     }
 }

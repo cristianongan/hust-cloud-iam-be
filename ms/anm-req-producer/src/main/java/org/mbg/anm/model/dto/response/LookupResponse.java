@@ -14,7 +14,7 @@ public class LookupResponse implements Serializable {
     @Serial
     private static final long serialVersionUID = -5401288388738213439L;
 
-    private String subscriberId;
+    private String customerKey;
 
     private List<RecordResponse> data;
 }

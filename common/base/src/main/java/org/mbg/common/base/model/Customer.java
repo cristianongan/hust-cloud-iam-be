@@ -29,9 +29,6 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
     @Column(name = "subscriber_id")
     private String subscriberId;
 
-    @Column(name = "client_id")
-    private String clientId;
-
     @Column(name = "reference")
     private String reference;
 
@@ -40,4 +37,10 @@ public class Customer extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "user_id")
     private Long userId;
+
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
 }

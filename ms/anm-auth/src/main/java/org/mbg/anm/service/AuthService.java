@@ -1,6 +1,6 @@
 package org.mbg.anm.service;
 
-import org.mbg.anm.jwt.JwtAccessToken;
+import org.mbg.common.base.model.JwtAccessToken;
 import org.mbg.anm.model.dto.request.LoginReq;
 import org.mbg.common.base.model.dto.request.ChangePasswordReq;
 import org.mbg.common.base.model.dto.request.OtpReq;
@@ -20,4 +20,6 @@ public interface AuthService {
     void verify(OtpReq req);
 
     void changePassword(ChangePasswordReq req);
+
+    JwtAccessToken customerToken(Long userId);
 }

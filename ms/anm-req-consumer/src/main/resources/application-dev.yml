@@ -32,7 +32,7 @@ spring:
       port: 8500      # Port of the Consul agent (default is 8500)
       discovery:
         register: true # Enable service discovery with Consul
-        instance-id: ${spring.application.name}-${random.value} # Generate a unique instance ID
+        instance-id: ${spring.application.name} # Generate a unique instance ID
         health-check-path: /actuator/health # Path for health checks (requires Spring Boot Actuator)
         health-check-interval: 30s
         prefer-ip-address: true # Register service with its IP address instead of hostname (optional)
@@ -52,7 +52,7 @@ spring:
     timeout-per-shutdown-phase: 30s
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://192.168.169.88:15432/mbg_anm_be
+    url: jdbc:postgresql://192.168.169.88:15432/mbg_anm_be_test
     username: mbg_anm_be
     password: 123456a@A
     #driver-class-name: org.postgresql.Driver

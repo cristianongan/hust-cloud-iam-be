@@ -22,6 +22,11 @@ public class AuthController {
         return ResponseEntity.ok(this.authService.login(userDTO));
     }
 
+    @GetMapping("customer/token/{userId}")
+    public ResponseEntity<?> customerToken(@PathVariable Long userId) {
+        return ResponseEntity.ok(this.authService.customerToken(userId));
+    }
+
     @PostMapping("refresh")
     public ResponseEntity<?> refresh() {
         return ResponseEntity.ok(this.authService.refreshToken());

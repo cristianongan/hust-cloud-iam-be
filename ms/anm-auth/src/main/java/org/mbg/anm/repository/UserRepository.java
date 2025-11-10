@@ -34,4 +34,11 @@ public interface UserRepository extends JpaRepository<User,Long>, UserRepository
     User findByPhoneAndStatusNot(String phone, Integer status);
 
     User findByEmailAndStatusNot(String email, Integer status);
+
+    @Query(nativeQuery = true, value = """
+    select e.* from user_ e inner join client_ c on c.user_id = e.id
+        where c.client_id = :clientId
+        limit 1
+        """)
+    User findByClientId(String clientId);
 }

@@ -64,6 +64,7 @@ public class SecurityFilter implements WebFilter {
                     var mutatedReq = req.mutate()
                             .header(SecurityConstants.Header.USER, user.getUser())
                             .header(SecurityConstants.Header.X_SERVICE_PERMISSIONS, String.join(",", user.getPermissions()))
+                            .header(SecurityConstants.Header.ORG, user.getOrg())
                             .build();
                     return chain.filter(exchange.mutate().request(mutatedReq).build())
                             .contextWrite(ReactiveSecurityContextHolder.withAuthentication(authn));

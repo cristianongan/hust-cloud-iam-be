@@ -1,0 +1,68 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="cms-structure-2025-11-05-01-01" author="Nganph">
+        <sql>
+            alter table customer add column start_time timestamp not null;
+            alter table customer add column end_time timestamp not null;
+            create index customer_endtime on customer(end_time);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-02" author="Nganph">
+        <sql>
+            alter table customer drop column client_id;
+            create unique index customer_customer_key on customer(customer_key);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-03" author="Nganph">
+        <sql>
+            alter table record_ drop column customer_id;
+            alter table record_ add column customer_key varchar(255);
+            create unique index record_customer_key on record_(customer_key);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-04" author="Nganph">
+        <sql>
+            drop index record_customer_key;
+            create index record_customer_key on record_(customer_key);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-05" author="Nganph">
+        <sql>
+            alter table customer_data drop column customer_id;
+            alter table customer_data add column customer_key varchar(255);
+            create index customer_data_customer_key on customer_data(customer_key);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-06" author="Nganph">
+        <sql>
+            create table common_data (
+                                     id bigserial primary key,
+                                     type varchar(100),
+                                     code varchar(50),
+                                     value varchar(500),
+                                     status smallint,
+                                     created_by varchar(100),
+                                     created_date timestamp,
+                                     last_modified_by varchar(100),
+                                     last_modified_date timestamp
+            );
+
+create unique index common_data_code on common_data(code);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-07" author="Nganph">
+        <sql>
+            alter table user_ add column organization varchar(50);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

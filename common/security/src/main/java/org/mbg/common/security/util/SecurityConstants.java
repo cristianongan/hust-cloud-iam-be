@@ -63,6 +63,10 @@ public final class SecurityConstants {
 		public static final String X_USER_ID = "X-User-Id";
 		public static final String X_SERVICE_PERMISSIONS = "X-Service-Permissions";
 		public static final String X_SERVICE_PERMISSIONS_SIGNATURE = "X-Service-Permissions-Signature";
+		public static final String X_ENC_KEY = "X-Enc-Key";
+		public static final String X_Nonce = "X-Nonce";
+		public static final String X_SIG = "X-Signature";
+		public static final String ORG = "Org";
 	}
 
 	/**
@@ -70,7 +74,7 @@ public final class SecurityConstants {
 	 */
 	@NoArgsConstructor(access = AccessLevel.PRIVATE)
 	public static final class Cookie {
-		public static final String JWT_TOKEN = "vmc-jwtToken";
+		public static final String JWT_TOKEN = "mbg-jwtToken";
 	}
 
 	/**

@@ -41,4 +41,6 @@ public interface CustomerRepository extends JpaRepository<Customer,Long>, Custom
     @Cacheable(cacheNames = CacheConstants.CUSTOMER.FIND_USER_ID, key = "#userId", unless = "#result == null")
     Customer findByUserIdAndStatusNot(Long userId, Integer status);
 
+    List<Customer> findByCustomerKeyInAndStatusNot(List<String> customerIds, Integer status);
+
 }

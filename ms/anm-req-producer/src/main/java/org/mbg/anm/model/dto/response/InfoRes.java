@@ -13,7 +13,7 @@ public class InfoRes implements Serializable {
     @Serial
     private static final long serialVersionUID = 2856540223712351257L;
 
-    private String subscriberId;
+    private String customerKey;
 
     private String clientId;
 

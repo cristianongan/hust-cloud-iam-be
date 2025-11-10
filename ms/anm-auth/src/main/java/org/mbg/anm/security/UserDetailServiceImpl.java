@@ -100,7 +100,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         // add role name to authority list
         roleNames.forEach(roleName -> grantedAuthorities.add(new SimpleGrantedAuthority(roleName)));
 
-        return new UserPrincipal(client, roleNames, grantedAuthorities);
+        User user = this.userRepository.findByClientId(clientId);
+
+        return new UserPrincipal(client, roleNames, Validator.isNotNull(user) ? user.getOrganization() : "",grantedAuthorities);
     }
 
     private UserPrincipal createSpringSecurityUser(String username, User user) {
@@ -137,7 +139,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
         // add role name to authority list
         roleNames.forEach(roleName -> grantedAuthorities.add(new SimpleGrantedAuthority(roleName)));
 
-        return new UserPrincipal(user, roleNames, grantedAuthorities);
+        return new UserPrincipal(user, roleNames, user.getOrganization(), grantedAuthorities);
 
     }
 }

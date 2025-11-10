@@ -14,4 +14,6 @@ public class VerifyRes implements Serializable {
     private List<String> permissions;
 
     private String user;
+
+    private String org;
 }

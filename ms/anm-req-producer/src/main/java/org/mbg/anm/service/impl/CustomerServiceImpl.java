@@ -2,11 +2,12 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.mbg.anm.configuration.ProducerProperties;
 import org.mbg.anm.feign.AuthClient;
 import org.mbg.anm.feign.CmsClient;
 import org.mbg.anm.model.dto.request.CustomerDataReq;
-import org.mbg.anm.model.dto.response.InfoRes;
-import org.mbg.anm.model.dto.response.RecordResponse;
+import org.mbg.anm.model.dto.request.SubscribeBatchReq;
+import org.mbg.anm.model.dto.response.*;
 import org.mbg.anm.service.mapper.RecordMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.configuration.ValidationProperties;
@@ -15,9 +16,10 @@ import org.mbg.common.base.model.Record;
 import org.mbg.common.base.model.dto.UserDTO;
 import org.mbg.common.base.model.dto.request.LookupReq;
 import org.mbg.anm.model.dto.request.SubscribeReq;
-import org.mbg.anm.model.dto.response.LookupResponse;
-import org.mbg.anm.model.dto.response.SubscribeRes;
+import org.mbg.common.base.model.dto.request.UserBatchReq;
 import org.mbg.common.base.model.dto.request.UserReq;
+import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
+import org.mbg.common.base.model.dto.response.CustomerUserRes;
 import org.mbg.common.base.model.dto.response.TransactionResponse;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.CustomerRepository;
@@ -43,9 +45,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -56,8 +61,6 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerDataRepository customerDataRepository;
 
-    private final CustomerMapper customerMapper;
-
     private final RecordRepository recordRepository;
 
     private final RecordMapper recordMapper;
@@ -67,6 +70,8 @@ public class CustomerServiceImpl implements CustomerService {
     private final CmsClient cmsClient;
 
     private final AuthClient authClient;
+
+    private final ProducerProperties properties;
 
     @Autowired
     @Qualifier("clientRsaProvider")
@@ -80,6 +85,160 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     @Transactional
+    public SubscribeBatchRes subscribeBatch(SubscribeBatchReq req, String org) {
+        final String clientId = org;
+
+        if (Validator.isNull(clientId)) {
+            throw new BadRequestException(ErrorCode.MSG1028);
+        }
+
+        if (Validator.isNull(req) || Validator.isNull(req.getDataReqs())) {
+            throw new BadRequestException(ErrorCode.MSG1016);
+        }
+
+        if (req.getDataReqs().size() > this.properties.getSubscribeBatchLimit()) {
+            throw new BadRequestException(ErrorCode.MSG1046);
+        }
+
+        List<String> cusKeys = req.getDataReqs().parallelStream().map(r ->
+                    getKey(clientId, r.getSubscriberId())
+                ).toList();
+
+        List<Customer> customers =
+                this.customerRepository.findByCustomerKeyInAndStatusNot(cusKeys, EntityStatus.DELETED.getStatus());
+
+        Map<String, Customer> customerMap = new HashMap<>();
+
+        List<Customer> entities = new ArrayList<>();
+        List<CustomerData> data = new ArrayList<>();
+
+        if (!customers.isEmpty()) {
+            for (Customer customer : customers) {
+                customerMap.put(customer.getCustomerKey(), customer);
+            }
+        }
+
+        List<UserReq> userReqs = new ArrayList<>();
+
+        for (SubscribeBatchReq.DataReq item : req.getDataReqs()) {
+            if (Validator.isNotNull(item)) {
+                if (Validator.isNull(item.getSubscriberId())) {
+                    throw new BadRequestException(ErrorCode.MSG1027);
+                }
+
+                if (Validator.isNull(item.getStartTime()) || Validator.isNull(item.getEndTime())) {
+                    throw new BadRequestException(ErrorCode.MSG1048);
+                }
+
+                if (item.getStartTime() >= item.getEndTime()) {
+                    throw new BadRequestException(ErrorCode.MSG1049);
+                }
+
+                final String key = this.getKey(clientId, item.getSubscriberId());
+
+                Customer customer = customerMap.get(key);
+                String phone = "";
+                String email = "";
+
+                if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+                    throw new BadRequestException(ErrorCode.MSG1038);
+                }
+
+                if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.LOCK.getStatus())) {
+                    throw new BadRequestException(ErrorCode.MSG1005);
+                }
+
+                if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.INACTIVE.getStatus())) {
+                    customer.setStatus(EntityStatus.ACTIVE.getStatus());
+                }
+
+                boolean isCreate = false;
+
+                if (Validator.isNull(customer)) {
+                    customer = new Customer();
+                    customer.setCustomerKey(key);
+                    customer.setSubscriberId(item.getSubscriberId());
+                    customer.setStatus(EntityStatus.ACTIVE.getStatus());
+                    isCreate = true;
+                }
+
+                ZoneId zone = ZoneId.of("Asia/Bangkok");
+                customer.setReference(req.getReference());
+                customer.setStartTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getStartTime()), zone));
+                customer.setEndTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getEndTime()), zone));
+
+                if (Validator.isNotNull(item.getType()) && isCreate) {
+                    CustomerData customerData = null;
+                    if (item.getType().equalsIgnoreCase(CustomerDataType.PHONE.name())) {
+                        customerData = new CustomerData();
+                        customerData.setType(CustomerDataType.PHONE.getValue());
+
+                        phone = customer.getSubscriberId();
+                    }
+
+                    if (item.getType().equalsIgnoreCase(CustomerDataType.EMAIL.name())) {
+                        customerData = new CustomerData();
+                        customerData.setType(CustomerDataType.EMAIL.getValue());
+                        email = customer.getSubscriberId();
+                    }
+
+                    if (customerData != null) {
+                        customerData.setVerify(1);
+                        customerData.setCustomerKey(key);
+                        customerData.setValue(customer.getSubscriberId());
+                        customerData.setIsPrimary(1);
+
+                        data.add(customerData);
+                    }
+                }
+
+                entities.add(customer);
+                if (isCreate) {
+                    String password = this.validationProperties.generateRandomPassword();
+                    String passEncrypted = null;
+                    try {
+                        passEncrypted = this.rsaProvider.encrypt(password);
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
+                    userReqs.add(UserReq.builder()
+                            .username(customer.getCustomerKey())
+                            .password(passEncrypted)
+                            .phone(phone)
+                            .email(email)
+                            .build());
+                }
+            }
+        }
+
+        CustomerUserBatchRes res = this.authClient.createCustomerUser(UserBatchReq.builder()
+                .users(userReqs)
+                .build()
+        );
+
+        if (Validator.isNull(res)) {
+            throw new BadRequestException(ErrorCode.MSG1017);
+        }
+
+        List<CustomerUserRes> customerUserRes = res.getCustomerUserRes();
+        Map<String, Long> customerResMap = customerUserRes.stream().collect(Collectors.toMap(
+                CustomerUserRes::getUsername, CustomerUserRes::getUserId
+        ));
+
+        for (Customer cus : entities) {
+            if (customerResMap.containsKey(cus.getCustomerKey())) {
+                cus.setUserId(customerResMap.get(cus.getCustomerKey()));
+            }
+        }
+
+        this.customerDataRepository.saveAll(data);
+        this.customerRepository.saveAll(entities);
+
+        return null;
+    }
+
+    @Override
+    @Transactional
     public SubscribeRes subscribe(SubscribeReq subscribeReq) {
         final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
 
@@ -87,11 +246,11 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1028);
         }
 
-        if (Validator.isNull(subscribeReq.getSubscriberId())) {
+        if (Validator.isNull(subscribeReq.getCustomerKey())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
+        final String key = subscribeReq.getCustomerKey();
 
         Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(key, EntityStatus.DELETED.getStatus());
 
@@ -113,7 +272,6 @@ public class CustomerServiceImpl implements CustomerService {
             customer = new Customer();
             customer.setCustomerKey(key);
             customer.setSubscriberId(subscribeReq.getSubscriberId());
-            customer.setClientId(clientId);
             customer.setStatus(EntityStatus.ACTIVE.getStatus());
             isCreateUser = true;
         }
@@ -164,7 +322,7 @@ public class CustomerServiceImpl implements CustomerService {
                     keys.add(item.getType());
 
                     CustomerData customerData = new CustomerData();
-                    customerData.setCustomerId(customer.getId());
+                    customerData.setCustomerKey(customer.getCustomerKey());
                     customerData.setType(type.getValue());
                     customerData.setValue(item.getValue());
                     customerData.setStatus(EntityStatus.ACTIVE.getStatus());
@@ -179,34 +337,34 @@ public class CustomerServiceImpl implements CustomerService {
 
             this.customerDataRepository.saveAll(datas);
 
-            String username;
-            String password;
-            String passEncrypted;
+//            String username;
+//            String password;
+//            String passEncrypted;
 
-            try {
-                username = customer.getSubscriberId();
-                password = this.validationProperties.generateRandomPassword();
-                passEncrypted = this.rsaProvider.encrypt(password);
+//            try {
+//                username = customer.getSubscriberId();
+//                password = this.validationProperties.generateRandomPassword();
+//                passEncrypted = this.rsaProvider.encrypt(password);
+//
+//            } catch (Exception e) {
+//                throw new RuntimeException(e);
+//            }
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+//            this.authClient.createCustomerUser(UserReq.builder()
+//                    .username(username)
+//                    .password(passEncrypted)
+//                    .phone(phone)
+//                    .email(email)
+//                    .build());
 
-            this.authClient.createCustomerUser(UserReq.builder()
-                    .username(username)
-                    .password(passEncrypted)
-                    .phone(phone)
-                    .email(email)
-                    .build());
-
-            if (Validator.isNotNull(email)) {
-                Map<String, String> valuesMap = new HashMap<>();
-
-                valuesMap.put(TemplateField._USERNAME_.name(), username);
-                valuesMap.put(TemplateField.PASSWORD.name(), password);
-
-                this.emailService.send(email, TemplateCode.EMAIL_NEW_CUSTOMER.name(), valuesMap);
-            }
+//            if (Validator.isNotNull(email)) {
+//                Map<String, String> valuesMap = new HashMap<>();
+//
+//                valuesMap.put(TemplateField._USERNAME_.name(), username);
+//                valuesMap.put(TemplateField.PASSWORD.name(), password);
+//
+//                this.emailService.send(email, TemplateCode.EMAIL_NEW_CUSTOMER.name(), valuesMap);
+//            }
         }
 
         return SubscribeRes.builder().subscriberId(customer.getSubscriberId()).build();
@@ -220,7 +378,7 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1028);
         }
 
-        final String key = this.getKey(clientId, subscribeReq.getSubscriberId());
+        final String key = subscribeReq.getCustomerKey();
 
         Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(key, EntityStatus.DELETED.getStatus());
 
@@ -236,15 +394,15 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public LookupResponse lookup(LookupReq lookupReq) {
-        if (Validator.isNull(lookupReq.getSubscriberId())) {
+        if (Validator.isNull(lookupReq.getCustomerKey())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
         final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
 
-        Customer customer = this.getCus(lookupReq.getSubscriberId(), clientId);
+        Customer customer = this.getCus(lookupReq.getCustomerKey());
 
-        lookupReq.setCustomerId(customer.getId());
+        lookupReq.setCustomerKey(customer.getCustomerKey());
 
         List<Record> records = this.recordRepository.search(lookupReq);
 
@@ -252,19 +410,19 @@ public class CustomerServiceImpl implements CustomerService {
 
         return LookupResponse.builder()
                 .data(content)
-                .subscriberId(lookupReq.getSubscriberId())
+                .customerKey(lookupReq.getCustomerKey())
                 .build();
     }
 
     @Override
     public LookupResponse lookup(LookupReq lookupReq, String clientId) {
-        if (Validator.isNull(lookupReq.getSubscriberId())) {
+        if (Validator.isNull(lookupReq.getCustomerKey())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-        Customer customer = this.getCus(lookupReq.getSubscriberId(), clientId);
+        Customer customer = this.getCus(lookupReq.getCustomerKey());
 
-        lookupReq.setCustomerId(customer.getId());
+        lookupReq.setCustomerKey(customer.getCustomerKey());
 
         List<Record> records = this.recordRepository.search(lookupReq);
 
@@ -272,7 +430,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         return LookupResponse.builder()
                 .data(content)
-                .subscriberId(lookupReq.getSubscriberId())
+                .customerKey(lookupReq.getCustomerKey())
                 .build();
     }
 
@@ -291,11 +449,10 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
-        List<CustomerData> data = this.customerDataRepository.findByCustomerIdAndStatus(customer.getId(), EntityStatus.ACTIVE.getStatus());
+        List<CustomerData> data = this.customerDataRepository.findByCustomerKeyAndStatus(customer.getCustomerKey(), EntityStatus.ACTIVE.getStatus());
 
         return InfoRes.builder()
-                .subscriberId(customer.getSubscriberId())
-                .clientId(customer.getClientId())
+                .customerKey(customer.getCustomerKey())
                 .data(data.stream().map(r -> InfoRes.CustomerDataRes.builder()
                         .value(r.getValue())
                         .type(Objects.requireNonNull(CustomerDataType.valueOfStatus(r.getType())).name())
@@ -307,7 +464,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public TransactionResponse sendOtpToVerify(CustomerDataReq customerDataReq, String clientId) {
-        if (Validator.isNull(customerDataReq.getSubscriberId())) {
+        if (Validator.isNull(customerDataReq.getCustomerKey())) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
@@ -315,14 +472,14 @@ public class CustomerServiceImpl implements CustomerService {
             throw new BadRequestException(ErrorCode.MSG1028);
         }
 
-        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(getKey(clientId, customerDataReq.getSubscriberId()),
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(customerDataReq.getCustomerKey(),
                 EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
-        CustomerData data = this.customerDataRepository.findByCustomerIdAndValueAndStatus(customer.getId(),
+        CustomerData data = this.customerDataRepository.findByCustomerKeyAndValueAndStatus(customer.getCustomerKey(),
                 customerDataReq.getValue(), EntityStatus.ACTIVE.getStatus());
 
         if (Validator.isNull(data)) {
@@ -348,9 +505,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void verify(CustomerDataReq customerDataReq, String clientId) {
-        Customer customer = this.getCus(customerDataReq.getSubscriberId(), clientId);
+        Customer customer = this.getCus(customerDataReq.getCustomerKey());
 
-        CustomerData data = this.customerDataRepository.findByCustomerIdAndValueAndStatus(customer.getId(),
+        CustomerData data = this.customerDataRepository.findByCustomerKeyAndValueAndStatus(customer.getCustomerKey(),
                 customerDataReq.getValue(), EntityStatus.ACTIVE.getStatus());
 
         if (Validator.isNull(data)) {
@@ -377,7 +534,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void addDataLookup(SubscribeReq subscribeReq, String clientId) {
-        Customer customer = this.getCus(subscribeReq.getSubscriberId(), clientId);
+        Customer customer = this.getCus(subscribeReq.getCustomerKey());
 
         if (Validator.isNotNull(subscribeReq.getDataReqs())) {
             List<String> values =
@@ -388,7 +545,7 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             List<CustomerData> old = this.customerDataRepository
-                    .findByCustomerIdAndStatus(customer.getId(), EntityStatus.ACTIVE.getStatus());
+                    .findByCustomerKeyAndStatus(customer.getCustomerKey(), EntityStatus.ACTIVE.getStatus());
 
             Set<String> oldSet = new HashSet<>();
             AtomicInteger dataCount = new AtomicInteger();
@@ -437,7 +594,7 @@ public class CustomerServiceImpl implements CustomerService {
 
                 oldSet.add(item.getType());
                 CustomerData customerData = new CustomerData();
-                customerData.setCustomerId(customer.getId());
+                customerData.setCustomerKey(customer.getCustomerKey());
                 customerData.setType(type.getValue());
                 customerData.setValue(item.getValue());
                 customerData.setStatus(EntityStatus.ACTIVE.getStatus());
@@ -455,7 +612,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void removeDataLookup(SubscribeReq subscribeReq, String clientId) {
-        Customer customer = this.getCus(subscribeReq.getSubscriberId(), clientId);
+        Customer customer = this.getCus(subscribeReq.getCustomerKey());
 
         if (Validator.isNotNull(subscribeReq.getDataReqs())) {
             List<String> values =
@@ -465,7 +622,7 @@ public class CustomerServiceImpl implements CustomerService {
                 throw new BadRequestException(ErrorCode.MSG1030);
             }
 
-            List<CustomerData> data = this.customerDataRepository.findByCustomerIdAndStatusAndValueIn(customer.getId(),
+            List<CustomerData> data = this.customerDataRepository.findByCustomerKeyAndStatusAndValueIn(customer.getCustomerKey(),
                     EntityStatus.ACTIVE.getStatus(), values);
 
             if (Validator.isNull(data)) {
@@ -484,18 +641,13 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-    private Customer getCus(String subscriberId, String clientId) {
-        if (Validator.isNull(subscriberId)) {
+    private Customer getCus(String customerKey) {
+        if (Validator.isNull(customerKey)) {
             throw new BadRequestException(ErrorCode.MSG1027);
         }
 
-//        final String clientId = SecurityUtils.getCurrentUserLogin().orElse(null);
 
-        if (Validator.isNull(clientId)) {
-            throw new BadRequestException(ErrorCode.MSG1028);
-        }
-
-        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(getKey(clientId, subscriberId),
+        Customer customer = this.customerRepository.findByCustomerKeyAndStatusNot(customerKey,
                 EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(customer)) {

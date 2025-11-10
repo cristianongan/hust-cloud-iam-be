@@ -1,4 +1,4 @@
-package org.mbg.anm.jwt;
+package org.mbg.common.base.model;
 
 import lombok.Builder;
 import lombok.Data;

@@ -19,7 +19,7 @@ public class CustomerDataRepositoryImpl implements CustomerDataRepositoryExtend 
     public List<CustomerData> getLookupData(CustomerSyncStatus customerSyncStatus, EntityStatus status, Integer limit) {
         StringBuilder sql = new StringBuilder("""
                 select e.* from customer_data e
-                inner join customer c on e.customer_id = c.id and c.status = :status
+                inner join customer c on e.customer_key = c.customer_key and c.status = :status
                 where e.sync_status = :syncStatus
                 order by e.last_scan NULLS FIRST
                 """);

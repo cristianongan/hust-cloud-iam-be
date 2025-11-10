@@ -47,4 +47,6 @@ public class UserDTO implements Serializable {
 
     private QuotaDTO quota;
 
+    private String organization;
+
 }

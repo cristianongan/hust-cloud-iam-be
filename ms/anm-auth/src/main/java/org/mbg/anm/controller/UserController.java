@@ -3,6 +3,7 @@ package org.mbg.anm.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mbg.common.base.enums.UserType;
+import org.mbg.common.base.model.dto.request.UserBatchReq;
 import org.mbg.common.base.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.service.UserService;
@@ -76,9 +77,8 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("customer/create")
-    public ResponseEntity<?> customerCreate(@RequestBody UserReq req) {
-        req.setType(UserType.INDIVIDUAL.getValue());
-        return ResponseEntity.ok(this.userService.customerCreate(req));
+    @PostMapping("customer/create-batch")
+    public ResponseEntity<?> customerCreate(@RequestBody UserBatchReq req) {
+        return ResponseEntity.ok(this.userService.customerCreateBatch(req));
     }
 }

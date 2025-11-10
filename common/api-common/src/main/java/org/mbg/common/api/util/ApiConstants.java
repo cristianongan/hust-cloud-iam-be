@@ -72,7 +72,7 @@ public final class ApiConstants {
     public static final class HttpHeaders {
         public static final String LINK_FORMAT = "<{0}>; rel=\"{1}\"";
         public static final String X_TRANSACTION_ID = "X-TRANSACTION-ID";
-        public static final String X_SIGNATURE = "X-SIGNATURE";
+        public static final String X_SIGNATURE = "X-Signature";
         public static final String X_ACTION_MESSAGE = "X-Action-Message";
         public static final String X_ACTION_PARAMS = "X-Action-Params";
         public static final String X_FORWARDED_FOR = "X-Forwarded-For";

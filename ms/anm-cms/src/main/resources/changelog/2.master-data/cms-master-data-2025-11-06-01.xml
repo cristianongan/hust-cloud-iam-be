@@ -1,0 +1,23 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.3.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+
+    <changeSet id="cms-master-data-2025-11-06-01-01" author="Nganph">
+        <sql>
+            INSERT INTO user_ (id, username, password, email, phone, gender, status, type) values (
+                -1, 'superadmin', '$2a$12$EhcvVVBMtV7dZFc1TWqyG.AHJPZYKSQfIvellYZXOzZ0wzH4weeZS',
+                'superadmin@gmail.com', '-1', 1, 1, 0);
+            INSERT INTO role_ (name, description, code, status) values ('SUPER_ADMIN', 'SUPER_ADMIN', 'SUPER_ADMIN', 1);
+            INSERT INTO role_permission (role_code, permission_code) values ('SUPER_ADMIN', 'ROLE_SUPER_ADMIN');
+            INSERT INTO user_role (role_code, user_id) values ('SUPER_ADMIN', -1);
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-master-data-2025-11-06-01-02" author="Nganph">
+        <sql>
+            INSERT INTO common_data (type, code, value, status) values ('ORGANNIZATION', 'TCB', 'Techcombank', 1);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

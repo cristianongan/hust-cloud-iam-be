@@ -1,9 +1,7 @@
 package org.mbg.anm.service;
 
-import org.mbg.anm.jwt.JwtAccessToken;
 import org.mbg.anm.model.dto.ClientDTO;
 import org.mbg.anm.model.dto.request.ClientReq;
-import org.mbg.anm.model.dto.request.ClientTokenReq;
 import org.mbg.anm.model.dto.response.SecretRes;
 import org.mbg.anm.model.dto.response.UserRes;
 import org.mbg.anm.model.search.UserSearch;

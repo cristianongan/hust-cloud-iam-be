@@ -26,15 +26,15 @@ import java.util.Arrays;
 @Component
 @Slf4j
 public class LoggingAspect {
-    @Pointcut(AnnotationConstants.Pointcut.CONTROLLER + " || " + AnnotationConstants.Pointcut.SERVICE)
-    public void logBeforeFunctionPointcut() {
-
-    }
-
-    @Before("logBeforeFunctionPointcut()")
-    public void logBeforeFunctionAdvice(JoinPoint joinPoint) {
-        _log.info("Class {}. Function {}() with argument[s] = {}", joinPoint.getTarget().getClass().getSimpleName(),
-                joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
-    }
+//    @Pointcut(AnnotationConstants.Pointcut.CONTROLLER + " || " + AnnotationConstants.Pointcut.SERVICE)
+//    public void logBeforeFunctionPointcut() {
+//
+//    }
+//
+//    @Before("logBeforeFunctionPointcut()")
+//    public void logBeforeFunctionAdvice(JoinPoint joinPoint) {
+//        _log.info("Class {}. Function {}() with argument[s] = {}", joinPoint.getTarget().getClass().getSimpleName(),
+//                joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+//    }
 
 }

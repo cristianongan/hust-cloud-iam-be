@@ -88,8 +88,8 @@ public class CustomerDataServiceImpl implements CustomerDataService {
             List<org.mbg.common.base.model.Record> records = new ArrayList<>();
             response.getItems().forEach(item -> {
                 String leakId = Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null;
-                if (!recordRepository.existsByCustomerIdAndLeakId(dataItem.getCustomerId(), leakId)) {
-                    org.mbg.common.base.model.Record record = new Record(dataItem.getCustomerId() , response.getResultId(),leakId, dataSource,
+                if (!recordRepository.existsByCustomerKeyAndLeakId(dataItem.getCustomerKey(), leakId)) {
+                    org.mbg.common.base.model.Record record = new Record(dataItem.getCustomerKey() , response.getResultId(),leakId, dataSource,
                             item.getLeakName(), DateUtil.utcToTimeStampSecond(item.getLeakPublished()),
                             DateUtil.utcToTimeStampSecond(item.getUploadTime()),
                             Validator.isNotNull(item.getEvaluation()) ? resolveSeverityGroupIb(item.getEvaluation().getSeverity()) : null ,

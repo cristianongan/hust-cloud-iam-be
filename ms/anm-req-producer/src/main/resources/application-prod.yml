@@ -186,3 +186,6 @@ config:
   logstash:
     host: 192.168.10.32
     port: 5000
+producer:
+  customer-data-extend-limit: 3
+  subscribe-batch-limit: 100

@@ -34,8 +34,11 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Column(name = "request_id")
     private String requestId;
 
-    @Column(name = "customer_id")
-    private Long customerId;
+//    @Column(name = "customer_id")
+//    private Long customerId;
+
+    @Column(name = "customer_key")
+    private String customerKey;
 
     @Column(name = "data_source")
     private String dataSource;
@@ -79,10 +82,10 @@ public class Record extends AbstractAuditingEntity implements Serializable {
     @Column(name = "type")
     private List<String> types;
 
-    public Record(Long customerId, String requestId, String leakId, String dataSource,
+    public Record(String customerKey, String requestId, String leakId, String dataSource,
                   String leakName, Long dataPublishedTime, Long detectTime, Integer severity,
                   Map<String, Object> meta, String description) {
-        this.customerId = customerId;
+        this.customerKey = customerKey;
         this.requestId = requestId;
         this.dataSource = dataSource;
         this.leakId = leakId;

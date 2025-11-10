@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface CustomerDataRepository extends JpaRepository<CustomerData,Long>, CustomerDataRepositoryExtend {
-    List<CustomerData> findByCustomerIdAndStatus(Long customerId, Integer status);
+    List<CustomerData> findByCustomerKeyAndStatus(String customerKey, Integer status);
 
     CustomerData findByIdAndStatus(Long id, Integer status);
 
-    CustomerData findByCustomerIdAndValueAndStatus(Long customerId, String value, Integer status);
+    CustomerData findByCustomerKeyAndValueAndStatus(String customerKey, String value, Integer status);
 
-    List<CustomerData> findByCustomerIdAndStatusAndValueIn(Long customerId, Integer status, List<String> values);
+    List<CustomerData> findByCustomerKeyAndStatusAndValueIn(String customerKey, Integer status, List<String> values);
 }

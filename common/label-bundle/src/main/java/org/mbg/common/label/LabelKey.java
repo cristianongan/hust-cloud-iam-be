@@ -484,4 +484,10 @@ public final class LabelKey {
     public static final String ERROR_DUPLICATE_PHONE = "error.duplicate-phone";
 
 	public static final String ERROR_DUPLICATE_EMAIL = "error.duplicate-email";
+
+	public static final String ERROR_DATA_LENGTH_EXCEEDED_LIMIT = "error.data-length-exceeded-limit";
+
+    public static final String ERROR_START_OR_END_TIME_CAN_NOT_BE_EMPTY = "error.start-or-end-time-can-not-be-empty";
+
+	public static final String ERROR_START_CAN_NOT_BE_GREAT_THAN_END_TIME = "error.start-can-not-be-great-than-end-time";
 }

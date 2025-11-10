@@ -24,8 +24,11 @@ public class CustomerData extends AbstractAuditingEntity implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "customer_id")
-    private Long customerId;
+//    @Column(name = "customer_id")
+//    private Long customerId;
+
+    @Column(name = "customer_key")
+    private String customerKey;
 
     @Column(name = "type")
     private Integer type;

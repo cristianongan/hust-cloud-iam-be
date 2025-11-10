@@ -1,8 +1,10 @@
 package org.mbg.anm.service;
 
 import org.mbg.common.base.model.dto.UserDTO;
+import org.mbg.common.base.model.dto.request.UserBatchReq;
 import org.mbg.common.base.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
+import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
@@ -12,7 +14,7 @@ public interface UserService {
 
     UserDTO create(UserReq userReq);
 
-    UserDTO customerCreate(UserReq userReq);
+    CustomerUserBatchRes customerCreateBatch(UserBatchReq userReq);
 
     Page<UserDTO> searchUsers(UserSearch search);
 

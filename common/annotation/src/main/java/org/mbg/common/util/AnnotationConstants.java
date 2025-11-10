@@ -23,7 +23,7 @@ public final class AnnotationConstants {
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Pointcut {
-        public static final String CONTROLLER = "within(com.vmc.mes.controller..*)";
-        public static final String SERVICE = "within(com.vmc.mes.service.impl..*)";
+        public static final String CONTROLLER = "within(org.mbg.anm.controller..*)";
+        public static final String SERVICE = "within(org.mbg.anm.service.impl..*)";
     }
 }

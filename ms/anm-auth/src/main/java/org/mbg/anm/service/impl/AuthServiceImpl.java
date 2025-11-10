@@ -2,8 +2,8 @@ package org.mbg.anm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
-import org.mbg.anm.jwt.JwtAccessToken;
+import org.mbg.anm.security.UserPrincipal;
+import org.mbg.common.base.model.JwtAccessToken;
 import org.mbg.anm.jwt.JwtProvider;
 import org.mbg.anm.model.User;
 import org.mbg.anm.model.dto.request.LoginReq;
@@ -14,12 +14,8 @@ import org.mbg.common.base.model.dto.request.OtpReq;
 import org.mbg.common.base.model.dto.request.ResetPasswordReq;
 import org.mbg.common.base.model.dto.response.TransactionResponse;
 import org.mbg.common.base.model.dto.response.VerifyRes;
-import org.mbg.anm.repository.PermissionRepository;
-import org.mbg.anm.repository.RoleRepository;
 import org.mbg.anm.repository.UserRepository;
-import org.mbg.anm.security.UserDetailServiceImpl;
 import org.mbg.anm.service.AuthService;
-import org.mbg.anm.service.TokenService;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.service.TransactionService;
@@ -110,6 +106,7 @@ public class AuthServiceImpl implements AuthService {
 
         verifyRes.setPermissions(auth.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
         verifyRes.setUser(auth.getName());
+        verifyRes.setOrg(auth.getPrincipal() instanceof UserPrincipal ? ((UserPrincipal) auth.getPrincipal()).getUserOrganization() : null);
 
         return verifyRes;
     }
@@ -184,6 +181,26 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void changePassword(ChangePasswordReq req) {
 
+    }
+
+    @Override
+    public JwtAccessToken customerToken(Long userId) {
+
+        User user = userRepository.findById(userId).orElse(null);
+
+        if (Validator.isNull(user)) {
+            throw new BadRequestException(ErrorCode.MSG1004);
+        }
+
+        if (Validator.equals(user.getStatus(), EntityStatus.LOCK.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1005);
+        }
+
+        if (Validator.isNull(user) || !Validator.equals(user.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1029);
+        }
+
+        return jwtProvider.createAccessToken(user.getUsername());
     }
 
     private String decryptPassword(String encryptedPassword) {

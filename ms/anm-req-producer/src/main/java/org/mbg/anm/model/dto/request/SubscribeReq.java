@@ -6,6 +6,8 @@ import java.util.List;
 
 @Data
 public class SubscribeReq {
+    private String customerKey;
+
     private String subscriberId;
 
     private String reference;

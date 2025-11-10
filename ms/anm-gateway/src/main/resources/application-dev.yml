@@ -36,7 +36,7 @@ spring:
       port: 8500      # Port of the Consul agent (default is 8500)
       discovery:
         register: true # Enable service discovery with Consul
-        instance-id: ${spring.application.name}-${random.value} # Generate a unique instance ID
+        instance-id: ${spring.application.name} # Generate a unique instance ID
         health-check-path: /actuator/health # Path for health checks (requires Spring Boot Actuator)
         health-check-interval: 30s
         prefer-ip-address: true # Register service with its IP address instead of hostname (optional)

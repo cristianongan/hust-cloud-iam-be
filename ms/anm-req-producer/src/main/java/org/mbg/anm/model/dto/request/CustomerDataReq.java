@@ -10,7 +10,7 @@ public class CustomerDataReq {
 
     private Integer status;
 
-    private String subscriberId;
+    private String customerKey;
 
     private String transactionId;
 

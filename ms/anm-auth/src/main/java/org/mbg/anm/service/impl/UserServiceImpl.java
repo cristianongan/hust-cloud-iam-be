@@ -14,6 +14,7 @@ import org.mbg.common.base.enums.ErrorCode;
 import org.mbg.common.base.enums.UserType;
 import org.mbg.anm.model.User;
 import org.mbg.common.base.model.dto.UserDTO;
+import org.mbg.common.base.model.dto.request.UserBatchReq;
 import org.mbg.common.base.model.dto.request.UserReq;
 import org.mbg.anm.model.search.UserSearch;
 import org.mbg.anm.service.UserService;
@@ -22,6 +23,8 @@ import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.common.base.model.dto.QuotaDTO;
 import org.mbg.common.base.model.dto.request.QuotaBatchReq;
+import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
+import org.mbg.common.base.model.dto.response.CustomerUserRes;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.security.RsaProvider;
@@ -217,50 +220,72 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO customerCreate(UserReq userReq) {
-        if (Validator.isNull(userReq.getStatus())) {
-            userReq.setStatus(EntityStatus.ACTIVE.getStatus());
+    public CustomerUserBatchRes customerCreateBatch(UserBatchReq userBatchReq) {
+        List<User> users = new ArrayList<>();
+
+        for (UserReq userReq : userBatchReq.getUsers()) {
+            try {
+                if (Validator.isNull(userReq.getStatus())) {
+                    userReq.setStatus(EntityStatus.ACTIVE.getStatus());
+                }
+
+                if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED.getStatus())) {
+                    throw new BadRequestException(ErrorCode.MSG1016);
+                }
+
+                if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
+                    throw new BadRequestException(ErrorCode.MSG1004);
+                }
+
+                String password = this.decryptPassword(userReq.getPassword());
+
+                if (!passwordPattern.matcher(password).matches()) {
+                    throw new BadRequestException(ErrorCode.MSG1004);
+                }
+
+                if (this.userRepository.existsByUsername(userReq.getUsername())) {
+                    throw new BadRequestException(ErrorCode.MSG1041);
+                }
+
+                if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
+                    throw new BadRequestException(ErrorCode.MSG1044);
+                }
+
+                if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
+                    throw new BadRequestException(ErrorCode.MSG1045);
+                }
+
+                User user = new User();
+                user.setUsername(userReq.getUsername());
+                user.setPhone(userReq.getPhone());
+                user.setEmail(userReq.getEmail());
+                user.setPassword(passwordEncoder.encode(password));
+                user.setAddress(userReq.getAddress());
+                user.setDob(userReq.getDob());
+                user.setGender(userReq.getGender());
+                user.setFullname(userReq.getFullname());
+                user.setType(userReq.getType());
+                user.setStatus(userReq.getStatus());
+
+                users.add(user);
+            } catch (Exception e) {
+                _log.error("customerCreateBatch occurred an exception {}", e.getMessage());
+            }
         }
 
-        if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED.getStatus())) {
-            throw new BadRequestException(ErrorCode.MSG1016);
-        }
+        users = this.userRepository.saveAll(users);
+        CustomerUserBatchRes res = new CustomerUserBatchRes();
 
-        if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
-            throw new BadRequestException(ErrorCode.MSG1004);
-        }
+        List<CustomerUserRes> data = users.stream().parallel().map(item -> {
+            CustomerUserRes user = new CustomerUserRes();
+            user.setUserId(item.getId());
+            user.setUsername(item.getUsername());
+            return user;
+        }).toList();
 
-        String password = this.decryptPassword(userReq.getPassword());
+        res.setCustomerUserRes(data);
 
-        if (!passwordPattern.matcher(password).matches()) {
-            throw new BadRequestException(ErrorCode.MSG1004);
-        }
-
-        if (this.userRepository.existsByUsername(userReq.getUsername())) {
-            throw new BadRequestException(ErrorCode.MSG1041);
-        }
-
-        if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
-            throw new BadRequestException(ErrorCode.MSG1044);
-        }
-
-        if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
-            throw new BadRequestException(ErrorCode.MSG1045);
-        }
-
-        User user = new User();
-        user.setUsername(userReq.getUsername());
-        user.setPhone(userReq.getPhone());
-        user.setEmail(userReq.getEmail());
-        user.setPassword(passwordEncoder.encode(password));
-        user.setAddress(userReq.getAddress());
-        user.setDob(userReq.getDob());
-        user.setGender(userReq.getGender());
-        user.setFullname(userReq.getFullname());
-        user.setType(userReq.getType());
-        user.setStatus(userReq.getStatus());
-
-        return this.userMapper.toDto(this.userRepository.save(user));
+        return res;
     }
 
     private void validateUserReq(UserReq userReq) {
