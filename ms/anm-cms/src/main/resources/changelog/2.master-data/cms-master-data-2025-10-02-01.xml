@@ -30,4 +30,13 @@
 
         </sql>
     </changeSet>
+
+    <changeSet id="cms-master-data-02-10-2025-01-03" author="Nganph">
+        <sql>
+            <![CDATA[
+            INSERT INTO  content_template (template_code, created_by, created_date, last_modified_by, last_modified_date, description, name, status, content, title) VALUES ('DATA_DESCRIPTION', NULL, NULL, NULL, NULL, 'Mẫu mô tả dữ liệu quét', 'Mẫu mô tả dữ liệu quét', '1', 'Bạn bị lộ các dữ liệu ${TYPE} tại ${LEAK_NAME}', 'DATA DESCRIPTION');
+            ]]>
+
+        </sql>
+    </changeSet>
 </databaseChangeLog>

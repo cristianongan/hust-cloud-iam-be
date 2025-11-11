@@ -18,7 +18,9 @@ import java.util.List;
 @ConfigurationProperties(prefix = "api-consumer")
 public class ApiConsumerProperties {
 
-    private List<Group> groups;
+    private List<Group> groupIbs;
+
+    private List<Group> leakChecks;
 
     @Data
     public static class Group {

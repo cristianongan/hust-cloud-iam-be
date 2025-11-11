@@ -49,30 +49,57 @@ public class ApiConsumerJob {
 
     private final CustomerDataService customerDataService;
 
+    private final CustomerDataService leakCheckDataService;
+
     public ApiConsumerJob(ApiConsumerProperties props,RedisTemplate<String, Object> redisTemplate,
-                       CustomerDataService customerDataService,
+                       CustomerDataService customerDataService, @Qualifier("leakCheckService") CustomerDataService leakCheckDataService,
                        @Qualifier("asyncExecutor") TaskExecutor taskExecutor) {
         this.apiConsumerProperties = props;
         this.taskExecutor = taskExecutor;
         this.redisTemplate = redisTemplate;
         this.customerDataService = customerDataService;
+        this.leakCheckDataService = leakCheckDataService;
     }
 
     @PostConstruct
     public void init() {
-        if (Validator.isNotNull(apiConsumerProperties.getGroups())) {
-            _log.info("start create consumers");
-            apiConsumerProperties.getGroups().forEach(group -> {
+        if (Validator.isNotNull(apiConsumerProperties.getGroupIbs())) {
+            _log.info("start create consumers group ib");
+            apiConsumerProperties.getGroupIbs().forEach(group -> {
                 group.getAccounts().forEach(account -> {
-                    _log.info("create consumer {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
+                    _log.info("create consumer group ib {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
                     LookUpDataMessageListener worker = new LookUpDataMessageListener(
                             (item) -> {
                                 this.customerDataService.craw((Long) item.getPayload(), group.getApi(),
-                                        HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),
+                                        null,
                                         group.getDataSource());
                             },
                             (item) -> {
                                 this.customerDataService.onFail((Long) item.getPayload());
+                            },
+                            redisTemplate,
+                            taskExecutor,
+                            account.getUser(),
+                            group.getGroupName(),
+                            group.getTopic());
+                    worker.start();
+                });
+            });
+        }
+
+        if (Validator.isNotNull(apiConsumerProperties.getLeakChecks())) {
+            _log.info("start create consumers leak check");
+            apiConsumerProperties.getLeakChecks().forEach(group -> {
+                group.getAccounts().forEach(account -> {
+                    _log.info("create consumer leak check {} - account: {} - topic: {}", group.getDataSource(), account.getUser(), group.getTopic());
+                    LookUpDataMessageListener worker = new LookUpDataMessageListener(
+                            (item) -> {
+                                this.leakCheckDataService.craw((Long) item.getPayload(), group.getApi(),
+                                        HeaderUtil.getBasicAuthorization(account.getUser(), account.getKey()),
+                                        group.getDataSource());
+                            },
+                            (item) -> {
+                                this.leakCheckDataService.onFail((Long) item.getPayload());
                             },
                             redisTemplate,
                             taskExecutor,

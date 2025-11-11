@@ -172,7 +172,7 @@ rsa:
     public-key: 'MIIBITANBgkqhkiG9w0BAQEFAAOCAQ4AMIIBCQKCAQBWYe+RzJwuRDKWdRNNYiKDuNOrDYgJ7wWgLpad89woDCMtXDytLTysD6oFDl9NLOr/WVcpWKRB/jmSy5lJyly9XpajUmW6Cx9gMb/VfMLwcsmyZoZ2wr69/yQQKrYd9pWNKBql8CQYPn7pjMjYG8vR2MsaGPIvqzgf2oJWv4ai6CesWoKQazpVsI6BbGc229/SIML2rKrBPgF4JMQScgUPbPATXRxrzmPKu61l/qAG8gWhO+vPTGpeHhy+VKC8wWZRrPIAWoykIiXR5OrXQ9Sk+V6pebiqlQHkiF1sohqdnF6ACIHCnNxxH/lHXpYkvgbZdTgGUyADEvQ2bwR9d3hHAgMBAAE='
 
 api-consumer:
-  groups:
+  group-ibs:
   - data-source: group-ib
 #    api: https://tap.group-ib.com/api/v3/compromised/breached
     api: http://localhost:9080/lookup
@@ -181,6 +181,15 @@ api-consumer:
     accounts:
       - user: thanglx@mobifoneglobal.vn
         key: GuFEek4ApzpCbA3gqMhtWHVPpjbQleSH
+  leak-checks:
+    - data-source: leak-check
+      #    api: https://tap.group-ib.com/api/v3/compromised/breached
+      api:  https://leakcheck.io/api/public
+      topic: lookupLst
+      group-name: leak-check-lookup
+      accounts:
+        - user: public
+          key:
 
 config:
   logstash:

@@ -84,7 +84,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
 
     public Record(String customerKey, String requestId, String leakId, String dataSource,
                   String leakName, Long dataPublishedTime, Long detectTime, Integer severity,
-                  Map<String, Object> meta, String description) {
+                  Map<String, Object> meta, String description, List<String> types) {
         this.customerKey = customerKey;
         this.requestId = requestId;
         this.dataSource = dataSource;
@@ -95,15 +95,7 @@ public class Record extends AbstractAuditingEntity implements Serializable {
         this.meta = meta;
         this.severity = severity;
         this.status = RecordStatus.INIT.getValue();
-        this.types = this.resolveType();
         this.description = description;
-    }
-
-    private List<String> resolveType() {
-        if (Validator.isNotNull(meta)) {
-            return PiiScanner.convertToEntityAttribute(meta.keySet());
-        }
-
-        return List.of();
+        this.types = types;
     }
 }

@@ -5,6 +5,8 @@ public enum TemplateCode {
 
     EMAIL_OTP,
 
+    DATA_DESCRIPTION,
+
     NEW_DEVICE_LOGIN_NOTICE,
 
     SMS_RESET_PASSWORD,

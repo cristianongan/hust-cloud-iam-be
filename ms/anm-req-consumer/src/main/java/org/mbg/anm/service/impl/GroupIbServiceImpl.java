@@ -17,6 +17,7 @@ import org.mbg.common.base.model.Record;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.common.base.repository.RecordRepository;
+import org.mbg.common.base.util.PiiScanner;
 import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.Validator;
 import org.springframework.context.annotation.Primary;
@@ -89,14 +90,15 @@ public class GroupIbServiceImpl implements CustomerDataService {
         if (Validator.isNotNull(response.getItems())) {
             List<org.mbg.common.base.model.Record> records = new ArrayList<>();
             response.getItems().forEach(item -> {
+                Map<String, Object> meta = this.gson.fromJson(item.getAddInfo(), new TypeToken<Map<String, Object>>(){}.getType());
                 String leakId = Validator.isNotNull(item.getId()) ? item.getId().getFirst() : null;
                 if (!recordRepository.existsByCustomerKeyAndLeakId(dataItem.getCustomerKey(), leakId)) {
                     org.mbg.common.base.model.Record record = new Record(dataItem.getCustomerKey() , response.getResultId(),leakId, dataSource,
                             item.getLeakName(), DateUtil.utcToTimeStampSecond(item.getLeakPublished()),
                             DateUtil.utcToTimeStampSecond(item.getUploadTime()),
                             Validator.isNotNull(item.getEvaluation()) ? resolveSeverityGroupIb(item.getEvaluation().getSeverity()) : null ,
-                            this.gson.fromJson(item.getAddInfo(), new TypeToken<Map<String, Object>>(){}.getType()),
-                            item.getDescription()
+                            meta,
+                            item.getDescription(), this.resolveType(meta)
                     );
 
                     record.setDataLookup(dataItem.getValue());
@@ -112,6 +114,14 @@ public class GroupIbServiceImpl implements CustomerDataService {
         dataItem.setLastScan(LocalDateTime.now());
 
         this.customerDataRepository.save(dataItem);
+    }
+
+    List<String> resolveType(Map<String, Object> meta) {
+        if (Validator.isNotNull(meta)) {
+            return PiiScanner.convertToEntityAttribute(meta.keySet());
+        }
+
+        return List.of();
     }
 
     @Override

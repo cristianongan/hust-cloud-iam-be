@@ -125,7 +125,7 @@ public class RecordRepositoryImpl implements RecordRepositoryExtend {
         params.put("deletedStatus", EntityStatus.DELETED.getStatus());
 
         if (Validator.isNotNull(lookupReq.getCustomerKey())) {
-            sql.append(" AND e.customer_key = :customerKey ");
+            sql.append(" AND e.customerKey = :customerKey ");
             params.put("customerKey",lookupReq.getCustomerKey());
         }
 

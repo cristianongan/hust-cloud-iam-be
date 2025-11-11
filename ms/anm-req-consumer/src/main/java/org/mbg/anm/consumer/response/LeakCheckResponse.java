@@ -1,5 +1,6 @@
 package org.mbg.anm.consumer.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
 
 import java.io.Serial;
@@ -19,8 +20,11 @@ public class LeakCheckResponse implements Serializable {
 
     private List<Source> sources;
 
+    private String error;
+
 
     @Data
+    @JsonPropertyOrder({"name","date"})
     public static class Source implements Serializable {
 
         @Serial
