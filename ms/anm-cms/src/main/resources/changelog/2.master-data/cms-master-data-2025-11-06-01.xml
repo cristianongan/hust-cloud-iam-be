@@ -16,7 +16,7 @@
 
     <changeSet id="cms-master-data-2025-11-06-01-02" author="Nganph">
         <sql>
-            INSERT INTO common_data (type, code, value, status) values ('ORGANNIZATION', 'TCB', 'Techcombank', 1);
+            INSERT INTO common_data (type, code, value, status) values ('ORGANIZATION', 'TCB', 'Techcombank', 1);
         </sql>
     </changeSet>
 

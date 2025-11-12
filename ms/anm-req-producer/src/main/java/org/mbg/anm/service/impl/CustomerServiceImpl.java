@@ -459,7 +459,7 @@ public class CustomerServiceImpl implements CustomerService {
                 .customerKey(customer.getCustomerKey())
                 .data(data.stream().map(r -> InfoRes.CustomerDataRes.builder()
                         .value(r.getValue())
-                        .type(Objects.requireNonNull(CustomerDataType.valueOfStatus(r.getType())).name())
+                        .type(Objects.requireNonNull(CustomerDataType.valueOf(r.getType())).name())
                         .isPrimary(r.getIsPrimary())
                         .verified(r.getVerify())
                         .build()).toList())

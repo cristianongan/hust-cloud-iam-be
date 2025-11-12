@@ -24,7 +24,7 @@ public enum LeakType {
         return Stream.of(values()).map(e -> e.value).collect(Collectors.toList());
     }
 
-    public static LeakType valueOfStatus(String value) {
+    public static LeakType valueOfType(String value) {
         for (LeakType e : values()) {
             if (Objects.equals(e.getValue(), value)) {
                 return e;

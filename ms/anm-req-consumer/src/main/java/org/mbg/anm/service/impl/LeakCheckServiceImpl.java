@@ -11,10 +11,7 @@ import org.mbg.anm.consumer.request.LeakCheckReq;
 import org.mbg.anm.consumer.response.GroupIbCompromisedRes;
 import org.mbg.anm.consumer.response.LeakCheckResponse;
 import org.mbg.anm.service.CustomerDataService;
-import org.mbg.common.base.enums.CustomerDataType;
-import org.mbg.common.base.enums.CustomerSyncStatus;
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.base.enums.TemplateCode;
+import org.mbg.common.base.enums.*;
 import org.mbg.common.base.model.ContentTemplate;
 import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.base.model.Record;
@@ -22,9 +19,12 @@ import org.mbg.common.base.repository.ContentTemplateRepository;
 import org.mbg.common.base.repository.CustomerDataRepository;
 import org.mbg.common.base.repository.RecordRepository;
 import org.mbg.common.base.util.PiiScanner;
+import org.mbg.common.label.LabelKey;
+import org.mbg.common.label.Labels;
 import org.mbg.common.security.util.SecurityConstants;
 import org.mbg.common.util.DateUtil;
 import org.mbg.common.util.Md5Util;
+import org.mbg.common.util.StringUtil;
 import org.mbg.common.util.Validator;
 import org.slf4j.MDC;
 import org.springframework.http.HttpMethod;
@@ -74,6 +74,7 @@ public class LeakCheckServiceImpl implements CustomerDataService {
         leakCheckReq.setBaseUrl(api);
 
         params.add("check", dataItem.getValue());
+        CustomerDataType customerDataType = CustomerDataType.valueOf(dataItem.getType());
 
         LeakCheckResponse response =  leakCheckApiSender.sendToLeakCheck(leakCheckReq,
                 LeakCheckResponse.class, params, token);
@@ -83,12 +84,50 @@ public class LeakCheckServiceImpl implements CustomerDataService {
         }
 
         if (Validator.isNotNull(response.getSources())) {
-            List<org.mbg.common.base.model.Record> records = new ArrayList<>();
+            List<String> types = resolveType(response.getFields());
+
+            if (Validator.isNotNull(customerDataType)) {
+                types.add(customerDataType.toString().toLowerCase());
+            }
+
+            List<String> unique = new ArrayList<>(new LinkedHashSet<>(types));
+
+
+            String typeNom = StringUtil.join(unique.stream().map(r -> {
+                String rs = "";
+                final LeakType ip = LeakType.valueOfType(r);
+                switch (ip) {
+                    case LeakType.EMAIL:
+                        rs = Labels.getLabels(LabelKey.LABEL_EMAIL);
+                        break;
+                    case LeakType.PHONE:
+                        rs = Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER);
+                        break;
+                    case LeakType.ADDRESS:
+                        rs = Labels.getLabels(LabelKey.LABEL_ADDRESS);
+                        break;
+                    case LeakType.BANK_ACCOUNT:
+                        rs = Labels.getLabels(LabelKey.LABEL_BANK_ACCOUNT);
+                        break;
+                    case LeakType.IDENTIFICATION:
+                        rs = Labels.getLabels(LabelKey.LABEL_IDENTIFICATION);
+                        break;
+                    case null:
+                        break;
+
+                }
+                return rs;
+            }).toList() , ", ");
+
+            List<Record> records = new ArrayList<>();
             response.getSources().stream().filter(Validator::isNotNull).forEach(item -> {
 
                 String leakId = Md5Util.md5Hex(item);
 
                 if (!recordRepository.existsByCustomerKeyAndLeakId(dataItem.getCustomerKey(), leakId)) {
+                    Map<String, String> paramContent = new HashMap<>();
+                    paramContent.put("TYPE", typeNom);
+                    paramContent.put("LEAK_NAME", item.getName());
                     Long epoch = null;
                     if (Validator.isNotNull(item.getDate())) {
                         YearMonth ym = YearMonth.parse(item.getDate());
@@ -100,18 +139,18 @@ public class LeakCheckServiceImpl implements CustomerDataService {
                         epoch = LocalDateTime.now().toEpochSecond(ZoneOffset.UTC);
                     }
 
-                    String description = "";
+                    String description = StringUtil.replaceMapValue(contentTemplate.getContent(), paramContent);
 
                     Map<String, Object> meta = new HashMap<>();
                     meta.put("fields", response.getFields());
 
-                    org.mbg.common.base.model.Record record = new Record(dataItem.getCustomerKey() , UUID.randomUUID().toString(), leakId, dataSource,
+                    Record record = new Record(dataItem.getCustomerKey() , UUID.randomUUID().toString(), leakId, dataSource,
                             item.getName(), epoch,
                             epoch,
-                            null ,
+                            null,
                             meta,
                             description,
-                            resolveType(response.getFields())
+                            types
                     );
 
                     record.setDataLookup(dataItem.getValue());

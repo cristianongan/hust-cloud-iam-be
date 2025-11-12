@@ -161,6 +161,7 @@ cache:
     captcha: 300 # 5 phút
     password-verify: 300 # 5 phút,
     dashboard: 180 # 3 phút
+    find_by_template_code: 180 # 3 phút
 
 rsa:
   algorithm: RSA/ECB/PKCS1Padding

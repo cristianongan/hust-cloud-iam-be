@@ -28,7 +28,7 @@ public class CustomerDataRepositoryImpl implements CustomerDataRepositoryExtend 
         query.setParameter("status", status.getStatus());
         query.setParameter("syncStatus", customerSyncStatus.getStatus());
         query.setFirstResult(0);
-        query.setMaxResults(--limit);
+        query.setMaxResults(limit);
 
         return query.getResultList();
     }

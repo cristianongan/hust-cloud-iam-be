@@ -20,7 +20,7 @@ public enum CustomerDataType {
         return Stream.of(values()).map(e -> e.value).collect(Collectors.toList());
     }
 
-    public static CustomerDataType valueOfStatus(int value) {
+    public static CustomerDataType valueOf(int value) {
         for (CustomerDataType e : values()) {
             if (e.getValue() == value) {
                 return e;
