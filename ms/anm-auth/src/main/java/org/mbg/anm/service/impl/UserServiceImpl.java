@@ -156,6 +156,7 @@ public class UserServiceImpl implements UserService {
         user.setFullname(userReq.getFullname());
         user.setType(userReq.getType());
         user.setStatus(userReq.getStatus());
+        user.setOrganization(userReq.getOrganization());
 
         return this.userMapper.toDto(userRepository.save(user));
     }
@@ -215,6 +216,7 @@ public class UserServiceImpl implements UserService {
         user.setFullname(userReq.getFullname());
         user.setType(userReq.getType());
         user.setStatus(userReq.getStatus());
+        user.setOrganization(userReq.getOrganization());
 
         return this.userMapper.toDto(this.userRepository.save(user));
     }
@@ -265,7 +267,9 @@ public class UserServiceImpl implements UserService {
                 user.setGender(userReq.getGender());
                 user.setFullname(userReq.getFullname());
                 user.setType(userReq.getType());
-                user.setStatus(userReq.getStatus());
+                user.setStatus(EntityStatus.ACTIVE.getStatus());
+                user.setType(UserType.INDIVIDUAL.getValue());
+                user.setOrganization(userReq.getOrganization());
 
                 users.add(user);
             } catch (Exception e) {
