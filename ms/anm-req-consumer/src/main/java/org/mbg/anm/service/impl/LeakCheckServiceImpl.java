@@ -112,6 +112,9 @@ public class LeakCheckServiceImpl implements CustomerDataService {
                     case LeakType.IDENTIFICATION:
                         rs = Labels.getLabels(LabelKey.LABEL_IDENTIFICATION);
                         break;
+                    case LeakType.PASSWORD:
+                        rs = Labels.getLabels(LabelKey.LABEL_PASSWORD);
+                        break;
                     case null:
                         break;
 
