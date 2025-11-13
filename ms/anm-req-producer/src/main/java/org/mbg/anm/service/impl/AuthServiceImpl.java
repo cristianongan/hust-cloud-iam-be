@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
-        if (Validator.equals(cus.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+        if (!Validator.equals(cus.getStatus(), EntityStatus.ACTIVE.getStatus())) {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
@@ -47,9 +47,9 @@ public class AuthServiceImpl implements AuthService {
         if (Validator.isNotNull(cus.getStartTime()) && Validator.isNotNull(cus.getEndTime()) && (
                 cus.getStartTime().isBefore(now) || cus.getEndTime().isAfter(now)
                 )) {
-            throw new BadRequestException(ErrorCode.MSG1029);
+            return authClient.generateToken(cus.getUserId());
         }
 
-        return authClient.generateToken(cus.getUserId());
+        throw new BadRequestException(ErrorCode.MSG1029);
     }
 }

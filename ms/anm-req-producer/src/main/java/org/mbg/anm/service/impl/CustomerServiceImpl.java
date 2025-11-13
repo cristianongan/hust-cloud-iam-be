@@ -128,7 +128,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         List<UserReq> userReqs = new ArrayList<>();
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now().plusDays(1);
         ZoneId zone = ZoneId.of("Asia/Bangkok");
 
         for (SubscribeBatchReq.DataReq item : req.getDataReqs()) {
@@ -153,8 +153,8 @@ public class CustomerServiceImpl implements CustomerService {
                 LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getStartTime()), zone);
                 LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getEndTime()), zone);
 
-                if (start.isBefore(end)) {
-                    throw new BadRequestException(ErrorCode.MSG1051);
+                if (end.isBefore(start)) {
+                    throw new BadRequestException(ErrorCode.MSG1049);
                 }
 
                 if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())
