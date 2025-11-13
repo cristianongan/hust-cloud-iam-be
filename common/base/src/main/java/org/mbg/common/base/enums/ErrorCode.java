@@ -121,6 +121,8 @@ public enum ErrorCode {
     MSG1048(LabelKey.ERROR_START_OR_END_TIME_CAN_NOT_BE_EMPTY),
 
     MSG1049(LabelKey.ERROR_START_CAN_NOT_BE_GREAT_THAN_END_TIME),
+
+    MSG1050(LabelKey.ERROR_INVALID_AES),
     ;
 
     private String key;

@@ -493,4 +493,5 @@ public final class LabelKey {
 
 	public static final String ERROR_PLEASE_ENTER_EMAIL_OR_PHONE_NUMBER = "error.please-enter-email-or-phone-number";
 
+	public static final String ERROR_INVALID_AES = "error.invalid-aes";
 }

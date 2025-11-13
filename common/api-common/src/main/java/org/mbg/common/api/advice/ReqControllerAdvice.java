@@ -116,7 +116,13 @@ public class ReqControllerAdvice extends RequestBodyAdviceAdapter {
             return inputMessage;
         }
 
-        byte[] plainText = AES256GCMUtil.decrypt(combineText, key, nonce,null);
+        byte[] plainText;
+
+        try {
+            plainText = AES256GCMUtil.decrypt(combineText, key, nonce,null);
+        } catch(Exception e) {
+            throw new BadRequestException(ErrorCode.MSG1032);
+        }
 
         HttpInputMessage message = new HttpInputMessage() {
             @Override public InputStream getBody() { return new ByteArrayInputStream(plainText); }

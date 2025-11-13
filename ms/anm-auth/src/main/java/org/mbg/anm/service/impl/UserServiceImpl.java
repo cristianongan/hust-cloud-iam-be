@@ -259,8 +259,8 @@ public class UserServiceImpl implements UserService {
 
                 User user = new User();
                 user.setUsername(userReq.getUsername());
-                user.setPhone(userReq.getPhone());
-                user.setEmail(userReq.getEmail());
+                user.setPhone(Validator.isNotNull(userReq.getPhone()) ? userReq.getPhone() : null);
+                user.setEmail(Validator.isNotNull(userReq.getEmail()) ? userReq.getEmail() : null);
                 user.setPassword(passwordEncoder.encode(password));
                 user.setAddress(userReq.getAddress());
                 user.setDob(userReq.getDob());
