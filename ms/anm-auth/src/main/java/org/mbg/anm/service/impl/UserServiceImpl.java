@@ -249,11 +249,11 @@ public class UserServiceImpl implements UserService {
                     throw new BadRequestException(ErrorCode.MSG1041);
                 }
 
-                if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
+                if ( Validator.isNotNull(userReq.getPhone()) && this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
                     throw new BadRequestException(ErrorCode.MSG1044);
                 }
 
-                if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
+                if (Validator.isNotNull(userReq.getEmail()) && this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
                     throw new BadRequestException(ErrorCode.MSG1045);
                 }
 
