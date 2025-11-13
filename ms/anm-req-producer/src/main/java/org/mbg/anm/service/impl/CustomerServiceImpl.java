@@ -129,6 +129,7 @@ public class CustomerServiceImpl implements CustomerService {
         List<UserReq> userReqs = new ArrayList<>();
 
         LocalDateTime now = LocalDateTime.now();
+        ZoneId zone = ZoneId.of("Asia/Bangkok");
 
         for (SubscribeBatchReq.DataReq item : req.getDataReqs()) {
             if (Validator.isNotNull(item)) {
@@ -149,6 +150,12 @@ public class CustomerServiceImpl implements CustomerService {
                 Customer customer = customerMap.get(key);
                 String phone = "";
                 String email = "";
+                LocalDateTime start = LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getStartTime()), zone);
+                LocalDateTime end = LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getEndTime()), zone);
+
+                if (start.isBefore(end)) {
+                    throw new BadRequestException(ErrorCode.MSG1051);
+                }
 
                 if (Validator.isNotNull(customer) && Validator.equals(customer.getStatus(), EntityStatus.ACTIVE.getStatus())
                     && customer.getEndTime().isAfter(now)) {
@@ -173,10 +180,9 @@ public class CustomerServiceImpl implements CustomerService {
                     isCreate = true;
                 }
 
-                ZoneId zone = ZoneId.of("Asia/Bangkok");
                 customer.setReference(req.getReference());
-                customer.setStartTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getStartTime()), zone));
-                customer.setEndTime(LocalDateTime.ofInstant(Instant.ofEpochMilli(item.getEndTime()), zone));
+                customer.setStartTime(start);
+                customer.setEndTime(end);
 
                 if (Validator.isNotNull(item.getType()) && isCreate) {
                     CustomerData customerData = null;

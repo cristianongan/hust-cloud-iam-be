@@ -123,6 +123,8 @@ public enum ErrorCode {
     MSG1049(LabelKey.ERROR_START_CAN_NOT_BE_GREAT_THAN_END_TIME),
 
     MSG1050(LabelKey.ERROR_INVALID_AES),
+
+    MSG1051(LabelKey.ERROR_START_CAN_NOT_SMALLER_THAN_NOW),
     ;
 
     private String key;
