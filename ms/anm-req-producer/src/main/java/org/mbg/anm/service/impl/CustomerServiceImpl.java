@@ -12,6 +12,7 @@ import org.mbg.anm.service.mapper.RecordMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.configuration.ValidationProperties;
 import org.mbg.common.base.enums.*;
+import org.mbg.common.base.model.CustomerLog;
 import org.mbg.common.base.model.Record;
 import org.mbg.common.base.model.dto.UserDTO;
 import org.mbg.common.base.model.dto.request.LookupReq;
@@ -22,12 +23,14 @@ import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
 import org.mbg.common.base.model.dto.response.CustomerUserRes;
 import org.mbg.common.base.model.dto.response.TransactionResponse;
 import org.mbg.common.base.repository.CustomerDataRepository;
+import org.mbg.common.base.repository.CustomerLogRepository;
 import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.anm.service.CustomerService;
 import org.mbg.anm.service.mapper.CustomerMapper;
 import org.mbg.common.base.model.Customer;
 import org.mbg.common.base.model.CustomerData;
 import org.mbg.common.base.repository.RecordRepository;
+import org.mbg.common.base.service.mapper.CustomerLogMapper;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.security.RsaProvider;
@@ -72,6 +75,10 @@ public class CustomerServiceImpl implements CustomerService {
     private final AuthClient authClient;
 
     private final ProducerProperties properties;
+
+    private final CustomerLogMapper customerLogMapper;
+
+    private final CustomerLogRepository customerLogRepository;
 
     @Autowired
     @Qualifier("clientRsaProvider")
@@ -236,7 +243,10 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
         this.customerDataRepository.saveAll(data);
-        this.customerRepository.saveAll(entities);
+        entities = this.customerRepository.saveAll(entities);
+
+        List<CustomerLog> logs = this.customerLogMapper.toDto(entities);
+        this.customerLogRepository.saveAll(logs);
 
         return null;
     }

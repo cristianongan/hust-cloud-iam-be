@@ -10,12 +10,14 @@ public class PiiScanner {
     public static Set<String> emailKeys = new HashSet<>();
     public static Set<String> addressKeys = new HashSet<>();
     public static Set<String> bankAccountKeys = new HashSet<>();
+    public static Set<String> passwordKeys = new HashSet<>();
 
     static {
         phoneKeys.addAll(List.of("phone", "mobile", "mobilephone", "sdt", "tel", "sodienthoai", "msisdn", "telephone", "mobilenumber"));
         emailKeys.addAll(List.of("email", "mail", "thudientu", "maildomain"));
         addressKeys.addAll(List.of("address","addr","diachi","street","ward","district","province","city","zipcode","postal","country"));
         bankAccountKeys.addAll(List.of("bank","bankaccount", "swift", "accountholder", "tknganhang", "taikhoannganhang", "creditcard", "debitcard", "bankcard", "atm", "atmcard"));
+        passwordKeys.addAll(List.of("password", "pwd", "pass", "secret", "matkhau", "pin", "pincode"));
     }
 
     public static List<String> convertToEntityAttribute(Set<String> keys) {
@@ -39,6 +41,10 @@ public class PiiScanner {
 
         if (isContain(keys, bankAccountKeys)) {
             result.add(LeakType.BANK_ACCOUNT.getValue());
+        }
+
+        if (isContain(keys, passwordKeys)) {
+            result.add(LeakType.PASSWORD.getValue());
         }
 
         return result;

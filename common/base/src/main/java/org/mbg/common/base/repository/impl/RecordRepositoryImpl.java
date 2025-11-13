@@ -10,14 +10,16 @@ import org.mbg.common.base.model.dto.request.RecordReq;
 import org.mbg.common.base.repository.extend.RecordRepositoryExtend;
 import org.mbg.common.util.TimeUtil;
 import org.mbg.common.util.Validator;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Pageable;
 
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.sql.Date;
+import java.time.*;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class RecordRepositoryImpl implements RecordRepositoryExtend {
     @PersistenceContext
@@ -94,8 +96,59 @@ public class RecordRepositoryImpl implements RecordRepositoryExtend {
     }
 
     @Override
-    public Map<String, Long> countTypeRecords(RecordReq recordReq) {
-        return Map.of();
+    public Map<String, Long> countTypeRecords(LocalDateTime start, LocalDateTime end) {
+        String sql = "select type, count(1) as count from record_type e inner join record_ cd " + " on cd.id = e.record_id " +
+                " where cd.created_date >= :start and cd.created_date <= :end " +
+                " group by e.type ";
+
+        Map<String,Object> params = new HashMap<>();
+
+        params.put("start", start);
+        params.put("end", end);
+
+        Query query = em.createNativeQuery(sql);
+
+        params.forEach(query::setParameter);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = query.getResultList();
+
+        return rows.stream().collect(
+                Collectors.toMap(
+                        r -> (String) r[0],
+                        r -> ((Number) r[1]).longValue(),
+                        Long::sum,
+                        LinkedHashMap::new
+                )
+        );
+    }
+
+    @Override
+    public Map<LocalDate, Long> countRecordByDay(LocalDateTime start, LocalDateTime end) {
+        String sql = "select (date_trunc('day', e.created_date AT TIME ZONE 'Asia/Ho_Chi_Minh'))::date AS day_vn, count(1) from record_ e "
+                + " where e.created_date >= :start and e.created_date <= :end "
+                + " GROUP BY day_vn";
+
+        Map<String,Object> params = new HashMap<>();
+
+        params.put("start", start);
+        params.put("end", end);
+
+        Query query = em.createNativeQuery(sql);
+
+        params.forEach(query::setParameter);
+
+        @SuppressWarnings("unchecked")
+        List<Object[]> rows = query.getResultList();
+
+        return rows.stream().collect(
+                Collectors.toMap(
+                        r -> ((Date) r[0]).toLocalDate(),
+                        r -> ((Number) r[1]).longValue(),
+                        Long::sum,
+                        LinkedHashMap::new
+                )
+        );
     }
 
     private StringBuilder createWhereQueryCms(RecordReq recordReq, Map<String, Object> params) {
@@ -122,7 +175,9 @@ public class RecordRepositoryImpl implements RecordRepositoryExtend {
 
     private StringBuilder createWhereQuery(LookupReq lookupReq, Map<String, Object> params) {
         StringBuilder sql = new StringBuilder(" WHERE 1=1 AND e.status != :deletedStatus ");
+        sql.append(" AND exists (select 1 from CustomerData c where c.customerKey = e.customerKey and c.value = e.dataLookup and c.status = :activeStatus) ");
         params.put("deletedStatus", EntityStatus.DELETED.getStatus());
+        params.put("activeStatus", EntityStatus.ACTIVE.getStatus());
 
         if (Validator.isNotNull(lookupReq.getCustomerKey())) {
             sql.append(" AND e.customerKey = :customerKey ");

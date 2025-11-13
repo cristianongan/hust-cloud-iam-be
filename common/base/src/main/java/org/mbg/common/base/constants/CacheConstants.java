@@ -17,7 +17,11 @@ public final class CacheConstants {
         public static final String FIND_BY_TEMPLATE_CODE = "content_template_find_by_template_code";
     }
 
-    public static final class CommonData {
+    public static final class COMMON_DATA {
         public static final String FIND_BY_TYPE_AND_STATUS = "common_data_find_by_type_and_status";
+    }
+
+    public static final class DASHBOARD {
+        public static final String DASHBOARD = "dashboard";
     }
 }

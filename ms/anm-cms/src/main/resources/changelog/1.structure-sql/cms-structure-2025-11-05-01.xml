@@ -65,4 +65,69 @@ create unique index common_data_code on common_data(code);
         </sql>
     </changeSet>
 
+    <changeSet id="cms-structure-2025-11-05-01-08" author="Nganph">
+        <sql>
+            drop index public.customer_data_sync_status_last_scan;
+
+            drop index public.idx_cd_sync_lastscan_nf;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-09" author="Nganph">
+        <sql>
+            CREATE INDEX idx_customer_status1_ck
+                ON customer (customer_key)
+                WHERE status = 1;
+
+            CREATE INDEX idx_cd_sync0_lastscan_asc_nf
+                ON customer_data (last_scan ASC NULLS FIRST)
+                WHERE sync_status = 0 and verify = 1;
+
+            CREATE INDEX idx_cd_sync0_lastscan_asc_nf_st
+                ON customer_data (last_scan ASC NULLS FIRST)
+                WHERE sync_status = 1 and verify = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-10" author="Nganph">
+        <sql>
+
+            CREATE INDEX idx_cd_customer_key_value_status
+                ON customer_data (customer_key, value)
+                WHERE status = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-11" author="Nganph">
+        <sql>
+
+            CREATE INDEX idx_record_created_date
+                ON record_ (created_date)
+                WHERE status = 1;
+        </sql>
+    </changeSet>
+
+    <changeSet id="cms-structure-2025-11-05-01-12" author="Nganph">
+        <sql>
+            create table customer_log
+            (
+                id                 bigserial
+                    primary key,
+                customer_key       varchar(255),
+                subscriber_id      varchar(500),
+                reference          varchar(255),
+                status             smallint,
+                created_by         varchar(100),
+                created_date       timestamp,
+                last_modified_by   varchar(100),
+                last_modified_date timestamp,
+                user_id            bigint,
+                start_time         timestamp not null,
+                end_time           timestamp not null
+            );
+
+        create index customer_log_created_date on customer_log(created_date);
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

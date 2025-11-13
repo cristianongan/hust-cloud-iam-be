@@ -16,6 +16,7 @@ public enum LeakType {
     BANK_ACCOUNT("bank_account"),
     ADDRESS("address"),
     IDENTIFICATION("identification"),
+    PASSWORD("password"),
     ;
 
     final String value;

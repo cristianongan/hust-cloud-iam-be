@@ -294,33 +294,26 @@ public class UserServiceImpl implements UserService {
 
     private void validateUserReq(UserReq userReq) {
         if (Validator.isNull(userReq.getFullname())) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY,
                     new String[]{Labels.getLabels(LabelKey.LABEL_FULLNAME)})
-                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+                    , User.class.getName(), LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY);
         }
 
-        if (Validator.isNull(userReq.getEmail())) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
-                    new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
-                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
-        }
-
-        if (Validator.isNull(userReq.getPhone())) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
-                    new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
-                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+        if (Validator.isNull(userReq.getEmail())  && Validator.isNull(userReq.getPhone())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_PLEASE_ENTER_EMAIL_OR_PHONE_NUMBER)
+                    , User.class.getName(), LabelKey.ERROR_PLEASE_ENTER_EMAIL_OR_PHONE_NUMBER);
         }
 
         if (Validator.isNull(userReq.getStatus()) || Validator.isNull(EntityStatus.valueOfStatus(userReq.getStatus()))) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY,
                     new String[]{Labels.getLabels(LabelKey.LABEL_STATUS)})
-                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+                    , User.class.getName(), LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY);
         }
 
         if (Validator.isNull(userReq.getType()) || Validator.isNull(UserType.valueOfStatus(userReq.getType()))) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND,
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY,
                     new String[]{Labels.getLabels(LabelKey.LABEL_TYPE)})
-                    , User.class.getName(), LabelKey.ERROR_DATA_COULD_NOT_BE_FOUND);
+                    , User.class.getName(), LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY);
         }
     }
 

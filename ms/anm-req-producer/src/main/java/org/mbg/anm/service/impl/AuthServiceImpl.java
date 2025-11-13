@@ -29,8 +29,6 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
-        _log.info(String.format("%s_%s", org.toUpperCase(), req.getSubscriberId()));
-
         Customer cus = this.customerRepository
                 .findByCustomerKeyAndStatusNot(String.format("%s_%s", org.toUpperCase(), req.getSubscriberId()), EntityStatus.DELETED.getStatus());
 

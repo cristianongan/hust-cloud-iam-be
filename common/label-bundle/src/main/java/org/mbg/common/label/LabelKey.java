@@ -490,4 +490,7 @@ public final class LabelKey {
     public static final String ERROR_START_OR_END_TIME_CAN_NOT_BE_EMPTY = "error.start-or-end-time-can-not-be-empty";
 
 	public static final String ERROR_START_CAN_NOT_BE_GREAT_THAN_END_TIME = "error.start-can-not-be-great-than-end-time";
+
+	public static final String ERROR_PLEASE_ENTER_EMAIL_OR_PHONE_NUMBER = "error.please-enter-email-or-phone-number";
+
 }

@@ -20,7 +20,7 @@ public class CustomerDataRepositoryImpl implements CustomerDataRepositoryExtend 
         StringBuilder sql = new StringBuilder("""
                 select e.* from customer_data e
                 inner join customer c on e.customer_key = c.customer_key and c.status = :status
-                where e.sync_status = :syncStatus
+                where e.sync_status = :syncStatus and e.verify = 1
                 order by e.last_scan NULLS FIRST
                 """);
 
