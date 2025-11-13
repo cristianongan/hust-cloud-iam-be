@@ -293,11 +293,11 @@ public class UserServiceImpl implements UserService {
     }
 
     private void validateUserReq(UserReq userReq) {
-        if (Validator.isNull(userReq.getFullname())) {
-            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY,
-                    new String[]{Labels.getLabels(LabelKey.LABEL_FULLNAME)})
-                    , User.class.getName(), LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY);
-        }
+//        if (Validator.isNull(userReq.getFullname())) {
+//            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY,
+//                    new String[]{Labels.getLabels(LabelKey.LABEL_FULLNAME)})
+//                    , User.class.getName(), LabelKey.ERROR_INPUT_CANNOT_BE_EMPTY);
+//        }
 
         if (Validator.isNull(userReq.getEmail())  && Validator.isNull(userReq.getPhone())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_PLEASE_ENTER_EMAIL_OR_PHONE_NUMBER)

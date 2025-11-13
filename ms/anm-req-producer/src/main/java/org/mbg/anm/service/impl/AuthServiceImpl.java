@@ -15,6 +15,8 @@ import org.mbg.common.base.repository.CustomerRepository;
 import org.mbg.common.util.Validator;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,6 +35,18 @@ public class AuthServiceImpl implements AuthService {
                 .findByCustomerKeyAndStatusNot(String.format("%s_%s", org.toUpperCase(), req.getSubscriberId()), EntityStatus.DELETED.getStatus());
 
         if (Validator.isNull(cus)) {
+            throw new BadRequestException(ErrorCode.MSG1029);
+        }
+
+        if (Validator.equals(cus.getStatus(), EntityStatus.ACTIVE.getStatus())) {
+            throw new BadRequestException(ErrorCode.MSG1029);
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (Validator.isNotNull(cus.getStartTime()) && Validator.isNotNull(cus.getEndTime()) && (
+                cus.getStartTime().isBefore(now) || cus.getEndTime().isAfter(now)
+                )) {
             throw new BadRequestException(ErrorCode.MSG1029);
         }
 
