@@ -84,6 +84,11 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
             params.put("statuses", search.getStatuses());
         }
 
+        if (Validator.isNotNull(search.getUserType())) {
+            sql.append(" e.type = :userType ");
+            params.put("userType", search.getUserType());
+        }
+
         return sql;
     }
 

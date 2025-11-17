@@ -17,6 +17,7 @@ import org.mbg.anm.service.mapper.ClientMapper;
 import org.mbg.common.api.exception.BadRequestException;
 import org.mbg.common.base.enums.EntityStatus;
 import org.mbg.anm.model.User;
+import org.mbg.common.base.enums.UserType;
 import org.mbg.common.label.LabelKey;
 import org.mbg.common.label.Labels;
 import org.mbg.common.util.RandomGenerator;
@@ -149,6 +150,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public Page<UserRes> searchUser(UserSearch clientReq) {
         Pageable pageable = PageRequest.of(clientReq.getPage(), clientReq.getPageSize());
+        clientReq.setUserType(UserType.BUSINESS.getValue());
 
         List<User> users = this.userRepository.search(clientReq, pageable);
 
