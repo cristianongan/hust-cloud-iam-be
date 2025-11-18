@@ -87,7 +87,7 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
         }
 
         if (Validator.isNotNull(search.getUserType())) {
-            sql.append(" e.type = :userType ");
+            sql.append(" AND e.type = :userType ");
             params.put("userType", search.getUserType());
         }
 
