@@ -62,6 +62,8 @@ public class RoleRepositoryImpl implements RoleRepositoryExtend {
 
         Query query = em.createNativeQuery(sql.toString(), Role.class);
 
+        sql.append(" order by e.last_modified_date desc nulls last ");
+
         params.forEach(query::setParameter);
 
         if (pageable != null) {

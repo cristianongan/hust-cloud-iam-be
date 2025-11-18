@@ -26,6 +26,8 @@ public class UserRepositoryImpl implements UserRepositoryExtend {
 
         sql.append(createWhereQuery(search,params));
 
+        sql.append(" order by e.last_modified_date desc nulls last ");
+
         Query query = em.createNativeQuery(sql.toString(), User.class);
 
         params.forEach(query::setParameter);
