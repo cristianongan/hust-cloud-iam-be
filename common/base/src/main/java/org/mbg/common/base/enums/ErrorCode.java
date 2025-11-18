@@ -125,6 +125,10 @@ public enum ErrorCode {
     MSG1050(LabelKey.ERROR_INVALID_AES),
 
     MSG1051(LabelKey.ERROR_START_CAN_NOT_SMALLER_THAN_NOW),
+
+    MSG1052(LabelKey.ERROR_USERNAME_INVALID),
+
+    MSG1053(LabelKey.ERROR_PASSWORD_INVALID)
     ;
 
     private String key;

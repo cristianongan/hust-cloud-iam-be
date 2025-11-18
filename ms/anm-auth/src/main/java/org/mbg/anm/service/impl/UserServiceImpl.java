@@ -73,6 +73,8 @@ public class UserServiceImpl implements UserService {
 
     private Pattern passwordPattern;
 
+    private Pattern usernamePattern;
+
     private final UserRoleRepository userRoleRepository;
 
     private final CmsClient cmsClient;
@@ -80,6 +82,7 @@ public class UserServiceImpl implements UserService {
     @PostConstruct
     protected void init() {
         this.passwordPattern = Pattern.compile(this.validationProperties.getPasswordRegex());
+        this.usernamePattern = Pattern.compile(this.validationProperties.getUsernameRegex());
     }
 
     @Override
@@ -172,6 +175,10 @@ public class UserServiceImpl implements UserService {
                     User.class.getName(), LabelKey.ERROR_INVALID);
         }
 
+        if (!usernamePattern.matcher(userReq.getUsername()).matches()) {
+            throw new BadRequestException(ErrorCode.MSG1005);
+        }
+
         this.validateUserReq(userReq);
 
         if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
@@ -193,13 +200,13 @@ public class UserServiceImpl implements UserService {
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
         }
 
-        if (this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
+        if (Validator.isNotNull(userReq.getPhone()) && this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
         }
 
-        if (this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
+        if (Validator.isNotNull(userReq.getEmail()) && this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
             throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
                     new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
                     , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);

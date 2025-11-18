@@ -496,4 +496,8 @@ public final class LabelKey {
 	public static final String ERROR_INVALID_AES = "error.invalid-aes";
 
 	public static final String ERROR_START_CAN_NOT_SMALLER_THAN_NOW = "error.start-can-not-smaller-than-now";
+
+	public static final String ERROR_USERNAME_INVALID = "error.username-invalid";
+
+	public static final String ERROR_PASSWORD_INVALID = "error.password-invalid";
 }
