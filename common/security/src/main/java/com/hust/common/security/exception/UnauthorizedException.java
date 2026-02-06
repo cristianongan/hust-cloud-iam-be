@@ -1,0 +1,22 @@
+package com.hust.common.security.exception;
+
+import org.springframework.security.core.AuthenticationException;
+
+import java.io.Serial;
+
+/**
+ * This exception is thrown in case of a not activated user trying to authenticate.
+ */
+public class UnauthorizedException extends AuthenticationException {
+
+    @Serial
+    private static final long serialVersionUID = 2132156464656744L;
+
+    public UnauthorizedException(String message) {
+        super(message);
+    }
+
+    public UnauthorizedException(String message, Throwable t) {
+        super(message, t);
+    }
+}

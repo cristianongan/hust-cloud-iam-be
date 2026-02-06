@@ -1,0 +1,52 @@
+package com.hust.common.base.model.dto;
+
+import lombok.Data;
+
+import java.io.Serial;
+import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+
+@Data
+public class UserDTO implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -6004336668090775994L;
+
+    private Long id;
+
+    private String username;
+
+    private String email;
+
+    private String phone;
+
+    private int gender;
+
+    private LocalDate dob;
+
+    private String address;
+
+    private int status;
+
+    private String fullname;
+
+    private int type;
+
+    private String createdBy;
+
+    private Instant createdDate;
+
+    private String lastModifiedBy;
+
+    private Instant lastModifiedDate;
+
+    private List<String> permissions;
+
+    private List<String> roles;
+
+    private QuotaDTO quota;
+
+    private String organization;
+
+}

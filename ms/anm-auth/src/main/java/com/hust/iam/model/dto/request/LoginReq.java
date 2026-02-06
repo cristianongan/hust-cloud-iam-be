@@ -1,0 +1,10 @@
+package com.hust.iam.model.dto.request;
+
+import lombok.Data;
+
+@Data
+public class LoginReq {
+    private String username;
+
+    private String password;
+}
