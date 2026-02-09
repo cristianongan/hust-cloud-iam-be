@@ -1,6 +1,6 @@
 package com.hust.iam.repository;
 
-import org.mbg.common.base.model.ProducerRequest;
+import com.hust.common.base.model.ProducerRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,6 @@
 package com.hust.iam.model.dto;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-import org.mbg.common.base.model.AbstractAuditingEntity;
 
 import java.io.Serial;
 import java.io.Serializable;

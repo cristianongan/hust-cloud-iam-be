@@ -6,8 +6,8 @@ import jakarta.persistence.Query;
 import com.hust.iam.model.User;
 import com.hust.iam.model.search.UserSearch;
 import com.hust.iam.repository.extend.UserRepositoryExtend;
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.enums.EntityStatus;
+import com.hust.common.util.Validator;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;

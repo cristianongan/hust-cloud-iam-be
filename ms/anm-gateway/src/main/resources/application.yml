@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: gateway-service
+  profiles:
+    group:
+      "dev": "base,dev"
+      "prod": "base,prod"
+      "uat": "base,uat"
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 10000           # ms
+        response-timeout: 300s
+
+resilience4j:
+  timelimiter:
+    instances:
+      productServiceCircuitBreaker:
+        timeout-duration: 60s
+        cancel-running-future: true
+  circuitbreaker:
+    instances:
+      productServiceCircuitBreaker:
+        sliding-window-size: 100
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 10s
+
+server:
+  port: 9091
+  servlet:
+    context-path: /
+    encoding:
+      charset: 'UTF-8'
+      enabled: true
+      force: true
+#logging:
+#  level:
+#    sun:
+#      rmi: ERROR
+#    javax:
+#      management:
+#        remote:
+#          rmi: ERROR
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

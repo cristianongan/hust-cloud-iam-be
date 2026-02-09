@@ -1,11 +1,12 @@
 package com.hust.iam.controller;
 
+import com.hust.common.base.model.dto.request.UserReq;
 import lombok.RequiredArgsConstructor;
 import com.hust.iam.model.dto.request.LoginReq;
 import com.hust.iam.service.AuthService;
 import com.hust.iam.service.UserService;
-import org.mbg.common.base.model.dto.request.OtpReq;
-import org.mbg.common.base.model.dto.request.ResetPasswordReq;
+import com.hust.common.base.model.dto.request.OtpReq;
+import com.hust.common.base.model.dto.request.ResetPasswordReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,11 @@ public class AuthController {
     @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody LoginReq userDTO) {
         return ResponseEntity.ok(this.authService.login(userDTO));
+    }
+
+    @PostMapping("register")
+    public ResponseEntity<?> register(@RequestBody UserReq req) {
+        return ResponseEntity.ok(this.userService.register(req));
     }
 
     @GetMapping("customer/token/{userId}")

@@ -2,7 +2,7 @@ package com.hust.iam.security;
 
 import com.hust.iam.model.Client;
 import com.hust.iam.model.User;
-import org.mbg.common.util.Validator;
+import com.hust.common.util.Validator;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serial;

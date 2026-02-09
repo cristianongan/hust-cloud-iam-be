@@ -6,8 +6,8 @@ import jakarta.persistence.Query;
 import com.hust.iam.model.Role;
 import com.hust.iam.model.dto.request.RoleReq;
 import com.hust.iam.repository.extend.RoleRepositoryExtend;
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.enums.EntityStatus;
+import com.hust.common.util.Validator;
 import org.springframework.data.domain.Pageable;
 
 import java.util.HashMap;

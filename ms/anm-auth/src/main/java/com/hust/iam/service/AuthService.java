@@ -1,12 +1,12 @@
 package com.hust.iam.service;
 
-import org.mbg.common.base.model.JwtAccessToken;
+import com.hust.common.base.model.JwtAccessToken;
 import com.hust.iam.model.dto.request.LoginReq;
-import org.mbg.common.base.model.dto.request.ChangePasswordReq;
-import org.mbg.common.base.model.dto.request.OtpReq;
-import org.mbg.common.base.model.dto.request.ResetPasswordReq;
-import org.mbg.common.base.model.dto.response.TransactionResponse;
-import org.mbg.common.base.model.dto.response.VerifyRes;
+import com.hust.common.base.model.dto.request.ChangePasswordReq;
+import com.hust.common.base.model.dto.request.OtpReq;
+import com.hust.common.base.model.dto.request.ResetPasswordReq;
+import com.hust.common.base.model.dto.response.TransactionResponse;
+import com.hust.common.base.model.dto.response.VerifyRes;
 
 public interface AuthService {
     JwtAccessToken login(LoginReq userDTO);

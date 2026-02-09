@@ -24,5 +24,5 @@ public class UserSearch {
 
     private int pageSize;
 
-    private int userType;
+    private Integer userType;
 }

@@ -2,7 +2,7 @@ package com.hust.iam.controller;
 
 import lombok.RequiredArgsConstructor;
 import com.hust.iam.service.RecordService;
-import org.mbg.common.base.model.dto.request.RecordReq;
+import com.hust.common.base.model.dto.request.RecordReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

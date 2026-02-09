@@ -1,8 +1,8 @@
 package com.hust.iam.fiegn;
 
-import org.mbg.common.base.configuration.FeignConfiguration;
-import org.mbg.common.base.model.dto.QuotaDTO;
-import org.mbg.common.base.model.dto.request.QuotaBatchReq;
+import com.hust.common.base.configuration.FeignConfiguration;
+import com.hust.common.base.model.dto.QuotaDTO;
+import com.hust.common.base.model.dto.request.QuotaBatchReq;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 

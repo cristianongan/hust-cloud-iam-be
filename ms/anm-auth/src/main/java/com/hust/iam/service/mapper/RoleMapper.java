@@ -6,8 +6,8 @@ import org.mapstruct.Named;
 import com.hust.iam.model.Permission;
 import com.hust.iam.model.Role;
 import com.hust.iam.model.dto.RoleDTO;
-import org.mbg.common.base.service.mapper.EntityMapper;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.service.mapper.EntityMapper;
+import com.hust.common.util.Validator;
 
 import java.util.List;
 import java.util.stream.Collectors;

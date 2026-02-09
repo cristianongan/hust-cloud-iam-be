@@ -4,33 +4,32 @@ import com.hust.iam.repository.*;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mbg.common.base.configuration.ValidationProperties;
+import com.hust.common.base.configuration.ValidationProperties;
 import com.hust.iam.fiegn.CmsClient;
 import com.hust.iam.model.Role;
 import com.hust.iam.model.UserRole;
-import org.mbg.anm.repository.*;
 import com.hust.iam.security.UserDetailServiceImpl;
 import com.hust.iam.security.UserPrincipal;
-import org.mbg.common.base.enums.ErrorCode;
-import org.mbg.common.base.enums.UserType;
+import com.hust.common.base.enums.ErrorCode;
+import com.hust.common.base.enums.UserType;
 import com.hust.iam.model.User;
-import org.mbg.common.base.model.dto.UserDTO;
-import org.mbg.common.base.model.dto.request.UserBatchReq;
-import org.mbg.common.base.model.dto.request.UserReq;
+import com.hust.common.base.model.dto.UserDTO;
+import com.hust.common.base.model.dto.request.UserBatchReq;
+import com.hust.common.base.model.dto.request.UserReq;
 import com.hust.iam.model.search.UserSearch;
 import com.hust.iam.service.UserService;
 import com.hust.iam.service.mapper.UserMapper;
-import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.base.model.dto.QuotaDTO;
-import org.mbg.common.base.model.dto.request.QuotaBatchReq;
-import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
-import org.mbg.common.base.model.dto.response.CustomerUserRes;
-import org.mbg.common.label.LabelKey;
-import org.mbg.common.label.Labels;
-import org.mbg.common.security.RsaProvider;
-import org.mbg.common.security.exception.UnauthorizedException;
-import org.mbg.common.util.Validator;
+import com.hust.common.api.exception.BadRequestException;
+import com.hust.common.base.enums.EntityStatus;
+import com.hust.common.base.model.dto.QuotaDTO;
+import com.hust.common.base.model.dto.request.QuotaBatchReq;
+import com.hust.common.base.model.dto.response.CustomerUserBatchRes;
+import com.hust.common.base.model.dto.response.CustomerUserRes;
+import com.hust.common.label.LabelKey;
+import com.hust.common.label.Labels;
+import com.hust.common.security.RsaProvider;
+import com.hust.common.security.exception.UnauthorizedException;
+import com.hust.common.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -223,6 +222,68 @@ public class UserServiceImpl implements UserService {
         user.setGender(userReq.getGender());
         user.setFullname(userReq.getFullname());
         user.setType(userReq.getType());
+        user.setStatus(userReq.getStatus());
+        user.setOrganization(userReq.getOrganization());
+
+        return this.userMapper.toDto(this.userRepository.save(user));
+    }
+
+    @Override
+    public UserDTO register(UserReq userReq) {
+        userReq.setStatus(EntityStatus.ACTIVE.getStatus());
+
+        if (Validator.equals(userReq.getStatus(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(LabelKey.ERROR_INVALID,
+                    User.class.getName(), LabelKey.ERROR_INVALID);
+        }
+
+        if (!usernamePattern.matcher(userReq.getUsername()).matches()) {
+            throw new BadRequestException(ErrorCode.MSG1005);
+        }
+
+        this.validateUserReq(userReq);
+
+        if (Validator.isNull(userReq.getUsername()) || Validator.isNull(userReq.getPassword())) {
+            throw new BadRequestException(LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD,
+                    User.class.getName(), LabelKey.ERROR_INVALID_USERNAME_OR_PASSWORD);
+        }
+
+        String password = this.decryptPassword(userReq.getPassword());
+
+        if (!passwordPattern.matcher(password).matches()) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_INVALID_DATA_FORMAT,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PASSWORD)})
+                    , User.class.getName(), LabelKey.ERROR_INVALID_DATA_FORMAT);
+        }
+
+        if (this.userRepository.existsByUsername(userReq.getUsername())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_USERNAME)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        if (Validator.isNotNull(userReq.getPhone()) && this.userRepository.existsByPhoneAndStatusNot(userReq.getPhone(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_PHONE_NUMBER)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        if (Validator.isNotNull(userReq.getEmail()) && this.userRepository.existsByEmailAndStatusNot(userReq.getEmail(), EntityStatus.DELETED.getStatus())) {
+            throw new BadRequestException(Labels.getLabels(LabelKey.ERROR_DUPLICATE_DATA,
+                    new String[]{Labels.getLabels(LabelKey.LABEL_EMAIL)})
+                    , User.class.getName(), LabelKey.ERROR_DUPLICATE_DATA);
+        }
+
+        User user = new User();
+        user.setUsername(userReq.getUsername());
+        user.setPhone(userReq.getPhone());
+        user.setEmail(userReq.getEmail());
+        user.setPassword(passwordEncoder.encode(password));
+        user.setAddress(userReq.getAddress());
+        user.setDob(userReq.getDob());
+        user.setGender(userReq.getGender());
+        user.setFullname(userReq.getFullname());
+        user.setType(UserType.INDIVIDUAL.getValue());
         user.setStatus(userReq.getStatus());
         user.setOrganization(userReq.getOrganization());
 

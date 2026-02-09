@@ -1,7 +1,7 @@
 logging:
   level:
     ROOT: INFO
-    org.mbg: DEBUG
+    com.hust: DEBUG
     org.springframework.cache: TRACE
     org.redisson: INFO
     org.springframework.transaction: TRACE # Rất quan trọng
@@ -53,7 +53,7 @@ spring:
     timeout-per-shutdown-phase: 30s
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://192.168.169.88:15432/mbg_anm_be_test
+    url: jdbc:postgresql://localhost:15432/mbg_anm_be
     username: mbg_anm_be
     password: 123456a@A
     #driver-class-name: org.postgresql.Driver
@@ -134,7 +134,7 @@ cache:
   redis:
     mode: "standalone" # standalone, sentinel
     standalone:
-      host: "192.168.169.88"
+      host: "localhost"
       port: 6379
       password: "123"
     sentinel:
@@ -177,5 +177,5 @@ rsa:
 
 config:
   logstash:
-    host: 192.168.169.88
+    host: localhost
     port: 5000

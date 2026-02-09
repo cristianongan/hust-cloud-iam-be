@@ -1,7 +1,7 @@
 package com.hust.iam;
 
-import org.mbg.common.base.BaseApplication;
-import org.mbg.common.base.constants.PackageConstants;
+import com.hust.common.base.BaseApplication;
+import com.hust.common.base.constants.PackageConstants;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

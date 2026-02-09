@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mbg</groupId>
+        <groupId>com.hust</groupId>
         <artifactId>mbg-anm-be</artifactId>
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -16,10 +16,8 @@
 
     <modules>
         <module>anm-auth</module>
-        <module>anm-gateway</module>
-        <module>anm-req-producer</module>
-        <module>anm-req-consumer</module>
         <module>anm-cms</module>
+        <module>anm-gateway</module>
     </modules>
 
     <properties>

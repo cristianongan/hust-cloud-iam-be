@@ -3,7 +3,7 @@ package com.hust.iam.controller;
 import lombok.RequiredArgsConstructor;
 import com.hust.iam.model.dto.request.ChangeTotalQuotaReq;
 import com.hust.iam.service.QuotaService;
-import org.mbg.common.base.model.dto.request.QuotaBatchReq;
+import com.hust.common.base.model.dto.request.QuotaBatchReq;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;

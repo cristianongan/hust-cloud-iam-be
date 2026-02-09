@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.hust.iam.model.dto.response.DashboardRes;
 import com.hust.iam.service.DashboardService;
-import org.mbg.common.base.constants.CacheConstants;
-import org.mbg.common.base.repository.CustomerLogRepository;
-import org.mbg.common.base.repository.RecordRepository;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.constants.CacheConstants;
+import com.hust.common.base.repository.CustomerLogRepository;
+import com.hust.common.base.repository.RecordRepository;
+import com.hust.common.util.Validator;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 

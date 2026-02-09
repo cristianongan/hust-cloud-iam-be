@@ -3,10 +3,10 @@ package com.hust.iam.service.mapper;
 import org.mapstruct.*;
 import com.hust.iam.model.Role;
 import com.hust.iam.model.User;
-import org.mbg.common.base.model.dto.UserDTO;
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.base.service.mapper.EntityMapper;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.model.dto.UserDTO;
+import com.hust.common.base.enums.EntityStatus;
+import com.hust.common.base.service.mapper.EntityMapper;
+import com.hust.common.util.Validator;
 
 import java.util.ArrayList;
 import java.util.List;

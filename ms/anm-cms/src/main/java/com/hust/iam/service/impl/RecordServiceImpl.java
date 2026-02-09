@@ -4,14 +4,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.hust.iam.model.dto.RecordDTO;
 import com.hust.iam.model.dto.response.RecordTypeStatisticRes;
-import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.base.model.dto.request.RecordReq;
+import com.hust.common.api.exception.BadRequestException;
+import com.hust.common.base.model.dto.request.RecordReq;
 import com.hust.iam.service.RecordService;
 import com.hust.iam.service.mapper.RecordMapper;
-import org.mbg.common.base.repository.RecordRepository;
-import org.mbg.common.label.LabelKey;
-import org.mbg.common.label.Labels;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.repository.RecordRepository;
+import com.hust.common.label.LabelKey;
+import com.hust.common.label.Labels;
+import com.hust.common.util.Validator;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -44,7 +44,7 @@ public class RecordServiceImpl implements RecordService {
 
         Pageable pageable = PageRequest.of(req.getPage(), req.getPageSize());
 
-        List<org.mbg.common.base.model.Record> records = this.recordRepository.searchCms(req, pageable);
+        List<com.hust.common.base.model.Record> records = this.recordRepository.searchCms(req, pageable);
 
         List<RecordDTO> content = this.recordMapper.toDto(records);
 

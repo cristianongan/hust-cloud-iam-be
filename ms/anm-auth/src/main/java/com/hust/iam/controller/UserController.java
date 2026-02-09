@@ -2,8 +2,8 @@ package com.hust.iam.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.mbg.common.base.model.dto.request.UserBatchReq;
-import org.mbg.common.base.model.dto.request.UserReq;
+import com.hust.common.base.model.dto.request.UserBatchReq;
+import com.hust.common.base.model.dto.request.UserReq;
 import com.hust.iam.model.search.UserSearch;
 import com.hust.iam.service.UserService;
 import org.springframework.http.ResponseEntity;

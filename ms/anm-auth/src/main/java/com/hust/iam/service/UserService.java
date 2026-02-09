@@ -1,10 +1,10 @@
 package com.hust.iam.service;
 
-import org.mbg.common.base.model.dto.UserDTO;
-import org.mbg.common.base.model.dto.request.UserBatchReq;
-import org.mbg.common.base.model.dto.request.UserReq;
+import com.hust.common.base.model.dto.UserDTO;
+import com.hust.common.base.model.dto.request.UserBatchReq;
+import com.hust.common.base.model.dto.request.UserReq;
 import com.hust.iam.model.search.UserSearch;
-import org.mbg.common.base.model.dto.response.CustomerUserBatchRes;
+import com.hust.common.base.model.dto.response.CustomerUserBatchRes;
 import org.springframework.data.domain.Page;
 
 public interface UserService {
@@ -13,6 +13,8 @@ public interface UserService {
     UserDTO update(UserReq userReq);
 
     UserDTO create(UserReq userReq);
+
+    UserDTO register(UserReq userReq);
 
     CustomerUserBatchRes customerCreateBatch(UserBatchReq userReq);
 

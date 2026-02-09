@@ -2,8 +2,8 @@ package com.hust.iam.queue;
 
 import lombok.extern.slf4j.Slf4j;
 import com.hust.iam.configuration.MessageListenerProperties;
-import org.mbg.common.model.RedisMessage;
-import org.mbg.common.queue.AbstractMessageProducer;
+import com.hust.common.model.RedisMessage;
+import com.hust.common.queue.AbstractMessageProducer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 

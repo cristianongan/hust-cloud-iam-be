@@ -1,8 +1,8 @@
 package com.hust.iam.service;
 
-import org.mbg.common.base.model.JwtAccessToken;
-import org.mbg.common.base.model.JwtToken;
-import org.mbg.common.security.util.SecurityConstants;
+import com.hust.common.base.model.JwtAccessToken;
+import com.hust.common.base.model.JwtToken;
+import com.hust.common.security.util.SecurityConstants;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;

@@ -1,9 +1,9 @@
 package com.hust.iam.configuration;
 
-import org.mbg.common.base.filter.ServiceSecurityFilter;
-import org.mbg.common.security.configuration.AuthenticationProperties;
-import org.mbg.common.security.configuration.SecurityConfiguration;
-import org.mbg.common.security.filter.AuthorizationFilter;
+import com.hust.common.base.filter.ServiceSecurityFilter;
+import com.hust.common.security.configuration.AuthenticationProperties;
+import com.hust.common.security.configuration.SecurityConfiguration;
+import com.hust.common.security.filter.AuthorizationFilter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.zalando.problem.spring.web.advice.security.SecurityProblemSupport;
