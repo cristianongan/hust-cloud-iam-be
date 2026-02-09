@@ -1,4 +1,4 @@
-package org.mbg.cache.util;
+package com.hust.cache.util;
 
 public interface OtpCacheConstants {
     public interface Others {

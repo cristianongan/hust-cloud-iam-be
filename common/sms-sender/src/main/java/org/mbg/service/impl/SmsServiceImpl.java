@@ -1,23 +1,23 @@
-package org.mbg.service.impl;
+package com.hust.service.impl;
 
 import java.util.Map;
 import java.util.UUID;
 
-import org.mbg.common.base.enums.EntityStatus;
-import org.mbg.common.base.model.ContentTemplate;
-import org.mbg.common.base.repository.ContentTemplateRepository;
-import org.mbg.common.label.LabelKey;
-import org.mbg.common.label.Labels;
-import org.mbg.common.util.StringUtil;
-import org.mbg.common.util.Validator;
+import com.hust.common.base.enums.EntityStatus;
+import com.hust.common.base.model.ContentTemplate;
+import com.hust.common.base.repository.ContentTemplateRepository;
+import com.hust.common.label.LabelKey;
+import com.hust.common.label.Labels;
+import com.hust.common.util.StringUtil;
+import com.hust.common.util.Validator;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.mbg.api.consumer.SmsSender;
-import org.mbg.api.request.SmsRequest;
-import org.mbg.api.response.SmsResponse;
-import org.mbg.api.response.SmsResponse.Result;
-import org.mbg.configuration.SmsProperties;
-import org.mbg.service.SmsService;
+import com.hust.api.consumer.SmsSender;
+import com.hust.api.request.SmsRequest;
+import com.hust.api.response.SmsResponse;
+import com.hust.api.response.SmsResponse.Result;
+import com.hust.configuration.SmsProperties;
+import com.hust.service.SmsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -5,9 +5,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import com.hust.common.base.model.Customer;
 import com.hust.common.base.model.CustomerLog;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CustomerLogMapper extends EntityMapper<CustomerLog, Customer> {

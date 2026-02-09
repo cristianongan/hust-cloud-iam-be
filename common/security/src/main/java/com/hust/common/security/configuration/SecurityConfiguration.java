@@ -3,7 +3,6 @@ package com.hust.common.security.configuration;
 import lombok.RequiredArgsConstructor;
 import com.hust.common.security.filter.AuthorizationFilter;
 import com.hust.common.security.util.SecurityConstants;
-import lombok.NoArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;

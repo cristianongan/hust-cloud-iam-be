@@ -1,6 +1,6 @@
-package org.mbg.captcha.text.impl;
+package com.hust.captcha.text.impl;
 
-import org.mbg.captcha.text.TextProducer;
+import com.hust.captcha.text.TextProducer;
 
 import java.security.SecureRandom;
 

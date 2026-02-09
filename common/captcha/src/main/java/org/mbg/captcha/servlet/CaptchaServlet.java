@@ -1,7 +1,7 @@
-package org.mbg.captcha.servlet;
+package com.hust.captcha.servlet;
 
-import org.mbg.captcha.Producer;
-import org.mbg.captcha.util.Config;
+import com.hust.captcha.Producer;
+import com.hust.captcha.util.Config;
 import jakarta.servlet.Servlet;
 import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;

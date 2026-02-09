@@ -1,7 +1,7 @@
-package org.mbg.captcha.text.impl;
+package com.hust.captcha.text.impl;
 
-import org.mbg.captcha.text.WordRenderer;
-import org.mbg.captcha.util.Configurable;
+import com.hust.captcha.text.WordRenderer;
+import com.hust.captcha.util.Configurable;
 
 import java.awt.Color;
 import java.awt.Font;

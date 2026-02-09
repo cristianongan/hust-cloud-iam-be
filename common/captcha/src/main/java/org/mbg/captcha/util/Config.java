@@ -1,18 +1,18 @@
-package org.mbg.captcha.util;
+package com.hust.captcha.util;
 
-import org.mbg.captcha.BackgroundProducer;
-import org.mbg.captcha.Constants;
-import org.mbg.captcha.GimpyEngine;
-import org.mbg.captcha.NoiseProducer;
-import org.mbg.captcha.Producer;
-import org.mbg.captcha.impl.DefaultBackground;
-import org.mbg.captcha.impl.DefaultCaptcha;
-import org.mbg.captcha.impl.DefaultNoise;
-import org.mbg.captcha.impl.WaterRipple;
-import org.mbg.captcha.text.TextProducer;
-import org.mbg.captcha.text.WordRenderer;
-import org.mbg.captcha.text.impl.DefaultTextCreator;
-import org.mbg.captcha.text.impl.DefaultWordRenderer;
+import com.hust.captcha.BackgroundProducer;
+import com.hust.captcha.Constants;
+import com.hust.captcha.GimpyEngine;
+import com.hust.captcha.NoiseProducer;
+import com.hust.captcha.Producer;
+import com.hust.captcha.impl.DefaultBackground;
+import com.hust.captcha.impl.DefaultCaptcha;
+import com.hust.captcha.impl.DefaultNoise;
+import com.hust.captcha.impl.WaterRipple;
+import com.hust.captcha.text.TextProducer;
+import com.hust.captcha.text.WordRenderer;
+import com.hust.captcha.text.impl.DefaultTextCreator;
+import com.hust.captcha.text.impl.DefaultWordRenderer;
 import lombok.Getter;
 
 import java.awt.*;

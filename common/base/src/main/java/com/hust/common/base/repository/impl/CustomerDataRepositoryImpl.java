@@ -7,7 +7,6 @@ import com.hust.common.base.enums.CustomerSyncStatus;
 import com.hust.common.base.enums.EntityStatus;
 import com.hust.common.base.model.CustomerData;
 import com.hust.common.base.repository.extend.CustomerDataRepositoryExtend;
-import org.springframework.data.jpa.repository.Modifying;
 
 import java.util.List;
 

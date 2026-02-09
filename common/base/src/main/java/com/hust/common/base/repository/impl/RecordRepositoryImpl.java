@@ -10,7 +10,6 @@ import com.hust.common.base.model.dto.request.RecordReq;
 import com.hust.common.base.repository.extend.RecordRepositoryExtend;
 import com.hust.common.util.TimeUtil;
 import com.hust.common.util.Validator;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;

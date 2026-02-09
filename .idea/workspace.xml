@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="773f98d8-305d-4a0c-bd22-74fc06fe4d6f" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/annotation/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/annotation/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/annotation/src/main/java/com/hust/common/aop/LoggingAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/annotation/src/main/java/com/hust/common/aop/LoggingAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/annotation/src/main/java/com/hust/common/aop/SignatureAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/annotation/src/main/java/com/hust/common/aop/SignatureAspect.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/advice/ReqControllerAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/advice/ReqControllerAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/advice/ResControllerAdvice.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/advice/ResControllerAdvice.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/configuration/ApiCommonConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/configuration/ApiCommonConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/enums/ClientResponseError.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/enums/ClientResponseError.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/exception/ClientResponseException.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/exception/ClientResponseException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/response/ClientResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/api-common/src/main/java/com/hust/common/api/response/ClientResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/configuration/FeignConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/configuration/FeignConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/enums/CustomerDataType.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/enums/CustomerDataType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/enums/CustomerSyncStatus.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/enums/CustomerSyncStatus.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/model/Record.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/model/Record.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/RecordRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/RecordRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/extend/RecordRepositoryExtend.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/extend/RecordRepositoryExtend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/impl/CustomerDataRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/impl/CustomerDataRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/impl/RecordRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/repository/impl/RecordRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/service/mapper/CustomerLogMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/base/src/main/java/com/hust/common/base/service/mapper/CustomerLogMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/cache/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/cache/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/cache/src/main/java/com/hust/common/cache/CacheRedisConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/cache/src/main/java/com/hust/common/cache/CacheRedisConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/BackgroundProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/BackgroundProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/Constants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/GimpyEngine.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/GimpyEngine.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/NoiseProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/NoiseProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/Producer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/Producer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultBackground.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultBackground.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultCaptcha.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultCaptcha.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultNoise.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/DefaultNoise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/FishEyeGimpy.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/FishEyeGimpy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/NoNoise.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/NoNoise.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/ShadowGimpy.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/ShadowGimpy.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/WaterRipple.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/impl/WaterRipple.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/servlet/CaptchaExtend.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/servlet/CaptchaExtend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/servlet/CaptchaServlet.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/servlet/CaptchaServlet.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/TextProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/TextProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/WordRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/WordRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/ChineseTextProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/ChineseTextProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/DefaultTextCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/DefaultTextCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/DefaultWordRenderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/DefaultWordRenderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/FiveLetterFirstNameTextCreator.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/text/impl/FiveLetterFirstNameTextCreator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/Config.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/Config.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/ConfigException.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/ConfigException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/ConfigHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/ConfigHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/Configurable.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/captcha/src/main/java/org/mbg/captcha/util/Configurable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/integration/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/integration/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/integration/src/main/java/com/hust/common/intergration/interceptor/FeignClientInterceptor.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/integration/src/main/java/com/hust/common/intergration/interceptor/FeignClientInterceptor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/label-bundle/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/label-bundle/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/api/util/OtpConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/api/util/OtpConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/cache/util/OtpCacheConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/cache/util/OtpCacheConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/configuration/OtpProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/configuration/OtpProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/enums/OtpType.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/enums/OtpType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/model/OtpValue.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/model/OtpValue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/repository/OtpRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/repository/OtpRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/repository/impl/OtpRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/repository/impl/OtpRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/service/OtpService.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/service/OtpService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/service/impl/OtpServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/otp-generator/src/main/java/org/mbg/service/impl/OtpServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/queue/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/queue/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/model/RedisMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/model/RedisMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/queue/AbstractMessageListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/queue/AbstractMessageListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/queue/Producer.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/queue/src/main/java/com/hust/common/queue/Producer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/security/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/security/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/security/src/main/java/com/hust/common/security/configuration/SecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/security/src/main/java/com/hust/common/security/configuration/SecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/consumer/SmsSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/consumer/SmsSender.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/request/SmsRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/request/SmsRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/response/SmsResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/api/response/SmsResponse.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/configuration/SmsProperties.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/configuration/SmsProperties.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/EmailService.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/EmailService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/SmsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/SmsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/impl/EmailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/impl/EmailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/impl/SmsServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/java/org/mbg/service/impl/SmsServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/resources/application-devsms.yml" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/resources/application-devsms.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/sms-sender/src/main/resources/application-prodsms.yml" beforeDir="false" afterPath="$PROJECT_DIR$/common/sms-sender/src/main/resources/application-prodsms.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/common/utils/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/common/utils/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/_16.cfe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/_16.cfs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/_16.si" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/manifest-1.st" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/node-1.st" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/_state/segments_1g" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/elasticsearch/snapshot_cache/segments_2" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/redis/appendonlydir/appendonly.aof.1.incr.aof" beforeDir="false" afterPath="$PROJECT_DIR$/data/redis/appendonlydir/appendonly.aof.1.incr.aof" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/redis/dump.rdb" beforeDir="false" afterPath="$PROJECT_DIR$/data/redis/dump.rdb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/AuthServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/AuthServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/configuration/AuthSecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/configuration/AuthSecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/fiegn/CmsClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/fiegn/CmsClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/filter/UserSecurityFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/filter/UserSecurityFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/jwt/JwtProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/jwt/JwtProvider.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/ClientRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/ClientRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Permission.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Permission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Role.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/Role.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/RolePermission.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/RolePermission.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/UserRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/dto/PermissionDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/dto/PermissionDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/dto/RoleDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/dto/RoleDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/search/UserSearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/model/search/UserSearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/ClientRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/ClientRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/RoleRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/RoleRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/UserRepositoryImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/repository/impl/UserRepositoryImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/security/UserDetailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/security/UserDetailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/security/UserPrincipal.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/security/UserPrincipal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/TokenService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/TokenService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/ClientServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/ClientServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/RoleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/RoleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/impl/UserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/ClientMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/ClientMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/PermissionMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/PermissionMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/RoleMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/RoleMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/UserMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/java/com/hust/iam/service/mapper/UserMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-auth/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-auth/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/CmsApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/CmsApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/configuration/CmsSecurityConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/configuration/CmsSecurityConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/controller/QuotaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/controller/QuotaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/controller/RecordController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/controller/RecordController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/queue/LookupMessageProducer.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/queue/LookupMessageProducer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/repository/ProducerRequestRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/repository/ProducerRequestRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/schedule/CrawDataSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/schedule/CrawDataSchedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/schedule/CustomerLockSchedule.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/schedule/CustomerLockSchedule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/CommonDataService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/CommonDataService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/QuotaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/QuotaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/RecordService.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/RecordService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/CommonDataServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/CommonDataServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/DashboardServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/DashboardServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/QuotaServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/QuotaServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/RecordServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/impl/RecordServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/mapper/QuotaMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/mapper/QuotaMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/mapper/RecordMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/java/com/hust/iam/service/mapper/RecordMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/anm-cms/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/ms/anm-cms/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ms/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/ms/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="KubernetesApiPersistence"><![CDATA[{}]]></component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 4
+}]]></component>
+  <component name="ProjectId" id="39HDkVYsGJyq5fmO2jVlAOkuiOB" />
+  <component name="ProjectViewState">
+    <option name="abbreviatePackageNames" value="true" />
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.mbg-anm-be [clean,install...].executor": "Run",
+    "Maven.mbg-anm-be [clean,install].executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.AuthServiceApplication.executor": "Run",
+    "Spring Boot.CmsApplication.executor": "Run",
+    "Spring Boot.GatewayServiceApplication (1).executor": "Run",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "run.configurations.included.in.services": "true",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn clean install " />
+      <command value="mvn clean install -Dmaven.test.skip=true" />
+    </option>
+  </component>
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="KtorApplicationConfigurationType" />
+        <option value="MicronautRunConfigurationType" />
+        <option value="QuarkusRunConfigurationType" />
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.AuthServiceApplication">
+    <configuration name="AuthServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="anm-auth" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.hust.iam.AuthServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="CmsApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="anm-cms" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.hust.iam.CmsApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GatewayServiceApplication (1)" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <module name="anm-gateway" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.hust.iam.GatewayServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fbdcb00ec9e3-intellij.indexing.shared.core-IU-251.23774.435" />
+        <option value="bundled-js-predefined-d6986cc7102b-f27c65a3e318-JavaScript-IU-251.23774.435" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="773f98d8-305d-4a0c-bd22-74fc06fe4d6f" name="Changes" comment="" />
+      <created>1770344246487</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1770344246487</updated>
+      <workItem from="1770344247872" duration="8891000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

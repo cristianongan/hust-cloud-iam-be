@@ -1,4 +1,4 @@
-package org.mbg.captcha.text;
+package com.hust.captcha.text;
 
 import java.awt.image.BufferedImage;
 

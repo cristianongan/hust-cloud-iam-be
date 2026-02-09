@@ -1,6 +1,6 @@
-package org.mbg.service;
+package com.hust.service;
 
-import org.mbg.api.response.SmsResponse;
+import com.hust.api.response.SmsResponse;
 
 import java.util.Map;
 

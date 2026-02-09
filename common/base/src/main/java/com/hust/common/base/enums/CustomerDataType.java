@@ -2,7 +2,6 @@ package com.hust.common.base.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.hust.common.util.Validator;
 
 import java.util.List;
 import java.util.stream.Collectors;

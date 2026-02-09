@@ -1,13 +1,12 @@
-package org.mbg.api.request;
+package com.hust.api.request;
 
 import java.io.Serial;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.mbg.common.api.request.Request;
+import com.hust.common.api.request.Request;
 
 @Getter
 @Setter

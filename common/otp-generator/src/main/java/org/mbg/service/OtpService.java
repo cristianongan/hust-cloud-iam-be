@@ -1,7 +1,7 @@
-package org.mbg.service;
+package com.hust.service;
 
-import org.mbg.enums.OtpType;
-import org.mbg.model.OtpValue;
+import com.hust.enums.OtpType;
+import com.hust.model.OtpValue;
 
 public interface OtpService {
 	OtpValue findByKey(String phoneNumber, OtpType type);

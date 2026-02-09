@@ -1,4 +1,4 @@
-package org.mbg.model;
+package com.hust.model;
 
 import java.io.Serializable;
 import lombok.Data;

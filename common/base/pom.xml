@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.mbg</groupId>
+        <groupId>com.hust</groupId>
         <artifactId>common</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -25,25 +25,25 @@
     <dependencies>
         <!-- app modules -->
         <dependency>
-            <groupId>org.mbg</groupId>
+            <groupId>com.hust</groupId>
             <artifactId>mbg-label-bundle</artifactId>
             <version>${app.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.mbg</groupId>
+            <groupId>com.hust</groupId>
             <artifactId>mbg-security</artifactId>
             <version>${app.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.mbg</groupId>
+            <groupId>com.hust</groupId>
             <artifactId>mbg-utils</artifactId>
             <version>${app.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.mbg</groupId>
+            <groupId>com.hust</groupId>
             <artifactId>mbg-cache</artifactId>
             <version>${app.version}</version>
         </dependency>

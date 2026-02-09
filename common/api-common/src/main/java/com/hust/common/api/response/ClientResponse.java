@@ -2,8 +2,6 @@ package com.hust.common.api.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import com.hust.common.api.enums.ClientResponseError;
 import com.hust.common.base.enums.ErrorCode;
 
 import java.io.Serial;

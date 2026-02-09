@@ -1,16 +1,16 @@
 /**
  * 
  */
-package org.mbg.repository;
+package com.hust.repository;
 
 import java.util.UUID;
 
-import org.mbg.common.util.StringPool;
+import com.hust.common.util.StringPool;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.mbg.cache.util.OtpCacheConstants;
-import org.mbg.model.OtpValue;
+import com.hust.cache.util.OtpCacheConstants;
+import com.hust.model.OtpValue;
 
 public interface OtpRepository {
 

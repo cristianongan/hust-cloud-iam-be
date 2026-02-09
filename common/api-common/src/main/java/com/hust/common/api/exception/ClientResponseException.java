@@ -2,7 +2,6 @@ package com.hust.common.api.exception;
 
 import lombok.Getter;
 import com.hust.common.api.enums.ClientResponseError;
-import com.hust.common.label.Labels;
 import org.zalando.problem.AbstractThrowableProblem;
 
 import java.io.Serial;

@@ -1,10 +1,10 @@
-package org.mbg.captcha.impl;
+package com.hust.captcha.impl;
 
-import org.mbg.captcha.BackgroundProducer;
-import org.mbg.captcha.GimpyEngine;
-import org.mbg.captcha.Producer;
-import org.mbg.captcha.text.WordRenderer;
-import org.mbg.captcha.util.Configurable;
+import com.hust.captcha.BackgroundProducer;
+import com.hust.captcha.GimpyEngine;
+import com.hust.captcha.Producer;
+import com.hust.captcha.text.WordRenderer;
+import com.hust.captcha.util.Configurable;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

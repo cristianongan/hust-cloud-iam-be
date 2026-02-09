@@ -1,35 +1,32 @@
-package org.mbg.service.impl;
+package com.hust.service.impl;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import jakarta.mail.internet.MimeMessage;
 import org.hibernate.exception.ConstraintViolationException;
-import org.mbg.common.api.exception.BadRequestException;
-import org.mbg.common.base.configuration.ValidationProperties;
-import org.mbg.common.base.enums.ErrorCode;
-import org.mbg.common.base.enums.TemplateCode;
-import org.mbg.common.base.enums.TemplateField;
-import org.mbg.common.base.model.TransactionLock;
-import org.mbg.common.base.repository.TransactionLockRepository;
-import org.mbg.common.label.Labels;
-import org.mbg.common.util.RandomGenerator;
-import org.mbg.common.util.StringPool;
-import org.mbg.common.util.Validator;
-import org.mbg.service.EmailService;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import com.hust.common.api.exception.BadRequestException;
+import com.hust.common.base.configuration.ValidationProperties;
+import com.hust.common.base.enums.ErrorCode;
+import com.hust.common.base.enums.TemplateCode;
+import com.hust.common.base.enums.TemplateField;
+import com.hust.common.base.model.TransactionLock;
+import com.hust.common.base.repository.TransactionLockRepository;
+import com.hust.common.label.Labels;
+import com.hust.common.util.RandomGenerator;
+import com.hust.common.util.StringPool;
+import com.hust.common.util.Validator;
+import com.hust.service.EmailService;
 import org.springframework.stereotype.Service;
 
-import org.mbg.api.response.SmsResponse;
-import org.mbg.configuration.OtpProperties;
-import org.mbg.enums.OtpType;
-import org.mbg.model.OtpValue;
-import org.mbg.repository.OtpRepository;
-import org.mbg.service.OtpService;
-import org.mbg.service.SmsService;
+import com.hust.api.response.SmsResponse;
+import com.hust.configuration.OtpProperties;
+import com.hust.enums.OtpType;
+import com.hust.model.OtpValue;
+import com.hust.repository.OtpRepository;
+import com.hust.service.OtpService;
+import com.hust.service.SmsService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.mbg.enums;
+package com.hust.enums;
 
 /**
  * @author LinhLH

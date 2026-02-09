@@ -2,7 +2,6 @@ package com.hust.common.base.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import com.hust.common.label.LabelKey;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,6 +1,6 @@
-package org.mbg.captcha;
+package com.hust.captcha;
 
-import org.mbg.captcha.impl.DefaultBackground;
+import com.hust.captcha.impl.DefaultBackground;
 
 import java.awt.image.BufferedImage;
 

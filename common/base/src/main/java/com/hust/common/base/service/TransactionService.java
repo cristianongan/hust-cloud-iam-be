@@ -4,7 +4,6 @@ import com.hust.common.security.util.SecurityConstants;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 
 public interface TransactionService {
     @CachePut(cacheNames = SecurityConstants.CACHE.TRANSACTION, key = "#transactionId", unless = "#result == null")

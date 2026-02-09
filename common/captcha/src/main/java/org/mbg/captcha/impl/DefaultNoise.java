@@ -1,7 +1,7 @@
-package org.mbg.captcha.impl;
+package com.hust.captcha.impl;
 
-import org.mbg.captcha.NoiseProducer;
-import org.mbg.captcha.util.Configurable;
+import com.hust.captcha.NoiseProducer;
+import com.hust.captcha.util.Configurable;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

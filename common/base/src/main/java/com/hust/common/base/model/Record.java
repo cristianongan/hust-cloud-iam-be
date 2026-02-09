@@ -6,17 +6,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
-import com.hust.common.base.enums.LeakType;
 import com.hust.common.base.enums.RecordStatus;
-import com.hust.common.base.model.converter.IntegerListConverter;
-import com.hust.common.base.util.PiiScanner;
-import com.hust.common.util.Validator;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "record_")

@@ -3,12 +3,9 @@ package com.hust.common.queue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import com.hust.common.model.RedisMessage;
-import com.hust.common.util.Validator;
 //import org.redisson.api.*;
 //import org.redisson.client.RedisClient;
-import org.springframework.stereotype.Component;
 
-import java.util.Map;
 
 @Slf4j
 //@Component

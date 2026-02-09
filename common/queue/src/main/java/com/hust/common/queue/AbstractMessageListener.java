@@ -2,9 +2,7 @@ package com.hust.common.queue;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import com.hust.common.model.RedisMessage;
 //import org.redisson.api.RPriorityBlockingQueue;
-import com.hust.common.util.Validator;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.connection.stream.*;
@@ -12,8 +10,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Supplier;
 
 @Slf4j
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package org.mbg.captcha;
+package com.hust.captcha;
 
 public class Constants {
     public final static String CAPTCHA_SESSION_KEY = "CAPTCHA_SESSION_KEY";

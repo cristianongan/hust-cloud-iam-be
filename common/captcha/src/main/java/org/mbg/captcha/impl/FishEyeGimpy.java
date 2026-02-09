@@ -1,6 +1,6 @@
-package org.mbg.captcha.impl;
+package com.hust.captcha.impl;
 
-import org.mbg.captcha.GimpyEngine;
+import com.hust.captcha.GimpyEngine;
 
 import java.awt.Color;
 import java.awt.Graphics2D;

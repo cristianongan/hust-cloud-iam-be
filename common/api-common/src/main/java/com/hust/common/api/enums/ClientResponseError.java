@@ -2,7 +2,6 @@ package com.hust.common.api.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.hust.common.label.Labels;
 
 @Getter
 @RequiredArgsConstructor

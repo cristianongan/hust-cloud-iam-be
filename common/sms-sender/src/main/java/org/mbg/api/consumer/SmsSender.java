@@ -1,4 +1,4 @@
-package org.mbg.api.consumer;
+package com.hust.api.consumer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -16,14 +16,14 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.dom.DOMSource;
 
-import org.mbg.common.base.configuration.ValidationProperties;
-import org.mbg.common.label.LabelKey;
-import org.mbg.common.label.Labels;
-import org.mbg.common.security.RsaProvider;
-import org.mbg.common.util.Constants;
-import org.mbg.common.util.StringUtil;
-import org.mbg.common.util.Validator;
-import org.mbg.common.util.XMLUtil;
+import com.hust.common.base.configuration.ValidationProperties;
+import com.hust.common.label.LabelKey;
+import com.hust.common.label.Labels;
+import com.hust.common.security.RsaProvider;
+import com.hust.common.util.Constants;
+import com.hust.common.util.StringUtil;
+import com.hust.common.util.Validator;
+import com.hust.common.util.XMLUtil;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -34,10 +34,10 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.mbg.api.request.SmsRequest;
-import org.mbg.api.response.SmsResponse;
-import org.mbg.api.response.SmsResponse.Result;
-import org.mbg.configuration.SmsProperties;
+import com.hust.api.request.SmsRequest;
+import com.hust.api.response.SmsResponse;
+import com.hust.api.response.SmsResponse.Result;
+import com.hust.configuration.SmsProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

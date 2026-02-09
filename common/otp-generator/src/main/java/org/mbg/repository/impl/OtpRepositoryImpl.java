@@ -1,10 +1,10 @@
 /**
  *
  */
-package org.mbg.repository.impl;
+package com.hust.repository.impl;
 
 import org.springframework.stereotype.Repository;
-import org.mbg.repository.OtpRepository;
+import com.hust.repository.OtpRepository;
 
 @Repository
 public class OtpRepositoryImpl implements OtpRepository {

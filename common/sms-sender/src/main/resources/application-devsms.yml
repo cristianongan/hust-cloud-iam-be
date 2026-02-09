@@ -1,10 +1,10 @@
 sms:
-  user: 'smsbrand_mbbank'
+  user: ''
   password: 'ETDdrK/9rzKmf8MRDr4B7D+lENp1u1YiNc5KvcAveVXnDnCQ9lV1BO2BNuFVYVy4ihCAr7wS88B+g5HCuPuLU9qjLPjEncMiZAS0qEOLK3WSRuDxKVOzuCY0hFeZH8pUeVjrHHSaBxk16rjha6Hfvvv1bowOiW/KSbmXaWrLMsYbQ0Q5EH+DXA4loqDqnnZC0ci4ZPsggO9uZ/i2kprNq0VhDAxP9ypPX9lTrIGBTewl6WG+bk1h8RYUYTxv6PJ/3UclTx7H4V7L93Ba2lBK+o/4pQNl2j0+JVht6sBAAWNCz5gv6ODOAlI7CQidCqmIC1MGd/P0aV2IMWsC1DzzRA=='
   cp-code: 'MB'
   request-id: '1'
-  service-id: 'MBBANK LAO'
-  url: 'http://183.182.100.166:8804/bulkapi'
+  service-id: ''
+  url: 'http://183.182.100.1665666:8804/bulkapi'
   schema: 'http://impl.bulkSms.ws/'
   command-code: 'bulksms'
   content-type: '0'
@@ -12,8 +12,8 @@ spring:
   mail:
     host: smtp.mailgun.org
     port: 587
-    username: vov@solidtech.vn
-    password: f713643ca5f162b27d004f978c7ed317-191fb7b6-254e655c
+    username: a
+    password: b
     properties:
       mail.smtp.auth: true
       mail.smtp.starttls.enable: true

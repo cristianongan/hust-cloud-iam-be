@@ -1,6 +1,6 @@
-package org.mbg.captcha;
+package com.hust.captcha;
 
-import org.mbg.captcha.impl.NoNoise;
+import com.hust.captcha.impl.NoNoise;
 
 import java.awt.image.BufferedImage;
 

@@ -1,4 +1,4 @@
-package org.mbg.api.response;
+package com.hust.api.response;
 
 import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;

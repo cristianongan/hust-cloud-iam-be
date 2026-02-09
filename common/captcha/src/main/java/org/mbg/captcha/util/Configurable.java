@@ -1,4 +1,4 @@
-package org.mbg.captcha.util;
+package com.hust.captcha.util;
 
 
 import lombok.Getter;

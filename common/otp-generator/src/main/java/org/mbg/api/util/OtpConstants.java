@@ -1,4 +1,4 @@
-package org.mbg.api.util;
+package com.hust.api.util;
 
 public interface OtpConstants {
     public interface EntityName {

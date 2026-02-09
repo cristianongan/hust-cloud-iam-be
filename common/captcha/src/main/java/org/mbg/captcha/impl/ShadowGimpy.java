@@ -1,11 +1,11 @@
-package org.mbg.captcha.impl;
+package com.hust.captcha.impl;
 
 import com.jhlabs.image.RippleFilter;
 import com.jhlabs.image.ShadowFilter;
 import com.jhlabs.image.TransformFilter;
-import org.mbg.captcha.GimpyEngine;
-import org.mbg.captcha.NoiseProducer;
-import org.mbg.captcha.util.Configurable;
+import com.hust.captcha.GimpyEngine;
+import com.hust.captcha.NoiseProducer;
+import com.hust.captcha.util.Configurable;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;

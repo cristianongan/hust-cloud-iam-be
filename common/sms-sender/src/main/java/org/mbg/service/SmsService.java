@@ -1,8 +1,8 @@
-package org.mbg.service;
+package com.hust.service;
 
 import java.util.Map;
-import org.mbg.api.request.SmsRequest;
-import org.mbg.api.response.SmsResponse;
+import com.hust.api.request.SmsRequest;
+import com.hust.api.response.SmsResponse;
 
 public interface SmsService {
     SmsResponse send(SmsRequest request);

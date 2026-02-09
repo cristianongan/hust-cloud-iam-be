@@ -4,7 +4,7 @@
  * Copyright (C) 2021 by Evotek. All right reserved.
  * This software is the confidential and proprietary information of Evotek
  */
-package org.mbg.configuration;
+package com.hust.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
